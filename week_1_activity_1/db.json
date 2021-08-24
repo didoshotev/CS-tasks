@@ -1,0 +1,24 @@
+{
+    "events": [
+        {
+            "title": "Party Mix",
+            "isOnlyForAdults": false,
+            "id": "1230421323",
+            "price": 0
+        },
+        {
+            "title": "Wonderland",
+            "isOnlyForAdults": true,
+            "id": "_3eqwbcfrs",
+            "price": 0
+        },
+        {
+            "title": "demo 2",
+            "isOnlyForAdults": false,
+            "id": "_oqrdkwcb6",
+            "price": 0,
+            "visitors": []
+        }
+    ]
+    
+}
