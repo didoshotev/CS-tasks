@@ -20,10 +20,11 @@ function askQuestion(theQuestion, validateInputFnc) {
 
 // title, isOnlyForAdults, id, price, clients
 const createEvent = async () => {
-    const event = {};
+    const event     = {};
     const eventName = await askQuestion('Please provide the name of the event: ', stringChecker);
-    const price = await askQuestion('Price of the event: ', priceChecker)
+    const price     = await askQuestion('Price of the event: ', priceChecker)
     let isOnlyForAdults;
+    
     rl.question('Can people under 18 years old attend the event(Any answer except "no" is threated as "yes"): ', answer => {
         answer = answer.trim().toLowerCase();
 
@@ -51,16 +52,18 @@ const createEvent = async () => {
         const dataEventsCollection = readData();
         dataEventsCollection.events.push(event);
         writeData(dataEventsCollection);
+        
         console.log(`Created Event "${eventName}"`);
         return event;
     })
 }
 
 const deleteEventById = async (id) => {
-    const dataEventsCollection = readData();
+    const dataEventsCollection  = readData();
 
-    let newEventCollection = dataEventsCollection.events.filter(item => item.id !== id);
+    let newEventCollection      = dataEventsCollection.events.filter(item => item.id !== id);
     dataEventsCollection.events = newEventCollection
+    
     writeData(dataEventsCollection);
     console.log('Successfully deleted event!');
     rl.close();
@@ -68,14 +71,16 @@ const deleteEventById = async (id) => {
 
 const editEventById = async (id) => {
     const dataEventsCollection = readData();
-    const eventToEdit = dataEventsCollection.events.find(item => item.id === id);
+    const eventToEdit          = dataEventsCollection.events.find(item => item.id === id);
+    
     console.log(`You are currently editing\nEvent title: ${eventToEdit.title}\n\
     Only allowed for adults (18+): ${eventToEdit ? 'Yes' : 'No'}\n\
     `);
 
     const eventName = await askQuestion('New event name: ', stringChecker);
-    const price = await askQuestion('New event price: ', priceChecker);
+    const price     = await askQuestion('New event price: ', priceChecker);
     let isOnlyForAdults;
+
     rl.question('Can people under 18 years old attend the event(Any answer except "no" is threated as "yes"): ', answer => {
         answer = answer.trim().toLowerCase();
 
@@ -92,16 +97,17 @@ const editEventById = async (id) => {
     })
 
     rl.on('close', () => {
-        const newEventObject = {}
-        newEventObject["title"] = eventName;
-        newEventObject["price"] = price;
+        const newEventObject              = {}
+        newEventObject["title"]           = eventName;
+        newEventObject["price"]           = price;
         newEventObject["isOnlyForAdults"] = isOnlyForAdults
 
         const mergedObject = Object.assign(eventToEdit, newEventObject);
+        const eventIndex   = dataEventsCollection.events.findIndex(item => item.id === id);
 
-        const eventIndex = dataEventsCollection.events.findIndex(item => item.id === id);
         dataEventsCollection.events.splice(eventIndex, 1, mergedObject);
         writeData(dataEventsCollection)
+
         console.log('You successfully edited the event');
         rl.close();
     })
@@ -109,22 +115,23 @@ const editEventById = async (id) => {
 
 const addEventVisitor = async (eventId) => {
     const dataEventsCollection = readData();
-    const eventToEdit = dataEventsCollection.events.find(item => item.id === eventId);
+    const eventToEdit          = dataEventsCollection.events.find(item => item.id === eventId);
 
     console.log('Please fill the necessary information down below in order to sign a new visitor\n');
 
     const user = {};
 
     const fullName = await askQuestion('Enter visitor full name: ', stringChecker);
-    const gender = await askQuestion('Enter visitor gender: ', genderChecker);
-    const age = await askQuestion('Enter visitor age: ', ageChecker);
+    const gender   = await askQuestion('Enter visitor gender: ', genderChecker);
+    const age      = await askQuestion('Enter visitor age: ', ageChecker);
 
     user['fullName'] = fullName;
-    user['gender'] = gender;
-    user['age'] = +age;
+    user['gender']   = gender;
+    user['age']      = +age;
 
     if (eventToEdit.isOnlyForAdults) {
         if (age < 18) {
+            
             console.log(`You must have 18 years in order to visit event: ${eventToEdit.title}`);
             rl.close();
             return;
@@ -132,26 +139,29 @@ const addEventVisitor = async (eventId) => {
     }
 
     eventToEdit.visitors.push(user);
-
     const eventIndex = dataEventsCollection.events.findIndex(item => item.id === eventId);
     dataEventsCollection.events.splice(eventIndex, 1, eventToEdit);
     writeData(dataEventsCollection);
+    
     console.log('You successfully edited the event');
     rl.close();
 }
 
 const deleteEventVisitor = async (eventId) => {
-    const data = readData();
+    const data                 = readData();
     const userToDeleteFullName = await askQuestion('Enter the visitor full name: ', stringChecker);
     let eventTitle
 
     data.events.map(event => {
+        
         if(event.id === eventId) {
+            
             eventTitle = event.title;
             const visitorToDeleteIndex = event.visitors.findIndex(visitor => visitor.fullName === userToDeleteFullName);
             event.visitors.splice(visitorToDeleteIndex, 1);
         }
     })
+    
     writeData(data)
     console.log(`Successfully deleted a ${userToDeleteFullName} from ${eventTitle}`);
     rl.close();
@@ -159,15 +169,19 @@ const deleteEventVisitor = async (eventId) => {
 
 const readDataPretty = () => {
     const dataEventsCollection = readData();
+    
     dataEventsCollection.events.map((event, index) => {
         console.log(`${index + 1}. ${event.title}`);
     })
+    
     rl.close();
 }
 
 const readNonAdultsEvents = () => {
     const dataEventsCollection = readData().events;
+    
     console.log('Events only for non adults');
+    
     dataEventsCollection.map((event, index) => {
         if(!event.isOnlyForAdults) {
             console.log(`${index}. ${event.title}`);
@@ -176,18 +190,24 @@ const readNonAdultsEvents = () => {
 }
 
 const readMostVisitedEvent = () => {
-    const dataEventsCollection = readData().events;
-    let currentMostVisitedEvent = 0; 
+    const dataEventsCollection    = readData().events;
+    let currentMostVisitedEvent   = 0; 
     let currentMostVisitedEventId = undefined;
+    
     dataEventsCollection.map(event => {
+        
         if(event.visitors.length > currentMostVisitedEvent) {
-            currentMostVisitedEvent = event.visitors.length;
+            
+            currentMostVisitedEvent   = event.visitors.length;
             currentMostVisitedEventId = event.id
         }
     })
+    
     if(currentMostVisitedEventId) {
+
         let mostVisited = dataEventsCollection.find(event => event.id === currentMostVisitedEventId)
         console.log(`Most visited event is: "${mostVisited.title}"`);
+    
     } else {
         console.log('Some of the events have equal visitors');
     }
@@ -196,27 +216,33 @@ const readMostVisitedEvent = () => {
 const readGroupedEvents = () => {
     const dataEventsCollection = readData().events;
     dataEventsCollection.map(event => {
+        
         if(event.isOnlyForAdults) {
             console.log(`* ${event.title}`);
         } else {
             console.log(`# ${event.title}`);
         }
+
     })
 }
 
 const handleFilterInput = async () => {
-    const criteria = await askQuestion('Select "title" or "flag" to filter the events: ', filterChecker);
+    const criteria    = await askQuestion('Select "title" or "flag" to filter the events: ', filterChecker);
     const filterValue = await askQuestion(`Enter "${criteria}" value to filter events: `, stringChecker);
-    // await readFilteredEvents(criteria, filterValue)
+
     criteria === 'title' && await readFilteredByTitle(filterValue);
+    
     rl.close();
     return;
 }
 
 const readFilteredByTitle = async (value) => {
     const dataEventsCollection = readData().events;
+    
     console.log(`Filtered by title: ${value}\n`);
+    
     dataEventsCollection.map((event, index) => {
+        
         if(event.title.includes(value)) {
             console.log(`${index + 1}. ${event.title}`);
         }
@@ -225,8 +251,11 @@ const readFilteredByTitle = async (value) => {
 
 const filterByFlag = async (value) => {
     const dataEventsCollection = readData().events;
+    
     console.log(`Filtered by flag: ${value}\n`);
+    
     dataEventsCollection.map((event, index) => {
+        
         if(event.isOnlyForAdults) {
             console.log(`${index + 1}. ${event.title}`);
         }
@@ -235,16 +264,19 @@ const filterByFlag = async (value) => {
 
 const proceedIfEventDoesNotExists = (id) => {
     let isValidId = checkIfEventExists(id);
+    
     if (!isValidId) {
+    
         console.log('There is no event with such ID');
         rl.close();
         return
     }
+
     return true;
 }
 
 const changeSystemStatus = (type) => { // 'events' or 'visitors'
-    const data = readData();
+    const data          = readData();
     const newDataSystem = {...data.system}
     
     type === 'events' && (newDataSystem.canAddEvents = !data.system.canAddEvents);

@@ -1,6 +1,5 @@
 const readline = require("readline");
-const { readData, checkIfEventExists, writeData } = require('./FsService');
-const { generateID, priceChecker, stringChecker, genderChecker, ageChecker, filterChecker } = require('./utils');
+const { readData } = require('./FsService');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -34,7 +33,6 @@ const { createEvent,
     proceedIfEventDoesNotExists
 } = require('./service')(rl);
 
-// const Service = require('./service')();
 
 const main = () => {
     rl.question(
@@ -53,7 +51,10 @@ const main = () => {
     12) Filter events\n\
     13) Delete visitor from event\n`,
         (answer) => {
-            if (answer.trim() == 1) {
+            answer = answer.trim();
+
+            if (answer == 1) {
+                
                 if (!system.canAddEvents) {
                     console.log('Creating events is currently disabled!');
                     rl.close();
@@ -62,58 +63,78 @@ const main = () => {
                 createEvent();
             }
 
-            else if (answer.trim() == 2) {
+            else if (answer == 2) {
+                
                 rl.question('Provide unique ID identifier: ', (answer) => {
                     if (!proceedIfEventDoesNotExists(answer)) { return }
                     deleteEventById(answer);
                 })
 
-            } else if (answer.trim() == 3) {
+            } else if (answer == 3) {
                 readDataPretty();
-            } else if (answer.trim() == 4) {
+            } else if (answer == 4) {
 
                 rl.question('Provide unique ID identifier: ', (answer) => {
+                    
                     if (!proceedIfEventDoesNotExists(answer)) { return }
                     editEventById(answer);
                 })
-            } else if (answer.trim() == 5) {
+            } else if (answer == 5) {
+                
                 if (!system.canAddVisitors) {
+                    
                     console.log('Adding new visitors is currently disabled');
+                    
                     rl.close();
                     return;
                 }
+               
                 rl.question('Provide event unique ID identifier: ', (answer) => {
+                    
                     if (!proceedIfEventDoesNotExists(answer)) { return }
+                    
                     addEventVisitor(answer);
                 })
 
-            } else if (answer.trim() == 6) {
+            } else if (answer == 6) {
                 rl.close();
-            } else if (answer.trim() == 7) {
+            } else if (answer == 7) {
+                
                 system.changeAddEventsStatus();
                 changeSystemStatus('events')
                 console.log(`${!system.canAddEvents ? 'Adding events DISABLED' : 'Adding events ENABLED'}`);
+                
                 rl.close()
-            } else if (answer.trim() == 8) {
+            } else if (answer == 8) {
+                
                 system.changeAddVisitorsStatus();
                 changeSystemStatus('visitors')
                 console.log(`${!system.canAddVisitors ? 'Adding visitors DISABLED' : 'Adding visitors ENABLED'}`);
+                
                 rl.close()
-            } else if (answer.trim() == 9) {
+            } else if (answer == 9) {
+                
                 readNonAdultsEvents();
+                
                 rl.close();
-            } else if (answer.trim() == 10) {
+            } else if (answer == 10) {
+
                 readMostVisitedEvent();
+
                 rl.close();
-            } else if (answer.trim() == 11) {
+            } else if (answer == 11) {
+
                 readGroupedEvents();
+
                 rl.close();
-            } else if (answer.trim() == 12) {
+            } else if (answer == 12) {
                 handleFilterInput();
-            } else if (answer.trim() == 13) {
+            } else if (answer == 13) {
 
                 rl.question('Provide event unique ID identifier: ', (answer) => {
+
                     if (!proceedIfEventDoesNotExists(answer)) { return }
+
                     deleteEventVisitor(answer);
                 })
             }
