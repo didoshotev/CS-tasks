@@ -147,32 +147,79 @@ const addEventVisitor = async (eventId) => {
     rl.close();
 }
 
-const addUserToEvent = async(eventId) => {
+const addUserToEvent = async(eventId, userID) => {
     const data        = readData();
-    const eventToEdit = dataEventsCollection.events.find(item => item.id === eventId);
+    const eventToEdit = data.events.find(item => item.id === eventId);
+    const userToAdd  = data.users.find(user => user.id === userID);
+    const userToAddIndex = data.users.findIndex(user => user.id === userID);
 
-    console.log('Please fill the necessary information down below in order to sign a new visitor\n');
+    if(eventToEdit.isOnlyForAdults) {
+        if (userToAdd.age < 18) {
 
-    const userToAddFullName = await askQuestion('Enter user full name')
+            console.log(`You must have 18 years in order to visit event: ${eventToEdit.title}`);
+            rl.close();
+            return;
+        }
+    }
+
+    if(eventToEdit.visitors.includes(userID)) {
+        console.log(`${userToAdd.fullName} is already added to ${eventToEdit.title}!`);
+        rl.close();
+        return;
+    }
+
+    eventToEdit.visitors.push(userID);
+    const newUserObject = {...userToAdd};
+
+    newUserObject.activeEvents++;
+
+    const IS_USER_VIP_NUMBER = 5;
+
+    if(IS_USER_VIP_NUMBER === newUserObject.activeEvents) {
+        newUserObject.isVip = true
+        newUserObject.activeEvents = 0;
+    } else { 
+        newUserObject.isVip = false
+    }
+
+    if(userToAdd.budget < eventToEdit.price && !userToAdd.isVip) {
+
+        console.log(`You don't have enought budget to visit event: ${eventToEdit.title}`);
+        rl.close();
+        return;
+    }
+    
+    !userToAdd.isVip && (newUserObject.budget -= eventToEdit.price);
+    
+    data.users.splice(userToAddIndex, 1, newUserObject);
+
+    writeData(data);
+    rl.close();
+    return;
 }
 
 const deleteEventVisitor = async (eventId) => {
     const data                 = readData();
-    const userToDeleteFullName = await askQuestion('Enter the visitor full name: ', stringChecker);
-    let eventTitle
+    const userToDeleteId = await askQuestion('Please enter the visitor ID: ', stringChecker);
+    let eventTitle;
+    let deleteChecker = false;
 
     data.events.map(event => {
         
         if(event.id === eventId) {
             
             eventTitle = event.title;
-            const visitorToDeleteIndex = event.visitors.findIndex(visitor => visitor.fullName === userToDeleteFullName);
-            event.visitors.splice(visitorToDeleteIndex, 1);
+            const userToDeleteIndex = event.visitors.findIndex(visitor => visitor.id === userToDeleteId);
+            event.visitors.splice(userToDeleteIndex, 1);
+            deleteChecker = true;
         }
     })
-    
-    writeData(data)
-    console.log(`Successfully deleted a ${userToDeleteFullName} from ${eventTitle}`);
+
+    if(deleteChecker) {
+        console.log(`Successfully user from ${eventTitle}`);
+        writeData(data)
+    }
+    console.log(`No such user attending ${eventTitle} `);
     rl.close();
 }
 
@@ -253,7 +300,7 @@ const readFilteredByTitle = async (value) => {
     dataEventsCollection.map((event, index) => {
         
         if(event.title.includes(value)) {
-            console.log(`${index + 1}. ${event.title}`);
+            console.log(`-- ${event.title} --`);
         }
     })
 }
@@ -269,6 +316,27 @@ const filterByFlag = async (value) => {
             console.log(`${index + 1}. ${event.title}`);
         }
     })
+}
+
+const filterEventVisitorsByGender = async(eventId) => {
+    const data          = readData();
+    const currentEvent = data.events.find(event => event.id === eventId);
+    const genderToFilter = await askQuestion('Which gender you want to filter (m)/(f): ', genderChecker);
+
+    genderToFilter === 'm' && console.log(`All male clients visiting "${currentEvent.title}" are:`);
+    genderToFilter === 'f' && console.log(`All female clients visiting "${currentEvent.title}" are:`);
+
+    currentEvent.visitors.map(visitorID => {
+        const currentUser = data.users.find(user => user.id === visitorID);
+        if(currentUser) {
+            if(genderToFilter === currentUser.gender) {
+                console.log(currentUser.fullName);
+            }
+        }
+    })
+    
+    rl.close();
+    return;
 }
 
 const proceedIfEventDoesNotExists = (id) => {
@@ -311,6 +379,8 @@ const changeSystemStatus = (type) => { // 'events' or 'visitors'
         changeSystemStatus,
         proceedIfEventDoesNotExists,
         askQuestion,
+        addUserToEvent,
+        filterEventVisitorsByGender
     }
 }
 
