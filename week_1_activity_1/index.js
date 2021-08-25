@@ -8,17 +8,35 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
+const system = {
+    canAddEvents: readData().system.canAddEvents,
+    canAddVisitors: readData().system.canAddVisitors,
+    changeAddEventsStatus: () => {
+        system.canAddEvents = !system.canAddEvents;
+    },
+    changeAddVisitorsStatus: () => {
+        system.canAddVisitors = !system.canAddVisitors;
+    }
+}
+
 const main = () => {
     rl.question(
-        'Hello, please enter a command you want to execute!\n\
+        `Hello, please enter a command you want to execute!\n\
     1) Create an event\n\
     2) Delete an event\n\
     3) Print all events\n\
     4) Edit an event\n\
     5) Add visitor to event \n\
-    6) Exit\n',
+    6) Exit\n\
+    7) ${system.canAddEvents ? 'Disable adding events' : 'Enable adding events' }  \n\
+    8) ${system.canAddVisitors ? 'Disable adding visitors' : 'Enable adding visitors' }\n`,
         (answer) => {
             if (answer.trim() == 1) {
+                if(!system.canAddEvents) {
+                    console.log('Creating events is currently disabled!');
+                    rl.close();
+                    return;
+                }
                 createEvent();
             }
 
@@ -37,7 +55,11 @@ const main = () => {
                     editEventById(answer);
                 })
             } else if (answer.trim() == 5) {
-
+                if(!system.canAddVisitors) {
+                    console.log('Adding new visitors is currently disabled');
+                    rl.close();
+                    return;
+                }
                 rl.question('Provide event unique ID identifier: ', (answer) => {
                     if (!proceedIfEventDoesNotExists(answer)) { return }
                     addEventVisitor(answer);
@@ -45,6 +67,16 @@ const main = () => {
 
             } else if (answer.trim() == 6) {
                 rl.close();
+            } else if (answer.trim() == 7) {
+                system.changeAddEventsStatus();
+                changeSystemStatus('events')
+                console.log(`${!system.canAddEvents ? 'Adding events DISABLED' : 'Adding events ENABLED' }`);
+                rl.close()
+            } else if (answer.trim() == 8) {
+                system.changeAddVisitorsStatus();
+                changeSystemStatus('visitors')
+                console.log(`${!system.canAddVisitors ? 'Adding visitors DISABLED' : 'Adding visitors ENABLED' }`);
+                rl.close()
             }
         })
 }
@@ -203,6 +235,17 @@ const proceedIfEventDoesNotExists = (id) => {
         rl.close();
     }
     return true;
+}
+
+const changeSystemStatus = (type) => { // 'events' or 'visitors'
+    const data = readData();
+    const newDataSystem = {...data.system}
+    
+    type === 'events' && (newDataSystem.canAddEvents = !data.system.canAddEvents);
+    type === 'visitors' && (newDataSystem.canAddVisitors = !data.system.canAddVisitors);
+
+    data.system = newDataSystem;
+    fs.writeFileSync('db.json', JSON.stringify(data))
 }
 
 main();

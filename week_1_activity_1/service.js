@@ -17,9 +17,5 @@ const checkIfEventExists = (id) => {
     }
 }
 
-const createEvent = () => {
-
-}
- 
 module.exports = { readData, checkIfEventExists }
 
