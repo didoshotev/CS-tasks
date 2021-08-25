@@ -1,4 +1,4 @@
-const { readData, checkIfEventExists, writeData } = require('./FsService');
+const { readData, checkIfEventExists, writeData, checkIfUserExists } = require('./FsService');
 const { generateID, priceChecker, stringChecker, genderChecker, ageChecker, filterChecker } = require('./utils');
 
 
@@ -147,6 +147,15 @@ const addEventVisitor = async (eventId) => {
     rl.close();
 }
 
+const addUserToEvent = async(eventId) => {
+    const data        = readData();
+    const eventToEdit = dataEventsCollection.events.find(item => item.id === eventId);
+
+    console.log('Please fill the necessary information down below in order to sign a new visitor\n');
+
+    const userToAddFullName = await askQuestion('Enter user full name')
+}
+
 const deleteEventVisitor = async (eventId) => {
     const data                 = readData();
     const userToDeleteFullName = await askQuestion('Enter the visitor full name: ', stringChecker);
@@ -286,7 +295,6 @@ const changeSystemStatus = (type) => { // 'events' or 'visitors'
     writeData(data);
 }
 
-
     return {
         createEvent,
         deleteEventById,
@@ -302,6 +310,7 @@ const changeSystemStatus = (type) => { // 'events' or 'visitors'
         filterByFlag,
         changeSystemStatus,
         proceedIfEventDoesNotExists,
+        askQuestion,
     }
 }
 

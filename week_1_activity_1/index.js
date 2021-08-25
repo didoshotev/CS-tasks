@@ -17,6 +17,8 @@ const system = {
     }
 }
 
+const { createUser } = require('./userService')(rl);
+
 const { createEvent,
     deleteEventById,
     deleteEventVisitor,
@@ -49,7 +51,8 @@ const main = () => {
     10) Print the most visited event\n\
     11) Print events with (*) for adults or (#) for non adults\n\
     12) Filter events\n\
-    13) Delete visitor from event\n`,
+    13) Delete visitor from event\n\
+    14) Create user\n`,
         (answer) => {
             answer = answer.trim();
 
@@ -137,6 +140,12 @@ const main = () => {
 
                     deleteEventVisitor(answer);
                 })
+            } else if(answer == 14) {
+                createUser();
+            } else {
+                console.log('No such command!');
+                rl.close();
+                return
             }
         })
 }

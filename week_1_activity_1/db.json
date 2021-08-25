@@ -1,1 +1,59 @@
-{"system":{"canAddEvents":true,"canAddVisitors":true},"events":[{"title":"Disco edited","isOnlyForAdults":true,"id":"_secuv44mu","price":"50","visitors":[{"fullName":"Pecata Yordanov","gender":"m","age":25}]},{"title":"Wonderland 2020","isOnlyForAdults":false,"id":"_5yu17aum4","price":"25","visitors":[]},{"title":"Test event","isOnlyForAdults":false,"id":"_1hhwpu75kjn","price":25,"visitors":[]},{"title":"World first","isOnlyForAdults":true,"id":"_2kfse4r7h1","price":40,"visitors":[]},{"title":"Demo event 2023","isOnlyForAdults":true,"id":"_efd0k1h6jws","price":50,"visitors":[]}]}
+{
+    "system": {
+        "canAddEvents": true,
+        "canAddVisitors": true
+    },
+    "users": [
+        {
+            "id": "_iwcbjryasu",
+            "fullName": "Deffect",
+            "age": 14,
+            "budget": 50,
+            "gender": "f",
+            "isVip": false,
+            "activeEvents": 0
+        }
+    ],
+    "events": [
+        {
+            "title": "Disco edited",
+            "isOnlyForAdults": true,
+            "id": "_secuv44mu",
+            "price": "50",
+            "visitors": [
+                {
+                    "fullName": "Pecata Yordanov",
+                    "gender": "m",
+                    "age": 25
+                }
+            ]
+        },
+        {
+            "title": "Wonderland 2020",
+            "isOnlyForAdults": false,
+            "id": "_5yu17aum4",
+            "price": "25",
+            "visitors": []
+        },
+        {
+            "title": "Test event",
+            "isOnlyForAdults": false,
+            "id": "_1hhwpu75kjn",
+            "price": 25,
+            "visitors": []
+        },
+        {
+            "title": "World first",
+            "isOnlyForAdults": true,
+            "id": "_2kfse4r7h1",
+            "price": 40,
+            "visitors": [
+                {
+                    "fullName": "Pikabrew",
+                    "gender": "m",
+                    "age": 18
+                }
+            ]
+        }
+    ]
+}

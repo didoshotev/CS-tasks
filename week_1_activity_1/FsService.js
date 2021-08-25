@@ -16,12 +16,18 @@ const checkIfEventExists = (id) => {
     
     let result = dataEventsCollection.events.find(event => event.id === id);
     
-    if(result) {
-        return true;
-    } else { 
-        return false;
-    }
+    if(result) { return true } 
+    return false;
 }
 
-module.exports = { readData, writeData, checkIfEventExists }
+const checkIfUserExists = (fullName) => {
+    const dataUsersCollection = readData().users;
+
+    let result = dataUsersCollection.find(user => user.fullName === fullName);
+
+    if(result) { return true } 
+    return false;
+}
+
+module.exports = { readData, writeData, checkIfEventExists, checkIfUserExists }
 
