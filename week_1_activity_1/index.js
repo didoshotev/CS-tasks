@@ -1,7 +1,7 @@
 const readline = require("readline");
 const fs = require('fs');
 const { readData, checkIfEventExists } = require('./service');
-const { generateID, priceChecker, stringChecker, genderChecker, ageChecker } = require('./utils');
+const { generateID, priceChecker, stringChecker, genderChecker, ageChecker, filterChecker } = require('./utils');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -29,7 +29,12 @@ const main = () => {
     5) Add visitor to event \n\
     6) Exit\n\
     7) ${system.canAddEvents ? 'Disable adding events' : 'Enable adding events' }  \n\
-    8) ${system.canAddVisitors ? 'Disable adding visitors' : 'Enable adding visitors' }\n`,
+    8) ${system.canAddVisitors ? 'Disable adding visitors' : 'Enable adding visitors' }\n\
+    9) Print all non adults events\n\
+    10) Print the most visited event\n\
+    11) Print events with (*) for adults or (#) for non adults\n\
+    12) Filter events\n\
+    13) Delete visitor from event\n`,
         (answer) => {
             if (answer.trim() == 1) {
                 if(!system.canAddEvents) {
@@ -77,6 +82,23 @@ const main = () => {
                 changeSystemStatus('visitors')
                 console.log(`${!system.canAddVisitors ? 'Adding visitors DISABLED' : 'Adding visitors ENABLED' }`);
                 rl.close()
+            } else if(answer.trim() == 9) {
+                readNonAdultsEvents();
+                rl.close();
+            } else if(answer.trim() == 10) {
+                readMostVisitedEvent();
+                rl.close();
+            } else if(answer.trim() == 11) {
+                readGroupedEvents();
+                rl.close();
+            } else if(answer.trim() == 12) {
+                handleFilterInput();
+            } else if(answer.trim() == 13) {
+                
+                rl.question('Provide event unique ID identifier: ', (answer) => {
+                    if (!proceedIfEventDoesNotExists(answer)) { return }
+                    deleteEventVisitor(answer);
+                })
             }
         })
 }
@@ -227,12 +249,30 @@ const addEventVisitor = async (eventId) => {
     rl.close();
 }
 
+const deleteEventVisitor = async (eventId) => {
+    const dataEventsCollection = readData().events;
+    const userToDeleteFullName = await askQuestion('Enter the visitor full name: ', stringChecker);
+    let eventTitle
+
+    dataEventsCollection.map(event => {
+        if(event.id === eventId) {
+            eventTitle = event.title;
+            const visitorToDeleteIndex = event.visitors.findIndex(visitor => visitor.fullName === userToDeleteFullName);
+            event.visitors.splice(visitorToDeleteIndex, 1);
+        }
+    })
+
+    fs.writeFileSync('db.json', JSON.stringify(dataEventsCollection));
+    console.log(`Successfully deleted a ${userToDeleteFullName} from ${eventTitle}`);
+    rl.close();
+}
+
 const proceedIfEventDoesNotExists = (id) => {
     let isValidId = checkIfEventExists(id);
-    console.log(isValidId);
     if (!isValidId) {
         console.log('There is no event with such ID');
         rl.close();
+        return
     }
     return true;
 }
@@ -248,4 +288,71 @@ const changeSystemStatus = (type) => { // 'events' or 'visitors'
     fs.writeFileSync('db.json', JSON.stringify(data))
 }
 
+const readNonAdultsEvents = () => {
+    const dataEventsCollection = readData().events;
+    console.log('Events only for non adults');
+    dataEventsCollection.map((event, index) => {
+        if(!event.isOnlyForAdults) {
+            console.log(`${index}. ${event.title}`);
+        }
+    })
+}
+
+const readMostVisitedEvent = () => {
+    const dataEventsCollection = readData().events;
+    let currentMostVisitedEvent = 0; 
+    let currentMostVisitedEventId = undefined;
+    dataEventsCollection.map(event => {
+        if(event.visitors.length > currentMostVisitedEvent) {
+            currentMostVisitedEvent = event.visitors.length;
+            currentMostVisitedEventId = event.id
+        }
+    })
+    if(currentMostVisitedEventId) {
+        let mostVisited = dataEventsCollection.find(event => event.id === currentMostVisitedEventId)
+        console.log(`Most visited event is: "${mostVisited.title}"`);
+    } else {
+        console.log('Some of the events have equal visitors');
+    }
+}
+
+const readGroupedEvents = () => {
+    const dataEventsCollection = readData().events;
+    dataEventsCollection.map(event => {
+        if(event.isOnlyForAdults) {
+            console.log(`* ${event.title}`);
+        } else {
+            console.log(`# ${event.title}`);
+        }
+    })
+}
+
+const handleFilterInput = async () => {
+    const criteria = await askQuestion('Select "title" or "flag" to filter the events: ', filterChecker);
+    const filterValue = await askQuestion(`Enter "${criteria}" value to filter events: `, stringChecker);
+    // await readFilteredEvents(criteria, filterValue)
+    criteria === 'title' && await filterByTitle(filterValue);
+    rl.close();
+    return;
+}
+
+const filterByTitle = async (value) => {
+    const dataEventsCollection = readData().events;
+    console.log(`Filtered by title: ${value}\n`);
+    dataEventsCollection.map((event, index) => {
+        if(event.title.includes(value)) {
+            console.log(`${index + 1}. ${event.title}`);
+        }
+    })
+}
+
+const filterByFlag = async (value) => {
+    const dataEventsCollection = readData().events;
+    console.log(`Filtered by flag: ${value}\n`);
+    dataEventsCollection.map((event, index) => {
+        if(event.isOnlyForAdults) {
+            console.log(`${index + 1}. ${event.title}`);
+        }
+    })
+}
 main();

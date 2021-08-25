@@ -5,7 +5,7 @@ const generateID = () => {
 const priceChecker = (input) => {
 
     input = parseFloat(input.trim())
-    
+
     if (Number.isNaN(input) || input < 0) {
         return { message: `Invalid price format. Please try again!` };
     } else {
@@ -43,4 +43,12 @@ const ageChecker = (input) => {
     }
 }
 
-module.exports = { generateID, priceChecker, stringChecker, genderChecker, ageChecker }
+const filterChecker = (input) => {
+    input = input.trim();
+    if (input === 'title' || input === 'flag') {
+        return input
+    }
+    return { message: 'Invalid filter values. Please try again!'}
+}
+
+module.exports = { generateID, priceChecker, stringChecker, genderChecker, ageChecker, filterChecker }
