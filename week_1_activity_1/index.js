@@ -250,11 +250,11 @@ const addEventVisitor = async (eventId) => {
 }
 
 const deleteEventVisitor = async (eventId) => {
-    const dataEventsCollection = readData().events;
+    const data = readData();
     const userToDeleteFullName = await askQuestion('Enter the visitor full name: ', stringChecker);
     let eventTitle
 
-    dataEventsCollection.map(event => {
+    data.events.map(event => {
         if(event.id === eventId) {
             eventTitle = event.title;
             const visitorToDeleteIndex = event.visitors.findIndex(visitor => visitor.fullName === userToDeleteFullName);
@@ -262,7 +262,7 @@ const deleteEventVisitor = async (eventId) => {
         }
     })
 
-    fs.writeFileSync('db.json', JSON.stringify(dataEventsCollection));
+    fs.writeFileSync('db.json', JSON.stringify(data));
     console.log(`Successfully deleted a ${userToDeleteFullName} from ${eventTitle}`);
     rl.close();
 }
