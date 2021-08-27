@@ -1,46 +1,48 @@
+const GlobalReference = require("../globals");
+
 const generateID = () => {
     return '_' + Math.random().toString(36).substr(2, 13);
 };
 
+const invalidMessageGenerator = (field) => {
+    return `Invalid ${field} format. Please try again!`;
+}
+
 const priceChecker = (input) => {
 
     input = parseFloat(input.trim())
+    const invalidPriceFormat = Number.isNaN(input) || input < 0;
 
-    if (Number.isNaN(input) || input < 0) {
-        return { message: `Invalid price format. Please try again!` };
-    } else {
-        return input;
-    }
+    return invalidPriceFormat ? { message: invalidMessageGenerator('price') } : input;
 }
 
 const stringChecker = (input) => {
-    input = input.trim();
-    if (input === "") {
-        return { message: `Invalid text format. Please try again!` };
-    } else {
-        return input;
 
+    const isEmptyString = input.trim() === "";
+    
+    if(!isEmptyString) {
+        return input
+    } else {
+        return {message: invalidMessageGenerator('text')}
     }
+
+    // !isEmptyString ? input : {message: invalidMessageGenerator('text')}   not working ? 
 }
 
 const genderChecker = (input) => {
     input = input.trim().toLowerCase();
-    if (input === 'male' || input === 'm') {
-        return input;
-    } else if (input === 'female' || input === 'f') {
-        return input;
-    } else {
-        return { message: 'Invalid gender format' };
-    }
+
+    const isValidGender = (Object.values(GlobalReference.genderEnum)).includes(input);
+   
+    return isValidGender ? input : { message: invalidMessageGenerator('gender')}
 }
 
 const ageChecker = (input) => {
+    
     input = parseInt(input.trim());
-    if (input && input > 0 && input <= 120) {
-        return input;
-    } else {
-        return { message: 'Invalid age format' };
-    }
+    const isValidAge = input && input > 0 && input <= 120;
+    
+    return isValidAge ? input : { message: invalidMessageGenerator('age') } 
 }
 
 const filterChecker = (input) => {
@@ -48,11 +50,14 @@ const filterChecker = (input) => {
     if (input === 'title' || input === 'flag') {
         return input
     }
-    return { message: 'Invalid filter values. Please try again!'}
+    return { message: invalidMessageGenerator('filter') }
 }
 
-const yesNoChecker = (input) => {
-    return input.trim() === 'no' ? true : false;
+const isOnlyForAdultsChecker = (input) => {
+    return GlobalReference.isOnlyForAdultsEnum[input.trim()] ? true : false; 
 }
 
-module.exports = { generateID, priceChecker, stringChecker, genderChecker, ageChecker, filterChecker, yesNoChecker }
+module.exports = {
+    generateID, priceChecker, stringChecker, genderChecker,
+    ageChecker, filterChecker, isOnlyForAdultsChecker
+}

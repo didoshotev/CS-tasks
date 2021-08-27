@@ -1,4 +1,4 @@
-const { priceChecker, stringChecker, genderChecker, ageChecker, yesNoChecker } = require('../utils/utils');
+const { priceChecker, stringChecker, genderChecker, ageChecker, isOnlyForAdultsChecker } = require('../utils/utils');
 const { processCreateUser, addUserToEvent, deleteUserFromEvent } = require('./userService')
 const { createEvent, deleteEventById, editEventById, filterEventsByGender,
     readGroupedEvents, readMostVisitedEvents, readNonAdultsEvents } = require('./eventService');
@@ -41,11 +41,11 @@ function readlineService(readline) {
         const canSystemCreateEvent = GlobalReference.System.checkAddEventsStatus()
         if(!canSystemCreateEvent) { return readline.close(); }
 
-        const eventName       = await askQuestion(questionsMatcher.EVENT_NAME, stringChecker);
-        const price           = parseFloat(await askQuestion(questionsMatcher.EVENT_PRICE, priceChecker));
-        const isOnlyForAdultsAnswer = await askQuestion(questionsMatcher.EVENT_IS_FOR_ADULTS, yesNoChecker);
+        const eventName             = await askQuestion(questionsMatcher.EVENT_NAME, stringChecker);
+        const price                 = parseFloat(await askQuestion(questionsMatcher.EVENT_PRICE, priceChecker));
+        const isOnlyForAdultsAnswer = await askQuestion(questionsMatcher.EVENT_IS_FOR_ADULTS);
         
-        const isOnlyForAdults = GlobalReference.isOnlyForAdultsEnum[isOnlyForAdultsAnswer] || false;
+        const isOnlyForAdults       = isOnlyForAdultsChecker(isOnlyForAdultsAnswer);
         
         await createEvent(eventName, isOnlyForAdults, price);
         return readline.close();
@@ -64,9 +64,9 @@ function readlineService(readline) {
         const eventId               = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
         const eventName             = await askQuestion(questionsMatcher.EVENT_NAME, stringChecker);
         const price                 = parseFloat(await askQuestion(questionsMatcher.EVENT_PRICE, priceChecker));
-        const isOnlyForAdultsAnswer = await askQuestion(questionsMatcher.EVENT_IS_FOR_ADULTS, yesNoChecker);
+        const isOnlyForAdultsAnswer = await askQuestion(questionsMatcher.EVENT_IS_FOR_ADULTS);
         
-        const isOnlyForAdults = GlobalReference.isOnlyForAdultsEnum[isOnlyForAdultsAnswer] || false;
+        const isOnlyForAdults       = isOnlyForAdultsChecker(isOnlyForAdultsAnswer);
 
         await editEventById(eventId, eventName, isOnlyForAdults, price);
 
@@ -79,7 +79,7 @@ function readlineService(readline) {
         if(!canSystemAddVisitor) { return readline.close(); }
 
         const eventId = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
-        const userId = await askQuestion(questionsMatcher.USER_ID, stringChecker);
+        const userId  = await askQuestion(questionsMatcher.USER_ID, stringChecker);
 
         await addUserToEvent(eventId, userId);
         
@@ -89,7 +89,7 @@ function readlineService(readline) {
     const handleDeleteVisitor = async() => {
 
         const eventId = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
-        const userId = await askQuestion(questionsMatcher.USER_ID, stringChecker);
+        const userId  = await askQuestion(questionsMatcher.USER_ID, stringChecker);
 
         await deleteUserFromEvent(eventId, userId);
 
@@ -98,7 +98,7 @@ function readlineService(readline) {
 
     const handleFilterEventsByGender = async() => {
 
-        const eventId = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
+        const eventId        = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
         const genderToFilter = await askQuestion(questionsMatcher.EVENT_GENDER_FILTER, genderChecker);
 
         await filterEventsByGender(eventId, genderToFilter);

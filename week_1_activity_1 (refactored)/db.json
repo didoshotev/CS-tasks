@@ -25,10 +25,28 @@
         {
             "fullName": "Tome",
             "age": 20,
-            "budget": 100,
+            "budget": 75,
             "gender": "m",
             "id": "_9j23vdgp2jh",
-            "activeEvents": 2,
+            "activeEvents": 3,
+            "isVip": false
+        },
+        {
+            "fullName": "asd",
+            "age": 33,
+            "budget": 33,
+            "gender": "m",
+            "id": "_yq0sx27jgz",
+            "activeEvents": 0,
+            "isVip": false
+        },
+        {
+            "fullName": "asd",
+            "age": 33,
+            "budget": 33,
+            "gender": "f",
+            "id": "_z5164iki0i",
+            "activeEvents": 0,
             "isVip": false
         }
     ],
@@ -71,7 +89,9 @@
             "isOnlyForAdults": true,
             "price": 25,
             "id": "_0oyy4ylz4oln",
-            "visitors": []
+            "visitors": [
+                "_9j23vdgp2jh"
+            ]
         }
     ]
 }

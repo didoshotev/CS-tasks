@@ -11,8 +11,8 @@ const processCreateUser = async (fullName, age, budget, gender) => {
 
     const userObject = new User(fullName, age, budget, gender);
 
-    dataUserCollection = [...dataUserCollection, { ...userObject }]
-    dataCollection.users = dataUserCollection;
+    const dataUserCollectionModified = [...dataUserCollection, { ...userObject }]
+    dataCollection.users = dataUserCollectionModified;
     writeData(dataCollection);
 
     console.log('Successfully created user!');
