@@ -1,4 +1,5 @@
 const readline = require("readline");
+const GlobalReference = require("./globals");
 const { readData } = require('./services/fsService');
 
 const rl = readline.createInterface({
@@ -49,15 +50,16 @@ const main = () => {
     4) Edit an event\n\
     5) Add visitor to event \n\
     6) Exit\n\
-    7) ${system.canAddEvents ? 'Disable adding events' : 'Enable adding events'}  \n\
-    8) ${system.canAddVisitors ? 'Disable adding visitors' : 'Enable adding visitors'}\n\
+    7) ${GlobalReference.System.canAddEvents ? 'Disable adding events' : 'Enable adding events'}  \n\
+    8) ${GlobalReference.System.canAddVisitors ? 'Disable adding visitors' : 'Enable adding visitors'}\n\
     9) Print all non adults events\n\
     10) Print the most visited event\n\
     11) Print events with (*) for adults or (#) for non adults\n\
     12) Filter events\n\
     13) Delete visitor from event\n\
     14) Create user\n\
-    15) Filter event visitors by gender\n`,
+    15) Filter event visitors by gender\n\
+    16) Check system status\n`,
         (answer) => {
             answer = answer.trim();
 
@@ -89,35 +91,27 @@ const main = () => {
                 rl.close();
             } else if (answer == 7) {
 
-                system.changeAddEventsStatus();
-                changeSystemStatus('events')
-                console.log(`${!system.canAddEvents ? 'Adding events DISABLED' : 'Adding events ENABLED'}`);
+                ReadlineService.handleChangeAddEventsStatus();
 
-                rl.close()
             } else if (answer == 8) {
 
-                system.changeAddVisitorsStatus();
-                changeSystemStatus('visitors')
-                console.log(`${!system.canAddVisitors ? 'Adding visitors DISABLED' : 'Adding visitors ENABLED'}`);
+                ReadlineService.handleChangeAddVisitorsStatus();
 
-                rl.close()
+                
             } else if (answer == 9) {
 
-                readNonAdultsEvents();
+                ReadlineService.handleReadNonAdultsEvents();
 
-                rl.close();
             } else if (answer == 10) {
 
-                readMostVisitedEvent();
-
-                rl.close();
+                ReadlineService.handleReadMostVisitedEvents();
+               
             } else if (answer == 11) {
 
-                readGroupedEvents();
+                ReadlineService.handleReadGroupedEvents();
 
-                rl.close();
             } else if (answer == 12) {
-                
+
                 handleFilterInput();
 
             } else if (answer == 13) {
@@ -129,13 +123,13 @@ const main = () => {
 
             } else if(answer == 15) {
                 
-                rl.question('Provide event unique ID identifier: ', (answer) => {
-
-                    if (!proceedIfEventDoesNotExists(answer)) { return }
-
-                    filterEventVisitorsByGender(answer)
-                })
+                ReadlineService.handleFilterEventsByGender();
                 
+            } else if(answer == 16) {
+
+                console.log(GlobalReference.System);
+                rl.close();
+            
             } else {
                 console.log('No such command!');
                 rl.close();
