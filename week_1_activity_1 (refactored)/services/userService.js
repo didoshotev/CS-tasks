@@ -11,7 +11,7 @@ const processCreateUser = async (fullName, age, budget, gender) => {
 
     const userObject = new User(fullName, age, budget, gender);
 
-    dataUserCollection.push({ ...userObject });
+    dataUserCollection = [...dataUserCollection, { ...userObject }]
     dataCollection.users = dataUserCollection;
     writeData(dataCollection);
 
@@ -45,7 +45,7 @@ const addUserToEvent = async (eventId, userId) => {
 
     updateUserVipStatus(currentUserUpdated);
 
-    currentEventUpdated.visitors.push(currentUserUpdated.id);
+    currentEventUpdated.visitors = [ ...currentEventUpdated.visitors, currentUserUpdated.id ];
     dataEventsCollection.splice(currentEventIndex, 1, currentEventUpdated);
 
     if(currentUserUpdated.budget < currentEvent.price && !currentUserUpdated.isVip) {

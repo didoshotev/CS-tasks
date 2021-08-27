@@ -3,6 +3,8 @@ const { processCreateUser, addUserToEvent, deleteUserFromEvent } = require('./us
 const { createEvent, deleteEventById, editEventById, filterEventsByGender,
     readGroupedEvents, readMostVisitedEvents, readNonAdultsEvents } = require('./eventService');
 const { changeSystemStatus } = require('./systemService');
+const { questionsMatcher } = require('../utils/textMatcher');
+
 
 const GlobalReference = require('../globals');
 
@@ -25,10 +27,10 @@ function readlineService(readline) {
 
     const handleCreateUserData = async() => {
 
-        const fullName = await askQuestion('Enter client full name: ', stringChecker);
-        const age      = parseInt(await askQuestion('Enter client age: ', ageChecker));
-        const budget   = parseFloat(await askQuestion('Enter client starting budget: ', priceChecker));
-        const gender   = await askQuestion('Enter client gender: ', genderChecker);
+        const fullName = await askQuestion(questionsMatcher.USER_FULLNAME, stringChecker);
+        const age      = parseInt(await askQuestion(questionsMatcher.USER_AGE, ageChecker));
+        const budget   = parseFloat(await askQuestion(questionsMatcher.USER_BUDGET, priceChecker));
+        const gender   = await askQuestion(questionsMatcher.USER_GENDER, genderChecker);
 
         await processCreateUser(fullName, age, budget, gender);
         return readline.close();
@@ -39,18 +41,19 @@ function readlineService(readline) {
         const canSystemCreateEvent = GlobalReference.System.checkAddEventsStatus()
         if(!canSystemCreateEvent) { return readline.close(); }
 
-        const eventName       = await askQuestion('Please provide the name of the event: ', stringChecker);
-        const price           = parseFloat(await askQuestion('Price of the event: ', priceChecker));
-        const isOnlyForAdultsAnswer = await askQuestion('Can people under 18 years old attend the event(Any answer except "no" is threated as "yes"): ', yesNoChecker);
-        const isOnlyForAdults = isOnlyForAdultsAnswer === 'no' ? false : true;
-
+        const eventName       = await askQuestion(questionsMatcher.EVENT_NAME, stringChecker);
+        const price           = parseFloat(await askQuestion(questionsMatcher.EVENT_PRICE, priceChecker));
+        const isOnlyForAdultsAnswer = await askQuestion(questionsMatcher.EVENT_IS_FOR_ADULTS, yesNoChecker);
+        
+        const isOnlyForAdults = GlobalReference.isOnlyForAdultsEnum[isOnlyForAdultsAnswer] || false;
+        
         await createEvent(eventName, isOnlyForAdults, price);
         return readline.close();
     };
 
     const handleDeleteEvent = async() => {
 
-        const eventId = await askQuestion('Provide unique event ID identifier: ', stringChecker);
+        const eventId = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
         await deleteEventById(eventId);
         
         return readline.close();
@@ -58,12 +61,12 @@ function readlineService(readline) {
 
     const handleEditEvent = async() => {
 
-        const eventId               = await askQuestion('Provide unique event ID identifier: ', stringChecker);
-        const eventName             = await askQuestion('Please provide the name of the event: ', stringChecker);
-        const price                 = parseFloat(await askQuestion('Price of the event: ', priceChecker));
-        const isOnlyForAdultsAnswer = await askQuestion('Can people under 18 years old attend the event(Any answer except "no" is threated as "yes"): ', yesNoChecker);
+        const eventId               = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
+        const eventName             = await askQuestion(questionsMatcher.EVENT_NAME, stringChecker);
+        const price                 = parseFloat(await askQuestion(questionsMatcher.EVENT_PRICE, priceChecker));
+        const isOnlyForAdultsAnswer = await askQuestion(questionsMatcher.EVENT_IS_FOR_ADULTS, yesNoChecker);
         
-        const isOnlyForAdults = isOnlyForAdultsAnswer === 'no' ? false : true;
+        const isOnlyForAdults = GlobalReference.isOnlyForAdultsEnum[isOnlyForAdultsAnswer] || false;
 
         await editEventById(eventId, eventName, isOnlyForAdults, price);
 
@@ -75,8 +78,8 @@ function readlineService(readline) {
         const canSystemAddVisitor = GlobalReference.System.checkAddVisitorsStatus();
         if(!canSystemAddVisitor) { return readline.close(); }
 
-        const eventId = await askQuestion('Provide event unique ID identifier: ', stringChecker);
-        const userId = await askQuestion('Provide user unique ID identifier: ', stringChecker);
+        const eventId = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
+        const userId = await askQuestion(questionsMatcher.USER_ID, stringChecker);
 
         await addUserToEvent(eventId, userId);
         
@@ -85,8 +88,8 @@ function readlineService(readline) {
 
     const handleDeleteVisitor = async() => {
 
-        const eventId = await askQuestion('Provide event unique ID identifier: ', stringChecker);
-        const userId = await askQuestion('Provide user unique ID identifier: ', stringChecker);
+        const eventId = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
+        const userId = await askQuestion(questionsMatcher.USER_ID, stringChecker);
 
         await deleteUserFromEvent(eventId, userId);
 
@@ -95,8 +98,8 @@ function readlineService(readline) {
 
     const handleFilterEventsByGender = async() => {
 
-        const eventId = await askQuestion('Provide event unique ID identifier: ', stringChecker);
-        const genderToFilter = await askQuestion('Which gender you want to filter (m)/(f): ', genderChecker);
+        const eventId = await askQuestion(questionsMatcher.EVENT_ID, stringChecker);
+        const genderToFilter = await askQuestion(questionsMatcher.EVENT_GENDER_FILTER, genderChecker);
 
         await filterEventsByGender(eventId, genderToFilter);
 

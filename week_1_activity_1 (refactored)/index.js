@@ -31,10 +31,15 @@ const commandsFunctionsCollection = {
 
 const commandsCollection = [
     'Create an event', 'Delete an event', 'Edit an event', 'Add visitor to event',
-    `${GlobalReference.System.canAddEvents ? 'Disable adding events' : 'Enable adding events'}`,
-    `${GlobalReference.System.canAddVisitors ? 'Disable adding visitors' : 'Enable adding visitors'}`,
-    'Print all non adults events', 'Print the most visited event', 'Print events with (*) for adults or (#) for non adults',
-    'Delete visitor from event', 'Create user', 'Filter event visitors by gender', 'Quit'
+    
+    `${GlobalReference.System.canAddEvents ? 
+        `Disable adding ${GlobalReference.DB_EVENTS_COLL_NAME}` : `Enable adding ${GlobalReference.DB_EVENTS_COLL_NAME}`}`,
+    
+    `${GlobalReference.System.canAddVisitors ? 
+        `Disable adding ${GlobalReference.DB_VISITORS_COLL_NAME}` : `Enable adding ${GlobalReference.DB_EVENTS_COLL_NAME}`}`,
+    
+        'Print all non adults events', 'Print the most visited event', 'Print events with (*) for adults or (#) for non adults',
+    'Delete visitor from event', 'Create user', `Filter event ${GlobalReference.DB_VISITORS_COLL_NAME} by gender`, 'Quit'
 ]
 
 const main = () => {
@@ -44,12 +49,9 @@ const main = () => {
         
         answer = parseInt(answer.trim());
         
-        if (answer in commandsFunctionsCollection) {
-            commandsFunctionsCollection[answer]();
-        } else {
-            console.log('Invalid command!');
-            readline.close();
-        }
+        const isValidAnswer = answer in commandsFunctionsCollection; 
+
+        isValidAnswer ? commandsFunctionsCollection[answer]() : (console.log('Invalid command!'), readline.close()); 
     })
 }
 

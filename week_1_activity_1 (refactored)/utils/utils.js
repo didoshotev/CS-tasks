@@ -52,7 +52,7 @@ const filterChecker = (input) => {
 }
 
 const yesNoChecker = (input) => {
-    return input.trim() === 'yes' ? true : false;
+    return input.trim() === 'no' ? true : false;
 }
 
 module.exports = { generateID, priceChecker, stringChecker, genderChecker, ageChecker, filterChecker, yesNoChecker }

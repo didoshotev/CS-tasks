@@ -1,5 +1,6 @@
 const { Event } = require('../models/eventModel');
 const { readData, getEvents, writeData, getUsers } = require('./fsService');
+const GlobalReference = require('../globals');
 
 const dataCollection = readData();
 const dataEventsCollection = getEvents();
@@ -9,8 +10,8 @@ const createEvent = (title, isOnlyForAdults, price, visitors) => {
 
     const eventObject = new Event(title, isOnlyForAdults, price, visitors);
 
-    dataEventsCollection.push({ ...eventObject });
-    dataCollection.events = dataEventsCollection;
+    const dataEventsCollectionModified = [ ...dataEventsCollection, { ...eventObject } ];
+    dataCollection.events = dataEventsCollectionModified;
     writeData(dataCollection);
 
     console.log(`Created Event "${title}"`);
@@ -40,7 +41,7 @@ const editEventById = async (id, title, isOnlyForAdults, price) => {
 
     if (!currentEvent) { return }
 
-    const editedEvent = Object.assign(currentEvent, { title, isOnlyForAdults, price });
+    const editedEvent = { ...currentEvent, title, isOnlyForAdults, price}
     const eventIndex = getEventIndexById(id);
 
     dataEventsCollection.splice(eventIndex, 1, editedEvent);
@@ -56,10 +57,10 @@ const filterEventsByGender = async (eventId, genderToFilter) => {
 
     if (!currentEvent) { return }
 
-    genderToFilter === 'm' && console.log(`All male clients visiting "${currentEvent.title}" are:`);
-    genderToFilter === 'f' && console.log(`All female clients visiting "${currentEvent.title}" are:`);
+    genderToFilter === GlobalReference.genderEnum.MALE && console.log(`All male clients visiting "${currentEvent.title}" are:`);
+    genderToFilter === GlobalReference.genderEnum.FEMALE && console.log(`All female clients visiting "${currentEvent.title}" are:`);
 
-    currentEvent.visitors.map(visitorID => {
+    currentEvent[GlobalReference.DB_VISITORS_COLL_NAME].map(visitorID => {
 
         const currentUser = dataUsersCollection.find(user => user.id === visitorID);
 
@@ -122,8 +123,7 @@ const getEventIndexById = (id) => {
 }
 
 const addUserToEventVisitors = (event, userId) => {
-    event.visitors.push(userId);
-    return event.visitors;
+    return [...event[GlobalReference.DB_VISITORS_COLL_NAME], userId ];
 }
 
 const checkAdultSymbol = (isOnlyForAdults) => {
