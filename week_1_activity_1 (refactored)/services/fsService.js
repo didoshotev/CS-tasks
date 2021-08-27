@@ -22,24 +22,6 @@ const getSystem = () => {
     return readData().system;
 }
 
-const getEventById = (id) => {
-    return getEvents().find(event => event.id === id); 
-}
 
-const getUserById = (id) => {
-    return getUsers().find(user => user.id === id);
-}
-
-const checkIfEventExists = (id) => {
-    return getEvents().find(event => event.id === id) ? true : false;
-}
-
-const checkIfUserExists = (fullName) => {
-    return getUsers().find(user => user.fullName === fullName);
-}
-
-module.exports = { readData, writeData, getUsers, getEvents,
-    checkIfEventExists, checkIfUserExists, getSystem,
-    getEventById, getUserById
-    }
+module.exports = { readData, writeData, getUsers, getEvents, getSystem }
 

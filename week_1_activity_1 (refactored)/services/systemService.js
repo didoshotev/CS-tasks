@@ -1,6 +1,4 @@
 const { getSystem, writeData, readData } = require("./fsService");
-const GlobalReference = require('../globals');
-
 
 const dataCollection = readData();
 const dataSystemCollection = getSystem();
@@ -15,6 +13,7 @@ const changeSystemStatus = (type) => {
 
     dataCollection.system = dataSystemCollectionModified;
     writeData(dataCollection);
+    
     console.log('Successfully updated the System Status');
 }
 

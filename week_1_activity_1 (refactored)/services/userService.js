@@ -1,9 +1,7 @@
-const { readData, writeData, checkIfUserExists, getUsers, getEvents } = require('./fsService');
-const { generateID, priceChecker, stringChecker, genderChecker, ageChecker, filterChecker } = require('../utils/utils');
+const { readData, writeData, getUsers, getEvents } = require('./fsService');
 const { User } = require('../models/userModel');
-const { getEventById, addUserToEventVisitors, getEventIndexById } = require('./eventService');
+const { getEventById, getEventIndexById } = require('./eventService');
 const GlobalReference = require('../globals');
-
 
 const dataCollection = readData();
 const dataUserCollection = getUsers();
@@ -57,8 +55,6 @@ const addUserToEvent = async (eventId, userId) => {
 
     !currentUser.isVip && (currentUserUpdated.budget -= currentEvent.price);
 
-    console.log('updated user', currentUserUpdated);
-
     dataUserCollection.splice(currentUserIndex, 1, currentUserUpdated);
     
     dataCollection.users = dataUserCollection;
@@ -71,9 +67,7 @@ const addUserToEvent = async (eventId, userId) => {
 const deleteUserFromEvent = async (eventId, userId) => {
 
     const currentEvent = getEventById(eventId);
-    const currentEventIndex = getEventIndexById(eventId);
     const currentUser = getUserById(userId);
-    const currentUserIndex = getUserIndexById(userId);
 
     let deleteChecker = false;
 
@@ -102,8 +96,6 @@ const deleteUserFromEvent = async (eventId, userId) => {
 
 }
 
-
-
 const getUserById = (id) => {
 
     const user = dataUserCollection.find(user => user.id === id);
@@ -116,8 +108,6 @@ const getUserIndexById = (id) => {
 };
 
 const checkIfUserIsAged = (userAges) => {
-    console.log(userAges);
-    console.log(typeof userAges);
     return userAges > GlobalReference.USER_MIN_ADULT_AGE ? true : false;
 }
 
@@ -138,18 +128,5 @@ const updateUserVipStatus = (user) => {
         user.activeEvents++;
     }
 }
-
-// const proceedIfUserDoesNotExits = (fullName) => {
-//     let isValidFullName = checkIfUserExists(fullName);
-
-//     if (isValidFullName) {
-
-//         console.log('There is no user with such full name');
-//         rl.close();
-//         return
-//     }
-
-//     return true
-// };
 
 module.exports = { processCreateUser, addUserToEvent, deleteUserFromEvent }

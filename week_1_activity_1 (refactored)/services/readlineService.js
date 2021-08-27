@@ -1,15 +1,15 @@
-const { readData, writeData, checkIfUserExists } = require('./fsService');
-const { generateID, priceChecker, stringChecker, genderChecker, ageChecker, filterChecker, yesNoChecker } = require('../utils/utils');
+const { priceChecker, stringChecker, genderChecker, ageChecker, yesNoChecker } = require('../utils/utils');
 const { processCreateUser, addUserToEvent, deleteUserFromEvent } = require('./userService')
-const { createEvent, getEventById, deleteEventById, editEventById, filterEventsByGender, readGroupedEvents, readMostVisitedEvents, readNonAdultsEvents } = require('./eventService');
+const { createEvent, deleteEventById, editEventById, filterEventsByGender,
+    readGroupedEvents, readMostVisitedEvents, readNonAdultsEvents } = require('./eventService');
 const { changeSystemStatus } = require('./systemService');
 
 const GlobalReference = require('../globals');
-const { System } = require('../globals');
 
 
 function readlineService(readline) {
 
+    // helper
     function askQuestion(theQuestion, validateInputFnc) {
         return new Promise(resolve => readline.question(theQuestion, answer => {
             if (validateInputFnc) {
@@ -23,7 +23,6 @@ function readlineService(readline) {
         }))
     }
 
-    // process input data
     const handleCreateUserData = async() => {
 
         const fullName = await askQuestion('Enter client full name: ', stringChecker);
@@ -141,6 +140,12 @@ function readlineService(readline) {
         readline.close();
     };
 
+    const handleQuit = async() => {
+        
+        console.log('See you later!');
+        readline.close()
+    }
+
     return {
         handleCreateUserData,
         handleCreateEventData,
@@ -153,7 +158,8 @@ function readlineService(readline) {
         handleReadMostVisitedEvents,
         handleReadNonAdultsEvents,
         handleChangeAddEventsStatus,
-        handleChangeAddVisitorsStatus
+        handleChangeAddVisitorsStatus,
+        handleQuit
     }
 }
 
