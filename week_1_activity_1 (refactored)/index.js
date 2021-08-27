@@ -1,5 +1,5 @@
 const readline = require("readline");
-const { readData } = require('./service');
+const { readData } = require('./services/fsService');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -17,7 +17,9 @@ const system = {
     }
 }
 
-const { createUser, proceedIfUserDoesNotExits } = require('./userService')(rl);
+const ReadlineService = require('./services/readlineService')(rl);
+
+
 
 const { createEvent,
     deleteEventById,
@@ -35,7 +37,7 @@ const { createEvent,
     proceedIfEventDoesNotExists,
     addUserToEvent,
     filterEventVisitorsByGender
-} = require('./service')(rl);
+} = require('./services/service')(rl);
 
 
 const main = () => {
@@ -60,50 +62,28 @@ const main = () => {
             answer = answer.trim();
 
             if (answer == 1) {
-
                 if (!system.canAddEvents) {
                     console.log('Creating events is currently disabled!');
-                    rl.close();
-                    return;
+                    return rl.close();
                 }
-                createEvent();
+                ReadlineService.handleCreateEventData();
             }
 
             else if (answer == 2) {
 
-                rl.question('Provide unique ID identifier: ', (answer) => {
-                    if (!proceedIfEventDoesNotExists(answer)) { return }
-                    deleteEventById(answer);
-                })
+                ReadlineService.handleDeleteEvent();
 
             } else if (answer == 3) {
+                
                 readDataPretty();
+            
             } else if (answer == 4) {
-
-                rl.question('Provide unique ID identifier: ', (answer) => {
-
-                    if (!proceedIfEventDoesNotExists(answer)) { return }
-                    editEventById(answer);
-                })
+            
+                ReadlineService.handleEditEvent();
+                
             } else if (answer == 5) {
 
-                if (!system.canAddVisitors) {
-                    console.log('Adding new visitors is currently disabled');
-
-                    rl.close();
-                    return
-                }
-
-                rl.question('Provide event unique ID identifier: ', (eventID) => {
-                    if (!proceedIfEventDoesNotExists(eventID)) { return }
-
-
-                    rl.question('Provide user unique ID identifier: ', (userId) => {
-                        if (!proceedIfUserDoesNotExits(userId)) { return }
-
-                        addUserToEvent(eventID, userId);
-                    })
-                })
+                ReadlineService.handleAddVisitor();
 
             } else if (answer == 6) {
                 rl.close();
@@ -137,18 +117,15 @@ const main = () => {
 
                 rl.close();
             } else if (answer == 12) {
+                
                 handleFilterInput();
 
             } else if (answer == 13) {
 
-                rl.question('Provide event unique ID identifier: ', (answer) => {
+                ReadlineService.handleDeleteVisitor();
 
-                    if (!proceedIfEventDoesNotExists(answer)) { return }
-
-                    deleteEventVisitor(answer);
-                })
             } else if (answer == 14) {
-                createUser();
+                ReadlineService.handleCreateUserData();
 
             } else if(answer == 15) {
                 

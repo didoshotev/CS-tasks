@@ -1,0 +1,63 @@
+{
+    "system": {
+        "canAddEvents": true,
+        "canAddVisitors": true
+    },
+    "users": [
+        {
+            "id": "_iwcbjryasu",
+            "fullName": "Deffect",
+            "age": 14,
+            "budget": 0,
+            "gender": "f",
+            "isVip": false,
+            "activeEvents": 2
+        },
+        {
+            "id": "_84vt49ihcbi",
+            "fullName": "Ivan Ivanov",
+            "age": 20,
+            "budget": 400,
+            "gender": "m",
+            "isVip": false,
+            "activeEvents": 2
+        },
+        {
+            "fullName": "Tome",
+            "age": 20,
+            "budget": 100,
+            "gender": "m",
+            "id": "_9j23vdgp2jh",
+            "activeEvents": 2,
+            "isVip": false
+        }
+    ],
+    "events": [
+        {
+            "title": "Wonderland 2020 edited",
+            "isOnlyForAdults": false,
+            "id": "_5yu17aum4",
+            "price": 50,
+            "visitors": [
+                "_84vt49ihcbi"
+            ]
+        },
+        {
+            "title": "Test event is edited",
+            "isOnlyForAdults": true,
+            "id": "_1hhwpu75kjn",
+            "price": "20",
+            "visitors": [
+                "_iwcbjryasu",
+                "_84vt49ihcbi"
+            ]
+        },
+        {
+            "title": "Demo event 230",
+            "isOnlyForAdults": false,
+            "price": 15,
+            "id": "_h6rbbmizj4e",
+            "visitors": []
+        }
+    ]
+}
