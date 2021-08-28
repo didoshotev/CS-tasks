@@ -1,0 +1,6 @@
+
+const GlobalReference = { }
+
+const unavailableCells = { 
+    
+}
