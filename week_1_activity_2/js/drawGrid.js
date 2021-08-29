@@ -2,8 +2,8 @@ const container = document.getElementById("container");
 let rows = document.getElementsByClassName("gridRow");
 
 export function drawGrid() {
-    makeRows(12);
-    makeColumns(12);
+    makeRows(13);
+    makeColumns(13);
 }
 
 
