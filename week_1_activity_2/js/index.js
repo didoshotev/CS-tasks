@@ -1,11 +1,12 @@
 import { drawGrid } from './drawGrid.js';
 import { Soldiers } from './army.js';
-import { DomFactory } from './domFactory.js';
+import GameBoardManager from './GameBoardManager.js';
 const container = document.getElementById("container");
 let rows = document.getElementsByClassName("gridRow");
 let cells = document.getElementsByClassName("cell");
 let startBtn = document.getElementById('start-btn');
 let resetBtn = document.getElementById('reset-btn');
+// GameBoardManager.moveTo();
 
 drawGrid();
 createBuildings();
@@ -22,8 +23,8 @@ const soldiersList = initSoliders();
 const soldiersListPositions = initSolidersPositions();
 drawSoldiers()
 
-console.log(soldiersList);
-console.log(soldiersListPositions);
+// console.log(soldiersList);
+// console.log(soldiersListPositions);
 
 const item = getCell(0, 0);
 // item.textContent = '';
@@ -35,14 +36,25 @@ function startGame() {
     startBtn.disabled = true;
     resetBtn.disabled = false;
 
+    console.log(GameBoardManager.getSoldiersListPositions());
    
     window.addEventListener('keydown', (key) => {
-        console.log(key);
+
         if(key.key === 'w') {
-            console.log('forward');
-            moveSoldiers('forward');
-            // changeCell(11, 7, soldiersList['tank']);
+
+            console.log('up');
+            GameBoardManager.moveTo('up');
+            console.log(GameBoardManager.getSoldiersListPositions());
+
+        } else if(key.key === 'a') {
             
+            console.log('left');
+            GameBoardManager.moveTo('up');
+
+        } else if(key.key === 's') {
+
+            console.log('down');
+            GameBoardManager.moveTo('down');
         }
     })
 }
@@ -80,6 +92,7 @@ function appendCell(row, coll, childCell) {
 }
 
 function initSoliders() {
+    // fix this as this is too concrete
     let fisher = createCell('div', 44, 'purple');
     let drunker = createCell('div', 33, 'yellow');
     let sniper = createCell('div', 22, 'orange');
