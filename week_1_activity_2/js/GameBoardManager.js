@@ -1,21 +1,15 @@
-import { getArmySoldiersCollection, updateArmySoldiersCollectionPositions } from "./army.js";
-let soldiersOrder = [1, 2, 3, 4]; // [3, 2, 1, 4]
+import { getArmySoldiersCollection, updateArmySoldiersCollectionPositions, changeCordinates } from "./army.js";
+let soldiersOrderCollection = [1, 2, 3, 4]; // [3, 2, 1, 4]
 
 const soldiersListPositions = {
 
-    1: { nickname: 'tank', cordinates: [13, 10], isLeader: true, symbol: getSoldierSymbol(1), order: 1 },
-    2: { nickname: 'sniper', cordinates: [13, 11], isLeader: false, symbol: getSoldierSymbol(2), order: 2 },
-    3: { nickname: 'drunker', cordinates: [13, 12], isLeader: false, symbol: getSoldierSymbol(3), order: 3 },
-    4: { nickname: 'fisher', cordinates: [13, 13], isLeader: false, symbol: getSoldierSymbol(4), order: 4 },
+    1: { nickname: 'tank', cordinates: [13, 10], symbol: getSoldierSymbol(1), order: 3 },
+    2: { nickname: 'sniper', cordinates: [13, 11], symbol: getSoldierSymbol(2), order: 2 },
+    3: { nickname: 'drunker', cordinates: [13, 12], symbol: getSoldierSymbol(3), order: 1 },
+    4: { nickname: 'fisher', cordinates: [13, 13], symbol: getSoldierSymbol(4), order: 4 },
 }
 
 // [[startRow, endRow], [startColl, endColl]]
-const buildingListPositions = {
-    'small': [[2, 3], [2, 3]],
-    'medium': [[4, 5], [7, 9]],
-    'big': [[9, 11], [1, 3]],
-
-}
 
 const GameBoardManager = {
 
@@ -38,22 +32,43 @@ const GameBoardManager = {
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], //15
     ],
 
+    activeBombs: [
+        { cordinates: [1, 1], timeLeft: 5}
+    ],
+
+    receiveShoot() {
+        if(soldiersListPositions.hasOwnProperty(1)) {
+            delete soldiersListPositions[1];
+            return;
+        }
+
+        // delete next one available
+        for (const soldierKey in soldiersListPositions) {
+
+            delete soldiersListPositions[soldierKey];
+            return;
+        }
+    },
+
     moveTo(direction) {
         changeCordinates(direction);
     },
 
-
     activateBomb() {
-
+        const cordinatesToDetronate = soldiersListPositions[4].cordinates;
+        this.activeBombs.push({ cordinates: cordinatesToDetronate, timeLeft: 5})
     },
 
-    changeSoldierLeader(oldLead, newLead) {
-        const oldLeadIndex = soldiersOrder.findIndex(item => item === oldLead);
-        const newLeadIndex = soldiersOrder.findIndex(item => item === newLead);
+    changeSoldierLeader(newLeadId) {
+       
+        // const oldLeadId = this.getOldLeadID();
+        const oldLeadId = getArmySoldiersCollection().shift().id
+        const newLeadIndex = soldiersOrderCollection.findIndex(item => item === newLeadId);
 
-        soldiersOrder = swapArrayElements(soldiersOrder, oldLeadIndex, newLeadIndex);
-        soldiersListPositions[oldLead].order = newLeadIndex + 1;
-        soldiersListPositions[newLead].order = oldLeadIndex + 1;
+        soldiersOrderCollection = swapArrayElements(soldiersOrderCollection, 0, newLeadIndex);
+        soldiersListPositions[oldLeadId].order = newLeadIndex + 1;
+        soldiersListPositions[newLeadId].order = 1;
+        console.log(soldiersListPositions);
     },
 
     checkIfValid(row, coll) {
@@ -66,18 +81,6 @@ const GameBoardManager = {
             return { error: true, message: "You can't go throgh this buidling!" }
         }
         return { error: false }
-
-
-        // for (const buildingKey in buildingListPositions) {
-        //     let startRow = buildingListPositions[buildingKey][0][0];
-        //     let endRow = buildingListPositions[buildingKey][0][1];
-        //     let startColl = buildingListPositions[buildingKey][1][0];
-        //     let endColl = buildingListPositions[buildingKey][1][1]
-        //     // 2 4
-        //     // if ((row >= startRow && row <= endRow) && (coll >= startColl && coll <= endColl)) {
-        //     //     return { error: true, message: 'Invalid direction' }
-        //     // }
-        // }
     },
 
     updateUnitCollection(newRow, newColl, oldRow, oldColl, symbol) {
@@ -101,60 +104,24 @@ const GameBoardManager = {
             }
         }
         return order;
-    }
-    
-}
+    },
 
-function changeCordinates(direction) {
-
-    let nextSoldierCordinates;
-    let currentCordinates;
-    let isMoveValid;
-
-    for (const soldierKey in soldiersListPositions) {
-
-        if (soldiersListPositions[soldierKey].isLeader) {
-
-            nextSoldierCordinates = [soldiersListPositions[soldierKey].cordinates[0], soldiersListPositions[soldierKey].cordinates[1]]
-
-            if (direction === 'left') {
-
-                isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[1] - 1);
-                soldiersListPositions[soldierKey].cordinates[1]--;
-
-            } else if (direction === 'down') {
-
-                isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[1] + 1);
-                soldiersListPositions[soldierKey].cordinates[0]++;
-
-            } else if (direction === 'up') {
-
-                isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[0] - 1);
-                soldiersListPositions[soldierKey].cordinates[0]--;
-
-            } else if (direction === 'right') {
-
-                isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[0] + 1);
-                soldiersListPositions[soldierKey].cordinates[1]++;
-
+    getOldLeadID() {
+        for (const soldierKey in soldiersListPositions) {
+            if(soldiersListPositions[soldierKey].order === 1) {
+                return soldierKey;
             }
-
-            if (isMoveValid.error) {
-                throw new Error(isMoveValid.message);
-            }
-        } else {
-            currentCordinates = soldiersListPositions[soldierKey].cordinates;
-            soldiersListPositions[soldierKey].cordinates = nextSoldierCordinates;
-            nextSoldierCordinates = currentCordinates;
         }
-        updateArmySoldiersCollectionPositions(soldierKey ,soldiersListPositions[soldierKey].cordinates);
+    },
+
+    getSoldiersOrderCollection() {
+        return soldiersOrderCollection;
     }
 }
 
 function getSoldierSymbol(soldierId) {
-    return `${soldiersOrder.findIndex(id => id === soldierId) + 1}${soldierId}`;
+    return `${soldiersOrderCollection.findIndex(id => id === soldierId) + 1}${soldierId}`;
 }
-
 
 // ------------
 
@@ -163,8 +130,6 @@ function swapArrayElements(arr, x, y) {
     arr.splice(y, 1, arr.splice(x, 1, arr[y])[0]);
     return arr;
 };
-
-//   swapArrayElements([1, 2, 3, 4, 5], 1, 3); //=> [ 1, 4, 3, 2, 5 ]
 
 export default GameBoardManager;
 

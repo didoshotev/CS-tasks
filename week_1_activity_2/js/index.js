@@ -1,16 +1,32 @@
 import { drawGrid } from './drawGrid.js';
 import GameBoardManager from './GameBoardManager.js';
 import DrawService from './DrawService.js';
-const container = document.getElementById("container");
-let rows = document.getElementsByClassName("gridRow");
-let cells = document.getElementsByClassName("cell");
+import { armySoldiersCollection, changeLeader } from './army.js';
+
 let startBtn = document.getElementById('start-btn');
 let resetBtn = document.getElementById('reset-btn');
+let leaderFormBtn = document.getElementById('change-leader-btn');
 
+let leaderForm = document.getElementById('leader-select');
+let commandsCounter = 0;
 
 drawGrid();
 DrawService.start();
 
+const commandObject = {
+    'a': () => {
+        GameBoardManager.moveTo('left')
+    },
+    'w': () => {
+        GameBoardManager.moveTo('up')
+    },
+    's': () => {
+        GameBoardManager.moveTo('down')
+    },
+    'd': () => {
+        GameBoardManager.moveTo('right')
+    },
+}
 
 
 startBtn.addEventListener("click", startGame)
@@ -19,39 +35,32 @@ resetBtn.addEventListener("click", () => {
     location.reload();
 })
 
-
-
 function startGame() {
     startBtn.disabled = true;
     resetBtn.disabled = false;
 
     window.addEventListener('keydown', (key) => {
-        console.log(key.key);
-        if(key.key === 'w') {
-
-            console.log('up');
-            GameBoardManager.moveTo('up');
+        
+        if(key.key in commandObject) {
+            commandObject[key.key]();
             DrawService.drawSoldiers();
-            // console.log('new', GameBoardManager.getSoldiersListPositions());
+            commandsCounter++;
+        }
+    })
+
+    console.log('old', GameBoardManager.getSoldiersOrderCollection());
+    leaderFormBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const isSoldierInArmy = armySoldiersCollection.find(item => item.id === +leaderForm.value);
+
+        if(!isNaN(leaderForm.value) && isSoldierInArmy) {
             
+            changeLeader(+leaderForm.value);
+            DrawService.drawSoldiers()
 
-        } else if(key.key === 'a') {
-
-            console.log('left');
-            GameBoardManager.moveTo('left');
-            DrawService.drawSoldiers();
-
-
-        } else if(key.key === 's') {
-
-            console.log('down');
-            GameBoardManager.moveTo('down');
-            DrawService.drawSoldiers();
-
-        } else if(key.key === 'd') {
-
-            GameBoardManager.moveTo('right');
-            DrawService.drawSoldiers();
+        } else {
+            alert('Selected soldier is not in the army!');
         }
     })
 }
