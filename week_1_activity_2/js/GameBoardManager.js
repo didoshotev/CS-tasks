@@ -1,11 +1,12 @@
+import { getArmySoldiersCollection, updateArmySoldiersCollectionPositions } from "./army.js";
 let soldiersOrder = [1, 2, 3, 4]; // [3, 2, 1, 4]
 
 const soldiersListPositions = {
 
-    1: { nickname: 'tank', cordinates: [14, 10], isLeader: true, symbol: getSoldierSymbol(1), order: 1 },
-    2: { nickname: 'sniper', cordinates: [14, 11], isLeader: false, symbol: getSoldierSymbol(2), order: 2 },
-    3: { nickname: 'drunker', cordinates: [14, 12], isLeader: false, symbol: getSoldierSymbol(3), order: 3 },
-    4: { nickname: 'fisher', cordinates: [14, 13], isLeader: false, symbol: getSoldierSymbol(4), order: 4 },
+    1: { nickname: 'tank', cordinates: [13, 10], isLeader: true, symbol: getSoldierSymbol(1), order: 1 },
+    2: { nickname: 'sniper', cordinates: [13, 11], isLeader: false, symbol: getSoldierSymbol(2), order: 2 },
+    3: { nickname: 'drunker', cordinates: [13, 12], isLeader: false, symbol: getSoldierSymbol(3), order: 3 },
+    4: { nickname: 'fisher', cordinates: [13, 13], isLeader: false, symbol: getSoldierSymbol(4), order: 4 },
 }
 
 // [[startRow, endRow], [startColl, endColl]]
@@ -13,7 +14,7 @@ const buildingListPositions = {
     'small': [[2, 3], [2, 3]],
     'medium': [[4, 5], [7, 9]],
     'big': [[9, 11], [1, 3]],
- 
+
 }
 
 const GameBoardManager = {
@@ -38,13 +39,7 @@ const GameBoardManager = {
     ],
 
     moveTo(direction) {
-        if (direction === 'up') {
-            changeCordinates(direction);
-        } else if (direction === 'down') {
-            changeCordinates(direction)
-        } else if (direction === 'left') {
-            changeCordinates(direction);
-        }
+        changeCordinates(direction);
     },
 
 
@@ -63,11 +58,11 @@ const GameBoardManager = {
 
     checkIfValid(row, coll) {
 
-        if((row === 0 || row === 14) || (coll === 0 || coll === 14)) {
-            return { error: true, message: "You are not allowed to step there!"}
+        if ((row === 0 || row === 14) || (coll === 0 || coll === 14)) {
+            return { error: true, message: "You are not allowed to step there!" }
         }
 
-        if((row === 4 && coll === 8)) {
+        if ((row === 4 && coll === 8)) {
             return { error: true, message: "You can't go throgh this buidling!" }
         }
         return { error: false }
@@ -96,13 +91,25 @@ const GameBoardManager = {
 
     getBuildingListPositions() {
         return buildingListPositions;
+    },
+
+    getLastSoldierOrder() {
+        let order = 0;
+        for (const soldierKey in soldiersListPositions) {
+            if(soldiersListPositions[soldierKey].order > order) {
+                order = soldiersListPositions[soldierKey].order
+            }
+        }
+        return order;
     }
+    
 }
 
 function changeCordinates(direction) {
 
     let nextSoldierCordinates;
     let currentCordinates;
+    let isMoveValid;
 
     for (const soldierKey in soldiersListPositions) {
 
@@ -112,40 +119,35 @@ function changeCordinates(direction) {
 
             if (direction === 'left') {
 
-                const isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[1] - 1);
-                if (isMoveValid.error) {
-                    throw new Error(isMoveValid.message)
-                }
+                isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[1] - 1);
                 soldiersListPositions[soldierKey].cordinates[1]--;
+
             } else if (direction === 'down') {
 
-                const isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[1] + 1);
-                if (isMoveValid.error) {
-                    throw new Error(isMoveValid.message)
-                }
+                isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[1] + 1);
                 soldiersListPositions[soldierKey].cordinates[0]++;
+
             } else if (direction === 'up') {
 
-                const isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[0] - 1);
-                if (isMoveValid.error) {
-                    throw new Error(isMoveValid.message)
-                }
+                isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[0] - 1);
                 soldiersListPositions[soldierKey].cordinates[0]--;
+
+            } else if (direction === 'right') {
+
+                isMoveValid = GameBoardManager.checkIfValid(soldiersListPositions[soldierKey].cordinates[0] + 1);
+                soldiersListPositions[soldierKey].cordinates[1]++;
+
             }
 
+            if (isMoveValid.error) {
+                throw new Error(isMoveValid.message);
+            }
         } else {
-
             currentCordinates = soldiersListPositions[soldierKey].cordinates;
             soldiersListPositions[soldierKey].cordinates = nextSoldierCordinates;
             nextSoldierCordinates = currentCordinates;
         }
-
-        // GameBoardManager.updateUnitCollection(soldiersListPositions[soldierKey].cordinates[0],
-        //                                     soldiersListPositions[soldierKey].cordinates[1],
-        //                                     nextSoldierCordinates[0],
-        //                                     nextSoldierCordinates[1],
-        //                                     soldiersListPositions.symbol
-        //                                     )
+        updateArmySoldiersCollectionPositions(soldierKey ,soldiersListPositions[soldierKey].cordinates);
     }
 }
 
