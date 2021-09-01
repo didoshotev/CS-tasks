@@ -1,4 +1,4 @@
-import { armySoldiersCollection, getArmySoldiersCollection } from '../army.js';
+import { armySoldiersCollection, getArmySoldiersCollection } from '../services/ArmyService.js';
 
 let rows = document.getElementsByClassName('gridRow');
 
@@ -55,10 +55,9 @@ const DrawService = {
 
         let cell = document.createElement(el);
 
-        // className ? cell.classList.add(`cell ${className}`) : cell.classList.add(`cell`);
-
         cell.classList.add(`child-cell`);
         let order = armySoldiersCollection.findIndex(item => item.id === id) + 1;
+        
         cell.textContent = `${order}${id}`;
         cell.style.backgroundColor = backgroundColor;
 
@@ -90,7 +89,6 @@ const DrawService = {
     resetCell(row, coll) {
         const cell = this.getCell(row, coll);
         cell.innerText = 'X';
-        cell.textContent = 'X';
         cell.style.color = 'white';
     }
 

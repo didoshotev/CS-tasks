@@ -25,15 +25,16 @@ function makeRows(rowNum) {
 
 function makeColumns(cellNum) {
     for (let i = 0; i < rows.length; i++) {
+
         for (let j = 0; j < cellNum; j++) {
+        
             let newCell = document.createElement("div");
-            if(i === 0 || i === 14) {
-                newCell.style.backgroundColor = 'gray';
-            }
+        
+            (i === 0 || i === 14) && (newCell.style.backgroundColor = 'gray');
+
             rows[j].appendChild(newCell).className = "cell";
             newCell.textContent= 'X'
         };
-
     };
 };
 
@@ -44,11 +45,10 @@ function createBuildings() {
 }
 
 function createSmallBuilding(row, coll) {
-    let c1 = accessCell(row, coll).className = 'cell small-build';
-    let c2 = accessCell(row, coll + 1).className = 'cell small-build';
-    let c3 = accessCell(row + 1, coll).className = 'cell small-build';
-    let c4 = accessCell(row + 1, coll + 1).className = 'cell small-build';
-    // c1.textContent;
+    accessCell(row, coll).className = 'cell small-build';
+    accessCell(row, coll + 1).className = 'cell small-build';
+    accessCell(row + 1, coll).className = 'cell small-build';
+    accessCell(row + 1, coll + 1).className = 'cell small-build';
 }
 
 function createMediumBuilding(row, coll) {
@@ -75,7 +75,6 @@ function createBigBuilding(row, coll) {
     accessCell(row + 2, coll + 1).className = 'cell big-build';
     accessCell(row + 2, coll + 2).className = 'cell big-build';
 }
-
 
 function accessCell(rowNumber, columnNumber) {
     let cell = rows[rowNumber].childNodes[columnNumber];

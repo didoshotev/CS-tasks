@@ -12,6 +12,18 @@ const getRandomNumberFromRange = (maxNum) => {
     return Math.floor(Math.random() * maxNum) + 1   
 }
 
+const checkIfValid = (row, coll) => {
+
+    if ((row === 0 || row === 14) || (coll === 0 || coll === 14)) {
+        return { error: true, message: "You are not allowed to step there!" }
+    }
+
+    if ((row === 4 && coll === 8)) {
+        return { error: true, message: "You can't go throgh this buidling!" }
+    }
+    return { error: false }
+};
+
 
 const validDiagonals = {
     a1: false,
@@ -28,4 +40,4 @@ const validBigCells = {
     c3: false
 }
 
-export { swapArrayElements, validDiagonals, arrayChecker, validBigCells, getRandomNumberFromRange }
+export { swapArrayElements, validDiagonals, arrayChecker, validBigCells, getRandomNumberFromRange, checkIfValid }

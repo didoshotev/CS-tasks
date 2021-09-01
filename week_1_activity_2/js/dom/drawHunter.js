@@ -1,5 +1,5 @@
-import HunterReference from "../hunter.js";
-import DrawService from "./DrawService.js";
+import HunterReference from "../services/HunterService.js";
+import DrawService from "./DrawPrimary.js";
 
 
 const DrawHunter = {

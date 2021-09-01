@@ -1,6 +1,5 @@
-import { armySoldiersCollection, fireTowardsArmy } from "./army.js";
-import GameBoardManager from "./GameBoardManager.js";
-import { arrayChecker, getRandomNumberFromRange } from "./utils/utils.js";
+import { armySoldiersCollection, fireTowardsArmy } from "./ArmyService.js";
+import { arrayChecker, checkIfValid, getRandomNumberFromRange } from "../utils/utils.js";
 
 const CORNERS_NUMBER = 4;
 const POSSIBLE_DIRECTIONS_NUMBER = 4;
@@ -68,16 +67,16 @@ function isNextMoveInvalid(move) {
 
     if (move === 'up') {
 
-        isMoveValid = GameBoardManager.checkIfValid(HunterReference.hunterObject.currentPosition[0] - 1, HunterReference.hunterObject.currentPosition[1]);
+        isMoveValid = checkIfValid(HunterReference.hunterObject.currentPosition[0] - 1, HunterReference.hunterObject.currentPosition[1]);
     } else if (move === 'down') {
 
-        isMoveValid = GameBoardManager.checkIfValid(HunterReference.hunterObject.currentPosition[0] + 1, HunterReference.hunterObject.currentPosition[1]);
+        isMoveValid = checkIfValid(HunterReference.hunterObject.currentPosition[0] + 1, HunterReference.hunterObject.currentPosition[1]);
     } else if (move === 'left') {
 
-        isMoveValid = GameBoardManager.checkIfValid(HunterReference.hunterObject.currentPosition[0], HunterReference.hunterObject.currentPosition[1] - 1);
+        isMoveValid = checkIfValid(HunterReference.hunterObject.currentPosition[0], HunterReference.hunterObject.currentPosition[1] - 1);
     } else if (move === 'right') {
 
-        isMoveValid = GameBoardManager.checkIfValid(HunterReference.hunterObject.currentPosition[0], HunterReference.hunterObject.currentPosition[1] + 1);
+        isMoveValid = checkIfValid(HunterReference.hunterObject.currentPosition[0], HunterReference.hunterObject.currentPosition[1] + 1);
     }
 
     return isMoveValid.error;

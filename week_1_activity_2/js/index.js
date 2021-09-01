@@ -1,10 +1,9 @@
-import { drawGrid } from './dom/drawGrid.js';
-import GameBoardManager from './GameBoardManager.js';
-import DrawService from './dom/DrawService.js';
-import { activateBomb, armySoldiersCollection, changeLeader, getActiveBombs, manageBombs,  } from './army.js';
+import { drawGrid } from './dom/DrawGrid.js';
+import DrawService from './dom/DrawPrimary.js';
+import { activateBomb, armySoldiersCollection, changeCordinates, changeLeader, getActiveBombs, manageBombs,  } from './services/ArmyService.js';
 import GlobalReference from './globals.js';
-import DrawHunter from './dom/drawHunter.js';
-import HunterReference from './hunter.js';
+import DrawHunter from './dom/DrawHunter.js';
+import HunterReference from './services/HunterService.js';
 
 let startBtn = document.getElementById('start-btn');
 let resetBtn = document.getElementById('reset-btn');
@@ -20,19 +19,19 @@ DrawHunter.start();
 
 const commandObject = {
     'a': () => {
-        GameBoardManager.moveTo('left')
+        changeCordinates('left');
     },
     'w': () => {
-        GameBoardManager.moveTo('up')
+        changeCordinates('up');
     },
     's': () => {
-        GameBoardManager.moveTo('down')
+        changeCordinates('down');
     },
     'd': () => {
-        GameBoardManager.moveTo('right')
+        changeCordinates('right');
     },
-    'c': () => {
-        activateBomb()
+    'f': () => {
+        activateBomb();
     }
 }
 
@@ -70,7 +69,7 @@ function startGame() {
         if(!isNaN(leaderForm.value) && isSoldierInArmy) {
             
             changeLeader(+leaderForm.value);
-            DrawService.drawSoldiers()
+            DrawService.drawSoldiers();
 
         } else {
             alert('Selected soldier is not in the army!');
