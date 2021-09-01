@@ -73,9 +73,9 @@ function startGame() {
 }
 
 function isGameOver() {
+    
     const isSaboteurDead        = armySoldiersCollection.find(item => item.id === SABOTEUR_ID) ? false : true;
-    const areSoldiersDead       = armySoldiersCollection.length === 0;
     const areBuildingsDestroyed = !GlobalReference.buildings.big.isAlive && !GlobalReference.buildings.medium.isAlive && !GlobalReference.buildings.small.isAlive; 
     
-    return isSaboteurDead || areBuildingsDestroyed || areSoldiersDead;
+    return isSaboteurDead || areBuildingsDestroyed;
 }

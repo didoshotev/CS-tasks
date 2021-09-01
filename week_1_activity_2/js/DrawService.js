@@ -1,10 +1,6 @@
-import GameBoardManager from "./GameBoardManager.js";
 import { armySoldiersCollection, getArmySoldiersCollection } from './army.js';
 
-// GameBoardManager.changeSoldierLeader(1, 3)
-
 let rows = document.getElementsByClassName('gridRow');
-let cells = document.getElementsByClassName("cell");
 
 const DrawService = {
 
@@ -51,10 +47,6 @@ const DrawService = {
         }
     },
 
-    get lastSoldierId() {
-        return GameBoardManager.getLastSoldierOrder();
-    },
-
     getCell(row, coll) {
         return [...rows[row].childNodes][coll];
     },
@@ -78,10 +70,6 @@ const DrawService = {
         currCell.style.backgroundColor = 'gray'
     },
 
-    swapCells(oldCell, newCell) {
-
-    },
-
     explodeCell(row, coll) {
         
         const explodedCell = this.getCell(row, coll);
@@ -98,11 +86,6 @@ const DrawService = {
                 this.explodeCell(i, k); 
             }
         }
-
-    },
-
-    changeCell(row, coll, newCell) {
-        return [...rows[row].childNodes][coll].replaceWith(newCell);
     },
 
     resetCell(row, coll) {

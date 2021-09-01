@@ -8,7 +8,6 @@ export function drawGrid() {
     createBuildings();
 }
 
-
 function makeRows(rowNum) {
 
     // Creates rows
