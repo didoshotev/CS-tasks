@@ -1,4 +1,3 @@
-
 const GlobalReference = { }
 
 GlobalReference.buildings = {

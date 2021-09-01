@@ -83,8 +83,23 @@ const DrawService = {
 
     },
 
+    explodeCell(row, coll) {
+        
+        const explodedCell = this.getCell(row, coll);
+        explodedCell.textContent = '000';
+        explodedCell.style.backgroundColor = 'black';
+    },
+
+
     changeCell(row, coll, newCell) {
         return [...rows[row].childNodes][coll].replaceWith(newCell);
+    },
+
+    resetCell(row, coll) {
+        const cell = this.getCell(row, coll);
+        cell.innerText = 'X';
+        cell.textContent = 'X';
+        cell.style.color = 'white';
     }
 }
 

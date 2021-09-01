@@ -59,17 +59,6 @@ const GameBoardManager = {
         this.activeBombs.push({ cordinates: cordinatesToDetronate, timeLeft: 5})
     },
 
-    changeSoldierLeader(newLeadId) {
-       
-        // const oldLeadId = this.getOldLeadID();
-        const oldLeadId = getArmySoldiersCollection().shift().id
-        const newLeadIndex = soldiersOrderCollection.findIndex(item => item === newLeadId);
-
-        soldiersOrderCollection = swapArrayElements(soldiersOrderCollection, 0, newLeadIndex);
-        soldiersListPositions[oldLeadId].order = newLeadIndex + 1;
-        soldiersListPositions[newLeadId].order = 1;
-        console.log(soldiersListPositions);
-    },
 
     checkIfValid(row, coll) {
 

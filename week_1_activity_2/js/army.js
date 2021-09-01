@@ -1,5 +1,7 @@
+import DrawService from "./DrawService.js";
 import GameBoardManager from "./GameBoardManager.js";
-import { swapArrayElements } from './utils.js';
+
+const BOMB_EXPLOSION_NUMBER = 6;
 
 const armySoldiersCollection = [
     { name: 'Tractor hooligan', nickname: 'tank', id: 1, skill: 'passive', color: 'red', currentPosition: [13, 10], prevPosition: [13, 10], domElement: null},
@@ -7,6 +9,11 @@ const armySoldiersCollection = [
     { name: 'The drunker', nickname: 'spy', id: 3, skill: 'passive', color: 'yellow', currentPosition: [13, 12], prevPosition: [13, 12], domElement: null},
     { name: 'The fisher', nickname: 'saboteur', id: 4, skill: 'special', color: 'purple', currentPosition: [13, 13], prevPosition: [13, 13], domElement: null},
 ]
+
+const activeBombs = [
+    // { cordinates: [1, 1], timeLeft: 6}
+    // victims: [1, 0] [0, 1] [1, 2] [2, 1]
+];
 
 const updateArmySoldiersCollectionPositions = (id, [x, y]) => {
     
@@ -98,4 +105,68 @@ const getArmySoldiersCollection = () => {
     return armySoldiersCollection;
 }
 
-export { armySoldiersCollection, updateArmySoldiersCollectionPositions, getArmySoldiersCollection, changeCordinates, changeLeader }
+const deleteSoldier = (soldier) => {
+    
+    const soldierIndex = armySoldiersCollection.findIndex(item => item.id === soldier.id);
+    armySoldiersCollection.splice(soldierIndex, 1);
+}
+
+const activateBomb = () => {
+    
+    const IsLeaderIsSaboteur = armySoldiersCollection[0].id === 4; 
+    if(!IsLeaderIsSaboteur) {
+        alert('The leader of the group must be The Fisher(saboteur)');
+        return;
+    }
+    activeBombs.push({ cordinates: [armySoldiersCollection[0].currentPosition[0], armySoldiersCollection[0].currentPosition[1]], timeLeft: BOMB_EXPLOSION_NUMBER });
+    console.log('bomb activated on: ', armySoldiersCollection[0].currentPosition);
+}
+
+const manageBombs = () => {
+
+    if(activeBombs.length <= 0) {
+        return
+    }
+    decreaseBombsTimer();
+}
+
+const decreaseBombsTimer = () => {
+    activeBombs.map(item => {
+        item.timeLeft -= 1
+        
+        if(item.timeLeft === 0) {
+            let bomb = activeBombs.shift();
+            console.log('BOOOOM');
+            checkForVictims(bomb.cordinates[0], bomb.cordinates[1]);
+            DrawService.explodeCell(bomb.cordinates[0], bomb.cordinates[1]);
+        }
+    });
+}
+
+const checkForVictims = (bombRoll, bombColl) => {
+    const damagedCells = [[bombRoll, bombColl - 1], [bombRoll - 1, bombColl], [bombRoll, bombColl + 1], [bombRoll + 1, bombColl]];
+    const damagedSoldiers = [];
+
+    armySoldiersCollection.map(item => {
+
+        damagedCells.map(damagedCell => {
+
+            const checkIfArraysHasEqualCordinates = JSON.stringify(damagedCell) == JSON.stringify(item.currentPosition); 
+
+            if(checkIfArraysHasEqualCordinates) {
+                deleteSoldier(item);
+                DrawService.resetCell(item.currentPosition[0], item.currentPosition[1]);
+                // damagedSoldiers.push(item) 
+            }
+        })
+    })
+    console.log('damaged soldiers: ', damagedSoldiers);
+}
+
+const getActiveBombs = () => {
+    return activeBombs;
+}
+
+export { armySoldiersCollection, updateArmySoldiersCollectionPositions,
+    getArmySoldiersCollection, changeCordinates,
+    changeLeader, activateBomb, decreaseBombsTimer, getActiveBombs, manageBombs }

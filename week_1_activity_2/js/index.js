@@ -1,14 +1,15 @@
 import { drawGrid } from './drawGrid.js';
 import GameBoardManager from './GameBoardManager.js';
 import DrawService from './DrawService.js';
-import { armySoldiersCollection, changeLeader } from './army.js';
+import { activateBomb, armySoldiersCollection, changeLeader, getActiveBombs, manageBombs,  } from './army.js';
 
 let startBtn = document.getElementById('start-btn');
 let resetBtn = document.getElementById('reset-btn');
 let leaderFormBtn = document.getElementById('change-leader-btn');
 
 let leaderForm = document.getElementById('leader-select');
-let commandsCounter = 0;
+
+const SABOTEUR_ID = 4;
 
 drawGrid();
 DrawService.start();
@@ -26,6 +27,9 @@ const commandObject = {
     'd': () => {
         GameBoardManager.moveTo('right')
     },
+    'c': () => {
+        activateBomb()
+    }
 }
 
 
@@ -42,9 +46,12 @@ function startGame() {
     window.addEventListener('keydown', (key) => {
         
         if(key.key in commandObject) {
+            
+            !isGameOver() && (alert('Game over!'), location.reload());
+
+            manageBombs();
             commandObject[key.key]();
             DrawService.drawSoldiers();
-            commandsCounter++;
         }
     })
 
@@ -63,4 +70,9 @@ function startGame() {
             alert('Selected soldier is not in the army!');
         }
     })
+}
+
+function isGameOver() {
+    let check = armySoldiersCollection.find(item => item.id === SABOTEUR_ID) || armySoldiersCollection.length === 0;
+    return check ? true : false;
 }
