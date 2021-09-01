@@ -1,8 +1,10 @@
-import { drawGrid } from './drawGrid.js';
+import { drawGrid } from './dom/drawGrid.js';
 import GameBoardManager from './GameBoardManager.js';
-import DrawService from './DrawService.js';
+import DrawService from './dom/DrawService.js';
 import { activateBomb, armySoldiersCollection, changeLeader, getActiveBombs, manageBombs,  } from './army.js';
 import GlobalReference from './globals.js';
+import DrawHunter from './dom/drawHunter.js';
+import HunterReference from './hunter.js';
 
 let startBtn = document.getElementById('start-btn');
 let resetBtn = document.getElementById('reset-btn');
@@ -14,6 +16,7 @@ const SABOTEUR_ID = 4;
 
 drawGrid();
 DrawService.start();
+DrawHunter.start();
 
 const commandObject = {
     'a': () => {
@@ -53,6 +56,9 @@ function startGame() {
             manageBombs();
             commandObject[key.key]();
             DrawService.drawSoldiers();
+            
+            HunterReference.changeCordinates();
+            DrawHunter.drawHunter();
         }
     })
 

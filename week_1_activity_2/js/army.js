@@ -1,8 +1,9 @@
 import { checkBigBuilding, checkMediumBuilding, checkSmallBuilding } from "./buildings.js";
-import DrawService from "./DrawService.js";
+import DrawService from "./dom/DrawService.js";
 import GameBoardManager from "./GameBoardManager.js";
 
 const BOMB_EXPLOSION_NUMBER = 6;
+const TANK_ID = 1;
 
 const armySoldiersCollection = [
     { name: 'Tractor hooligan', nickname: 'tank', id: 1, skill: 'passive', color: 'red', currentPosition: [13, 10], prevPosition: [13, 10], domElement: null },
@@ -40,7 +41,6 @@ function changeCordinates(direction) {
             prevPosition = armySoldiersCollection[i].currentPosition
 
             // nextSoldierCordinates = [soldiersListPositions[soldierKey].cordinates[0], soldiersListPositions[soldierKey].cordinates[1]]
-
 
             if (direction === 'left') {
 
@@ -112,6 +112,15 @@ const deleteSoldier = (soldier) => {
     armySoldiersCollection.splice(soldierIndex, 1);
 }
 
+const deleteSoldierById = (id) => {
+    const soldierIndex = armySoldiersCollection.findIndex(item => item.id === id);
+    armySoldiersCollection.splice(soldierIndex, 1);
+}
+
+const deleteFirst = () => {
+    armySoldiersCollection.splice(0, 1);
+}
+
 const activateBomb = () => {
 
     const IsLeaderTheSaboteur = armySoldiersCollection[0].id === 4;
@@ -171,13 +180,32 @@ const checkForDestroyedBuildings = (row, coll) => {
     checkBigBuilding(row, coll);
 }
 
-
 const getActiveBombs = () => {
     return activeBombs;
+}
+
+const fireTowardsArmy = () => {
+    console.log('FIRIIING...!!!');
+
+    if (armyHasTank()) {
+        let tanker = armySoldiersCollection.find(item => item.id === TANK_ID);
+        DrawService.resetCell(tanker.currentPosition[0], tanker.currentPosition[1]);
+        deleteSoldierById(TANK_ID);
+        return;
+    }
+
+    let victimSoldier = armySoldiersCollection[0];
+    DrawService.resetCell(victimSoldier.currentPosition[0], victimSoldier.currentPosition[1]);
+    deleteFirst();
+}
+
+const armyHasTank = () => {
+    return armySoldiersCollection.find(item => item.id === TANK_ID) ? true : false;
 }
 
 export {
     armySoldiersCollection, updateArmySoldiersCollectionPositions,
     getArmySoldiersCollection, changeCordinates,
-    changeLeader, activateBomb, decreaseBombsTimer, getActiveBombs, manageBombs
+    changeLeader, activateBomb, decreaseBombsTimer, getActiveBombs, manageBombs,
+    fireTowardsArmy
 }

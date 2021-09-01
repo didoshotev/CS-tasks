@@ -1,4 +1,4 @@
-import { armySoldiersCollection, getArmySoldiersCollection } from './army.js';
+import { armySoldiersCollection, getArmySoldiersCollection } from '../army.js';
 
 let rows = document.getElementsByClassName('gridRow');
 
@@ -78,7 +78,6 @@ const DrawService = {
     },
 
     explodeMutlipleCells([startRow, endRow], [startColl, endColl]) {
-        // console.log(startRow, endRow, startColl, endColl);
 
         for (let i = startRow; i <= endRow; i++) {
 

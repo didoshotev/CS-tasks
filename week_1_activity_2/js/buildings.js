@@ -1,6 +1,6 @@
-import DrawService from "./DrawService.js";
+import DrawService from "./dom/DrawService.js";
 import GlobalReference from "./globals.js";
-import { validDiagonals, arrayChecker, validBigCells } from "./utils.js";
+import { validDiagonals, arrayChecker, validBigCells } from "./utils/utils.js";
 
 const destroyedMediumCells = [];
 const destroyedBigCells = [];

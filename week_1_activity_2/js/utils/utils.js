@@ -8,6 +8,10 @@ const arrayChecker = (arr1, arr2) => {
     return JSON.stringify(arr1) == JSON.stringify(arr2)
 }
 
+const getRandomNumberFromRange = (maxNum) => {
+    return Math.floor(Math.random() * maxNum) + 1   
+}
+
 
 const validDiagonals = {
     a1: false,
@@ -24,4 +28,4 @@ const validBigCells = {
     c3: false
 }
 
-export { swapArrayElements, validDiagonals, arrayChecker, validBigCells }
+export { swapArrayElements, validDiagonals, arrayChecker, validBigCells, getRandomNumberFromRange }
