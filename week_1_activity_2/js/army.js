@@ -1,13 +1,14 @@
+import { checkBigBuilding, checkMediumBuilding, checkSmallBuilding } from "./buildings.js";
 import DrawService from "./DrawService.js";
 import GameBoardManager from "./GameBoardManager.js";
 
 const BOMB_EXPLOSION_NUMBER = 6;
 
 const armySoldiersCollection = [
-    { name: 'Tractor hooligan', nickname: 'tank', id: 1, skill: 'passive', color: 'red', currentPosition: [13, 10], prevPosition: [13, 10], domElement: null},
-    { name: 'Stone thrower', nickname: 'sniper', id: 2, skill: 'passive', color: 'orange',  currentPosition: [13, 11], prevPosition: [13, 11], domElement: null},
-    { name: 'The drunker', nickname: 'spy', id: 3, skill: 'passive', color: 'yellow', currentPosition: [13, 12], prevPosition: [13, 12], domElement: null},
-    { name: 'The fisher', nickname: 'saboteur', id: 4, skill: 'special', color: 'purple', currentPosition: [13, 13], prevPosition: [13, 13], domElement: null},
+    { name: 'Tractor hooligan', nickname: 'tank', id: 1, skill: 'passive', color: 'red', currentPosition: [13, 10], prevPosition: [13, 10], domElement: null },
+    { name: 'Stone thrower', nickname: 'sniper', id: 2, skill: 'passive', color: 'orange', currentPosition: [13, 11], prevPosition: [13, 11], domElement: null },
+    { name: 'The drunker', nickname: 'spy', id: 3, skill: 'passive', color: 'yellow', currentPosition: [13, 12], prevPosition: [13, 12], domElement: null },
+    { name: 'The fisher', nickname: 'saboteur', id: 4, skill: 'special', color: 'purple', currentPosition: [13, 13], prevPosition: [13, 13], domElement: null },
 ]
 
 const activeBombs = [
@@ -16,13 +17,13 @@ const activeBombs = [
 ];
 
 const updateArmySoldiersCollectionPositions = (id, [x, y]) => {
-    
+
     let currentItem = armySoldiersCollection.find(item => item.id === +id);
     let currentItemIndex = armySoldiersCollection.findIndex(item => item.id === +id);
 
     currentItem.prevPosition = currentItem.currentPosition;
     currentItem.currentPosition = [x, y];
-   
+
     armySoldiersCollection.splice(currentItemIndex, 1, currentItem);
 }
 
@@ -35,12 +36,12 @@ function changeCordinates(direction) {
         const isLeader = i === 0;
         let prevPosition;
 
-        if(isLeader) {
+        if (isLeader) {
             prevPosition = armySoldiersCollection[i].currentPosition
-            
+
             // nextSoldierCordinates = [soldiersListPositions[soldierKey].cordinates[0], soldiersListPositions[soldierKey].cordinates[1]]
-        
-            
+
+
             if (direction === 'left') {
 
                 isMoveValid = GameBoardManager.checkIfValid(armySoldiersCollection[i].currentPosition[1] - 1);
@@ -87,7 +88,7 @@ const changeLeader = (newLeadId) => {
     const newLeadItem = armySoldiersCollection[newLeadIndex]
     const oldLeadItem = armySoldiersCollection.shift();
 
-    const oldLeadItemCordinates = { newPosition: [oldLeadItem.currentPosition[0], oldLeadItem.currentPosition[1]], oldPosition: [oldLeadItem.prevPosition[0], oldLeadItem.prevPosition[1]]};
+    const oldLeadItemCordinates = { newPosition: [oldLeadItem.currentPosition[0], oldLeadItem.currentPosition[1]], oldPosition: [oldLeadItem.prevPosition[0], oldLeadItem.prevPosition[1]] };
     const newLeadItemCordinates = { newPosition: [newLeadItem.currentPosition[0], newLeadItem.currentPosition[1]], oldPosition: [newLeadItem.prevPosition[0], newLeadItem.prevPosition[1]] };
 
     newLeadItem.currentPosition = oldLeadItemCordinates.newPosition;
@@ -98,7 +99,7 @@ const changeLeader = (newLeadId) => {
 
     armySoldiersCollection.unshift(newLeadItem);
     armySoldiersCollection.splice(newLeadIndex, 1, oldLeadItem);
-    
+
 }
 
 const getArmySoldiersCollection = () => {
@@ -106,25 +107,24 @@ const getArmySoldiersCollection = () => {
 }
 
 const deleteSoldier = (soldier) => {
-    
+
     const soldierIndex = armySoldiersCollection.findIndex(item => item.id === soldier.id);
     armySoldiersCollection.splice(soldierIndex, 1);
 }
 
 const activateBomb = () => {
-    
-    const IsLeaderIsSaboteur = armySoldiersCollection[0].id === 4; 
-    if(!IsLeaderIsSaboteur) {
-        alert('The leader of the group must be The Fisher(saboteur)');
+
+    const IsLeaderTheSaboteur = armySoldiersCollection[0].id === 4;
+    if (!IsLeaderTheSaboteur) {
+        alert('The leader of the group must be The Fisher(The Saboteur)');
         return;
     }
     activeBombs.push({ cordinates: [armySoldiersCollection[0].currentPosition[0], armySoldiersCollection[0].currentPosition[1]], timeLeft: BOMB_EXPLOSION_NUMBER });
-    console.log('bomb activated on: ', armySoldiersCollection[0].currentPosition);
 }
 
 const manageBombs = () => {
 
-    if(activeBombs.length <= 0) {
+    if (activeBombs.length === 0) {
         return
     }
     decreaseBombsTimer();
@@ -133,12 +133,14 @@ const manageBombs = () => {
 const decreaseBombsTimer = () => {
     activeBombs.map(item => {
         item.timeLeft -= 1
-        
-        if(item.timeLeft === 0) {
+
+        if (item.timeLeft === 0) {
+
             let bomb = activeBombs.shift();
-            console.log('BOOOOM');
+
             checkForVictims(bomb.cordinates[0], bomb.cordinates[1]);
             DrawService.explodeCell(bomb.cordinates[0], bomb.cordinates[1]);
+            checkForDestroyedBuildings(bomb.cordinates[0], bomb.cordinates[1]);
         }
     });
 }
@@ -151,22 +153,31 @@ const checkForVictims = (bombRoll, bombColl) => {
 
         damagedCells.map(damagedCell => {
 
-            const checkIfArraysHasEqualCordinates = JSON.stringify(damagedCell) == JSON.stringify(item.currentPosition); 
+            const checkIfArraysHasEqualCordinates = JSON.stringify(damagedCell) == JSON.stringify(item.currentPosition);
 
-            if(checkIfArraysHasEqualCordinates) {
+            if (checkIfArraysHasEqualCordinates) {
                 deleteSoldier(item);
                 DrawService.resetCell(item.currentPosition[0], item.currentPosition[1]);
                 // damagedSoldiers.push(item) 
             }
         })
     })
-    console.log('damaged soldiers: ', damagedSoldiers);
 }
+
+const checkForDestroyedBuildings = (row, coll) => {
+
+    checkSmallBuilding(row, coll);
+    checkMediumBuilding(row, coll);
+    checkBigBuilding(row, coll);
+}
+
 
 const getActiveBombs = () => {
     return activeBombs;
 }
 
-export { armySoldiersCollection, updateArmySoldiersCollectionPositions,
+export {
+    armySoldiersCollection, updateArmySoldiersCollectionPositions,
     getArmySoldiersCollection, changeCordinates,
-    changeLeader, activateBomb, decreaseBombsTimer, getActiveBombs, manageBombs }
+    changeLeader, activateBomb, decreaseBombsTimer, getActiveBombs, manageBombs
+}

@@ -2,6 +2,7 @@ import { drawGrid } from './drawGrid.js';
 import GameBoardManager from './GameBoardManager.js';
 import DrawService from './DrawService.js';
 import { activateBomb, armySoldiersCollection, changeLeader, getActiveBombs, manageBombs,  } from './army.js';
+import GlobalReference from './globals.js';
 
 let startBtn = document.getElementById('start-btn');
 let resetBtn = document.getElementById('reset-btn');
@@ -47,7 +48,7 @@ function startGame() {
         
         if(key.key in commandObject) {
             
-            !isGameOver() && (alert('Game over!'), location.reload());
+            isGameOver() && (alert('Game over!'), location.reload());
 
             manageBombs();
             commandObject[key.key]();
@@ -55,7 +56,6 @@ function startGame() {
         }
     })
 
-    console.log('old', GameBoardManager.getSoldiersOrderCollection());
     leaderFormBtn.addEventListener('click', (e) => {
         e.preventDefault();
 
@@ -73,6 +73,9 @@ function startGame() {
 }
 
 function isGameOver() {
-    let check = armySoldiersCollection.find(item => item.id === SABOTEUR_ID) || armySoldiersCollection.length === 0;
-    return check ? true : false;
+    const isSaboteurDead        = armySoldiersCollection.find(item => item.id === SABOTEUR_ID) ? false : true;
+    const areSoldiersDead       = armySoldiersCollection.length === 0;
+    const areBuildingsDestroyed = !GlobalReference.buildings.big.isAlive && !GlobalReference.buildings.medium.isAlive && !GlobalReference.buildings.small.isAlive; 
+    
+    return isSaboteurDead || areBuildingsDestroyed || areSoldiersDead;
 }

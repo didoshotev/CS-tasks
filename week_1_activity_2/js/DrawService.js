@@ -45,7 +45,6 @@ const DrawService = {
     initDomSoldiersElements() {
 
         for (const soldier of armySoldiersCollection) {
-            // console.log(soldier);
             let newEl = this.createCell('div', soldier.id, soldier.color);
             let curretSoldierIndex = armySoldiersCollection.findIndex(item => item.id === soldier.id);
             armySoldiersCollection[curretSoldierIndex].domElement = newEl
@@ -90,6 +89,17 @@ const DrawService = {
         explodedCell.style.backgroundColor = 'black';
     },
 
+    explodeMutlipleCells([startRow, endRow], [startColl, endColl]) {
+        // console.log(startRow, endRow, startColl, endColl);
+
+        for (let i = startRow; i <= endRow; i++) {
+
+            for (let k = startColl; k <= endColl; k++) {
+                this.explodeCell(i, k); 
+            }
+        }
+
+    },
 
     changeCell(row, coll, newCell) {
         return [...rows[row].childNodes][coll].replaceWith(newCell);
@@ -101,6 +111,8 @@ const DrawService = {
         cell.textContent = 'X';
         cell.style.color = 'white';
     }
+
+
 }
 
 export default DrawService
