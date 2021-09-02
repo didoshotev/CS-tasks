@@ -1,0 +1,59 @@
+/* @import url('./styles/reset.css'); */
+
+body {
+    box-sizing: border-box;
+}
+
+#container {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.gridRow {
+    /* border: 1px solid red; */
+}
+
+.btn-container {
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.cell {
+    margin: 2px;
+    padding: 1px;
+    border: 1px solid rgb(180, 180, 180);
+    /* background-color: gray; */
+    min-width: 40px;
+    min-height: 40px;
+    display: inline-block;
+    margin-right: 2px;
+}
+
+.child-cell {
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.small-build {
+    background-color: purple;
+}
+
+.medium-build {
+    background-color: blue;
+}
+
+.big-build {
+    background-color: red;
+}
+/* 
+.cell:nth-child(2n) {
+    background-color: #D3E9D2;
+}
+
+.cell:nth-child(2n + 1) {
+    background-color: #F7CECB;
+} */
+
+

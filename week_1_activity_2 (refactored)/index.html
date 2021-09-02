@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container">
+        <h1>Game Board</h1>
+        <div class="btn-container">
+            <button id="start-btn">Start the game</button>
+            <button id="reset-btn" disabled>Reset the game</button>
+
+        </div>
+        <div style="margin-bottom: 20px;">
+            <label for="leader-select">Change leader:</label>
+
+            <select name="leaders" id="leader-select">
+                <option value="">--Please choose an option--</option>
+                <option value="1">Tank</option>
+                <option value="2">Sniper</option>
+                <option value="3">Drunker</option>
+                <option value="4">Fisher</option>
+            </select>
+            <button id="change-leader-btn">Change Leader</button>
+        </div>
+        <div id="grid-container"></div>
+
+    </div>
+</body>
+<script type="module" src="./js/index.js"></script>
+
+
+</html>
