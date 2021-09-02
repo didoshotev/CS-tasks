@@ -13,4 +13,8 @@ GlobalReference.buildings = {
     }
 }
 
+GlobalReference.BOMB_EXPLOSION_NUMBER = 6;
+GlobalReference.CORNERS_NUMBER = 4;
+GlobalReference.POSSIBLE_DIRECTIONS_NUMBER = 4;
+
 export default GlobalReference;

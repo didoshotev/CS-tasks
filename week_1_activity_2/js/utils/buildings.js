@@ -1,6 +1,6 @@
 import DrawService from "../dom/DrawPrimary.js";
 import GlobalReference from "../globals.js";
-import { validDiagonals, arrayChecker, validBigCells } from "./utils.js";
+import { validDiagonals, compareArrayValues, validBigCells } from "./utils.js";
 
 const destroyedMediumCells = [];
 const destroyedBigCells = [];
@@ -21,11 +21,11 @@ const checkBigBuilding = (row, coll) => {
     if (destroyedBigCells.length < 5) { return; }
 
     destroyedBigCells.map(item => {
-        validBigCells.a1 === false ? validBigCells.a1 = arrayChecker(item, bigBuildingValidCordinates.a[0]) : true;
-        validBigCells.a3 === false ? validBigCells.a3 = arrayChecker(item, bigBuildingValidCordinates.a[1]) : true;
-        validBigCells.b2 === false ? validBigCells.b2 = arrayChecker(item, bigBuildingValidCordinates.a[2]) : true;
-        validBigCells.c1 === false ? validBigCells.c1 = arrayChecker(item, bigBuildingValidCordinates.a[3]) : true;
-        validBigCells.c3 === false ? validBigCells.c3 = arrayChecker(item, bigBuildingValidCordinates.a[4]) : true;
+        validBigCells.a1 === false ? validBigCells.a1 = compareArrayValues(item, bigBuildingValidCordinates.a[0]) : true;
+        validBigCells.a3 === false ? validBigCells.a3 = compareArrayValues(item, bigBuildingValidCordinates.a[1]) : true;
+        validBigCells.b2 === false ? validBigCells.b2 = compareArrayValues(item, bigBuildingValidCordinates.a[2]) : true;
+        validBigCells.c1 === false ? validBigCells.c1 = compareArrayValues(item, bigBuildingValidCordinates.a[3]) : true;
+        validBigCells.c3 === false ? validBigCells.c3 = compareArrayValues(item, bigBuildingValidCordinates.a[4]) : true;
     })
 
     const shouldExplode = validBigCells.a1 && validBigCells.a3 && validBigCells.b2 && validBigCells.c1 && validBigCells.c3;
@@ -49,10 +49,10 @@ const checkMediumBuilding = (row, coll) => {
 
     destroyedMediumCells.map(item => {
         // item = [4, 8]
-        validDiagonals.a1 === false ? validDiagonals.a1 = arrayChecker(item, mediumBuildingValidCordinates.a[0]) : true;
-        validDiagonals.a2 === false ? validDiagonals.a2 = arrayChecker(item, mediumBuildingValidCordinates.a[1]) : true;
-        validDiagonals.b1 === false ? validDiagonals.b1 = arrayChecker(item, mediumBuildingValidCordinates.b[0]) : true;
-        validDiagonals.b2 === false ? validDiagonals.b2 = arrayChecker(item, mediumBuildingValidCordinates.b[1]) : true;
+        validDiagonals.a1 === false ? validDiagonals.a1 = compareArrayValues(item, mediumBuildingValidCordinates.a[0]) : true;
+        validDiagonals.a2 === false ? validDiagonals.a2 = compareArrayValues(item, mediumBuildingValidCordinates.a[1]) : true;
+        validDiagonals.b1 === false ? validDiagonals.b1 = compareArrayValues(item, mediumBuildingValidCordinates.b[0]) : true;
+        validDiagonals.b2 === false ? validDiagonals.b2 = compareArrayValues(item, mediumBuildingValidCordinates.b[1]) : true;
     })
 
     const areBombsDiagonal = (validDiagonals.a1 && validDiagonals.a2) || (validDiagonals.b1 && validDiagonals.b2);

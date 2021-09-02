@@ -1,6 +1,6 @@
 import { drawGrid } from './dom/DrawGrid.js';
 import DrawService from './dom/DrawPrimary.js';
-import { activateBomb, armySoldiersCollection, changeCordinates, changeLeader, getActiveBombs, manageBombs,  } from './services/ArmyService.js';
+import { activateBomb, armySoldiersCollection, changeCordinates, changeLeader, getActiveBombs, getSoldierById, manageBombs,  } from './services/ArmyService.js';
 import GlobalReference from './globals.js';
 import DrawHunter from './dom/DrawHunter.js';
 import HunterReference from './services/HunterService.js';
@@ -64,7 +64,7 @@ function startGame() {
     leaderFormBtn.addEventListener('click', (e) => {
         e.preventDefault();
 
-        const isSoldierInArmy = armySoldiersCollection.find(item => item.id === +leaderForm.value);
+        const isSoldierInArmy = getSoldierById(+leaderForm.value);
 
         if(!isNaN(leaderForm.value) && isSoldierInArmy) {
             
@@ -79,7 +79,7 @@ function startGame() {
 
 function isGameOver() {
     
-    const isSaboteurDead        = armySoldiersCollection.find(item => item.id === SABOTEUR_ID) ? false : true;
+    const isSaboteurDead        = getSoldierById(SABOTEUR_ID) ? false : true;
     const areBuildingsDestroyed = !GlobalReference.buildings.big.isAlive && !GlobalReference.buildings.medium.isAlive && !GlobalReference.buildings.small.isAlive; 
     
     return isSaboteurDead || areBuildingsDestroyed;

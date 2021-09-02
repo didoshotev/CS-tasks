@@ -1,4 +1,4 @@
-import { armySoldiersCollection, getArmySoldiersCollection } from '../services/ArmyService.js';
+import { armySoldiersCollection, getArmySoldiersCollection, getSoldierIndex } from '../services/ArmyService.js';
 
 let rows = document.getElementsByClassName('gridRow');
 
@@ -15,7 +15,8 @@ const DrawService = {
 
         for (let soldier of armySoldiersUpdated) {
 
-            let cellToPlace = this.getCell(soldier.currentPosition[0], soldier.currentPosition[1]);
+            let cellToPlace         = this.getCell(soldier.currentPosition[0], soldier.currentPosition[1]);
+            
             cellToPlace.textContent = '';
             cellToPlace.appendChild(soldier.domElement)
         }
@@ -26,11 +27,13 @@ const DrawService = {
         let lastSoldier;
         for (let i = 0; i < armySoldiersUpdated.length; i++) {
             
-            let soldier = armySoldiersCollection[i]
+            let soldier                    = armySoldiersCollection[i]
             soldier.domElement.textContent = `${i+1}${soldier.id}`;
-            let cellToPlace = this.getCell(soldier.currentPosition[0], soldier.currentPosition[1]);
+            
+            let cellToPlace         = this.getCell(soldier.currentPosition[0], soldier.currentPosition[1]);
             cellToPlace.textContent = '';
             cellToPlace.appendChild(soldier.domElement);
+            
             lastSoldier = soldier;
         }
 
@@ -42,7 +45,7 @@ const DrawService = {
 
         for (const soldier of armySoldiersCollection) {
             let newEl = this.createCell('div', soldier.id, soldier.color);
-            let curretSoldierIndex = armySoldiersCollection.findIndex(item => item.id === soldier.id);
+            let curretSoldierIndex = getSoldierIndex(soldier.id);
             armySoldiersCollection[curretSoldierIndex].domElement = newEl
         }
     },
@@ -56,23 +59,26 @@ const DrawService = {
         let cell = document.createElement(el);
 
         cell.classList.add(`child-cell`);
-        let order = armySoldiersCollection.findIndex(item => item.id === id) + 1;
-        
-        cell.textContent = `${order}${id}`;
+        let order = getSoldierIndex(id) + 1;
+
+        cell.textContent           = `${order}${id}`;
         cell.style.backgroundColor = backgroundColor;
 
         return cell;
     },
 
     drawEnds() {
+        
         let currCell = this.getCell(0, 0);
+        
         currCell.style.backgroundColor = 'gray'
     },
 
     explodeCell(row, coll) {
         
-        const explodedCell = this.getCell(row, coll);
-        explodedCell.textContent = '000';
+        const explodedCell                 = this.getCell(row, coll);
+        
+        explodedCell.textContent           = '000';
         explodedCell.style.backgroundColor = 'black';
     },
 
@@ -87,8 +93,8 @@ const DrawService = {
     },
 
     resetCell(row, coll) {
-        const cell = this.getCell(row, coll);
-        cell.innerText = 'X';
+        const cell       = this.getCell(row, coll);
+        cell.innerText   = 'X';
         cell.style.color = 'white';
     }
 

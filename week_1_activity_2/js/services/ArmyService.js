@@ -1,91 +1,54 @@
 import { checkBigBuilding, checkMediumBuilding, checkSmallBuilding } from "../utils/buildings.js";
 import DrawService from "../dom/DrawPrimary.js";
-import { checkIfValid } from "../utils/utils.js";
+import { compareArrayValues } from "../utils/utils.js";
+import SoldierCommands from "../utils/SoldierCommands.js";
+import GlobalReference from "../globals.js";
 
-const BOMB_EXPLOSION_NUMBER = 6;
+
 const TANK_ID = 1;
 
 const armySoldiersCollection = [
-    { name: 'Tractor hooligan', nickname: 'tank', id: 1, skill: 'passive', color: 'red', currentPosition: [13, 10], prevPosition: [13, 10], domElement: null },
-    { name: 'Stone thrower', nickname: 'sniper', id: 2, skill: 'passive', color: 'orange', currentPosition: [13, 11], prevPosition: [13, 11], domElement: null },
-    { name: 'The drunker', nickname: 'spy', id: 3, skill: 'passive', color: 'yellow', currentPosition: [13, 12], prevPosition: [13, 12], domElement: null },
-    { name: 'The fisher', nickname: 'saboteur', id: 4, skill: 'special', color: 'purple', currentPosition: [13, 13], prevPosition: [13, 13], domElement: null },
+    { name: 'Tractor hooligan', id: 1, skill: 'passive', color: 'red', currentPosition: [13, 10], prevPosition: [13, 10], domElement: null },
+    { name: 'Stone thrower', id: 2, skill: 'passive', color: 'orange', currentPosition: [13, 11], prevPosition: [13, 11], domElement: null },
+    { name: 'The drunker', id: 3, skill: 'passive', color: 'yellow', currentPosition: [13, 12], prevPosition: [13, 12], domElement: null },
+    { name: 'The fisher', id: 4, skill: 'special', color: 'purple', currentPosition: [13, 13], prevPosition: [13, 13], domElement: null },
 ]
 
 const activeBombs = [];
-    // { cordinates: [1, 1], timeLeft: 6}
-    // victims: [1, 0] [0, 1] [1, 2] [2, 1]
+// { cordinates: [1, 1], timeLeft: 6}
+// victims: [1, 0] [0, 1] [1, 2] [2, 1]
 
 
 const updateArmySoldiersCollectionPositions = (id, [x, y]) => {
 
-    let currentItem      = armySoldiersCollection.find(item => item.id === +id);
-    let currentItemIndex = armySoldiersCollection.findIndex(item => item.id === +id);
+    let currentItem = getSoldierById(+id);
+    let currentItemIndex = getSoldierIndex(+id);
 
-    currentItem.prevPosition    = currentItem.currentPosition;
+    currentItem.prevPosition = currentItem.currentPosition;
     currentItem.currentPosition = [x, y];
 
     armySoldiersCollection.splice(currentItemIndex, 1, currentItem);
 }
 
-function changeCordinates(direction) {
-    let isMoveValid;
-    
+const changeCordinates = (direction) => {
+
     for (let i = 0; i < armySoldiersCollection.length; i++) {
 
         const isLeader = i === 0;
+        let prevPosition;
 
         if (isLeader) {
-            prevPosition = armySoldiersCollection[i].currentPosition
+            prevPosition = armySoldiersCollection[0].currentPosition;
 
-            if (direction === 'left') {
+            const isMoveValid = SoldierCommands.check[direction]();
 
-                isMoveValid = checkIfValid(armySoldiersCollection[i].currentPosition[1] - 1);
-               
-                if(isMoveValid.error) {
-                    alert(isMoveValid.message);
-                    return;
-                }
-
-                armySoldiersCollection[i].prevPosition = [armySoldiersCollection[i].currentPosition[0], armySoldiersCollection[i].currentPosition[1]];
-                armySoldiersCollection[i].currentPosition[1] -= 1;
-
-            } else if (direction === 'down') {
-
-                isMoveValid = checkIfValid(armySoldiersCollection[i].currentPosition[0] + 1);
+            if (isMoveValid.error) {
                 
-                if(isMoveValid.error) {
-                    alert(isMoveValid.message);
-                    return;
-                }
-
-                armySoldiersCollection[i].prevPosition = [armySoldiersCollection[i].currentPosition[0], armySoldiersCollection[i].currentPosition[1]];
-                armySoldiersCollection[i].currentPosition[0] += 1;
-
-            } else if (direction === 'up') {
-
-                isMoveValid = checkIfValid(armySoldiersCollection[i].currentPosition[0] - 1);
-                
-                if(isMoveValid.error) {
-                    alert(isMoveValid.message);
-                    return;
-                }
-
-                armySoldiersCollection[i].prevPosition = [armySoldiersCollection[i].currentPosition[0], armySoldiersCollection[i].currentPosition[1]];
-                armySoldiersCollection[i].currentPosition[0] -= 1;
-
-            } else if (direction === 'right') {
-
-                isMoveValid = checkIfValid(armySoldiersCollection[i].currentPosition[1] + 1);
-                
-                if(isMoveValid.error) {
-                    alert(isMoveValid.message);
-                    return;
-                }
-
-                armySoldiersCollection[i].prevPosition = [armySoldiersCollection[i].currentPosition[0], armySoldiersCollection[i].currentPosition[1]];
-                armySoldiersCollection[i].currentPosition[1] += 1;
+                alert(isMoveValid.message)
+                return
             }
+
+            SoldierCommands.actions[direction]();
 
         } else {
 
@@ -97,18 +60,18 @@ function changeCordinates(direction) {
 
 const changeLeader = (newLeadId) => {
 
-    const newLeadIndex = armySoldiersCollection.findIndex(item => item.id === newLeadId);
-    const newLeadItem  = armySoldiersCollection[newLeadIndex]
-    const oldLeadItem  = armySoldiersCollection.shift();
+    const newLeadIndex = getSoldierIndex(newLeadId);
+    const newLeadItem = armySoldiersCollection[newLeadIndex]
+    const oldLeadItem = armySoldiersCollection.shift();
 
     const oldLeadItemCordinates = { newPosition: [oldLeadItem.currentPosition[0], oldLeadItem.currentPosition[1]], oldPosition: [oldLeadItem.prevPosition[0], oldLeadItem.prevPosition[1]] };
     const newLeadItemCordinates = { newPosition: [newLeadItem.currentPosition[0], newLeadItem.currentPosition[1]], oldPosition: [newLeadItem.prevPosition[0], newLeadItem.prevPosition[1]] };
 
     newLeadItem.currentPosition = oldLeadItemCordinates.newPosition;
-    newLeadItem.prevPosition    = oldLeadItemCordinates.oldPosition;
+    newLeadItem.prevPosition = oldLeadItemCordinates.oldPosition;
 
     oldLeadItem.currentPosition = newLeadItemCordinates.newPosition;
-    oldLeadItem.prevPosition    = newLeadItemCordinates.oldPosition;
+    oldLeadItem.prevPosition = newLeadItemCordinates.oldPosition;
 
     armySoldiersCollection.unshift(newLeadItem);
     armySoldiersCollection.splice(newLeadIndex, 1, oldLeadItem);
@@ -118,14 +81,16 @@ const getArmySoldiersCollection = () => {
     return armySoldiersCollection;
 }
 
-const deleteSoldier = (soldier) => {
+const getSoldierById = (id) => {
+    return armySoldiersCollection.find(item => item.id === id);
+}
 
-    const soldierIndex = armySoldiersCollection.findIndex(item => item.id === soldier.id);
-    armySoldiersCollection.splice(soldierIndex, 1);
+const getSoldierIndex = (id) => {
+    return armySoldiersCollection.findIndex(item => item.id === id);
 }
 
 const deleteSoldierById = (id) => {
-    const soldierIndex = armySoldiersCollection.findIndex(item => item.id === id);
+    const soldierIndex = getSoldierIndex(id);
     armySoldiersCollection.splice(soldierIndex, 1);
 }
 
@@ -136,11 +101,12 @@ const deleteFirst = () => {
 const activateBomb = () => {
 
     const IsLeaderTheSaboteur = armySoldiersCollection[0].id === 4;
+
     if (!IsLeaderTheSaboteur) {
         alert('The leader of the group must be The Fisher(The Saboteur)');
         return;
     }
-    activeBombs.push({ cordinates: [armySoldiersCollection[0].currentPosition[0], armySoldiersCollection[0].currentPosition[1]], timeLeft: BOMB_EXPLOSION_NUMBER });
+    activeBombs.push({ cordinates: [armySoldiersCollection[0].currentPosition[0], armySoldiersCollection[0].currentPosition[1]], timeLeft: GlobalReference.BOMB_EXPLOSION_NUMBER });
 }
 
 const manageBombs = () => {
@@ -152,7 +118,9 @@ const manageBombs = () => {
 }
 
 const decreaseBombsTimer = () => {
+
     activeBombs.map(item => {
+
         item.timeLeft -= 1
 
         if (item.timeLeft === 0) {
@@ -168,18 +136,17 @@ const decreaseBombsTimer = () => {
 
 const checkForVictims = (bombRoll, bombColl) => {
     const damagedCells = [[bombRoll, bombColl - 1], [bombRoll - 1, bombColl], [bombRoll, bombColl + 1], [bombRoll + 1, bombColl]];
-    const damagedSoldiers = [];
 
     armySoldiersCollection.map(item => {
 
         damagedCells.map(damagedCell => {
 
-            const checkIfArraysHasEqualCordinates = JSON.stringify(damagedCell) == JSON.stringify(item.currentPosition);
+            const checkIfArraysHasEqualCordinates = compareArrayValues(damagedCell, item.currentPosition);
 
             if (checkIfArraysHasEqualCordinates) {
-                deleteSoldier(item);
+
+                deleteSoldierById(item.id);
                 DrawService.resetCell(item.currentPosition[0], item.currentPosition[1]);
-                // damagedSoldiers.push(item) 
             }
         })
     })
@@ -197,11 +164,15 @@ const getActiveBombs = () => {
 }
 
 const fireTowardsArmy = () => {
+
     console.log('FIRE IN THE HOLE...!!');
 
-    if (armyHasTank()) {
-        let tanker = armySoldiersCollection.find(item => item.id === TANK_ID);
-        DrawService.resetCell(tanker.currentPosition[0], tanker.currentPosition[1]);
+    const armyHasTank = getSoldierById(TANK_ID) ? true : false;
+
+    if (armyHasTank) {
+
+        let tankSoldier = getSoldierById(TANK_ID);
+        DrawService.resetCell(tankSoldier.currentPosition[0], tankSoldier.currentPosition[1]);
         deleteSoldierById(TANK_ID);
         return;
     }
@@ -211,13 +182,9 @@ const fireTowardsArmy = () => {
     deleteFirst();
 }
 
-const armyHasTank = () => {
-    return armySoldiersCollection.find(item => item.id === TANK_ID) ? true : false;
-}
-
 export {
     armySoldiersCollection, updateArmySoldiersCollectionPositions,
     getArmySoldiersCollection, changeCordinates,
     changeLeader, activateBomb, decreaseBombsTimer, getActiveBombs, manageBombs,
-    fireTowardsArmy
+    fireTowardsArmy, getSoldierById, getSoldierIndex
 }

@@ -4,7 +4,7 @@ const swapArrayElements = (arr, x, y) => {
     return arr;
 };
 
-const arrayChecker = (arr1, arr2) => {
+const compareArrayValues = (arr1, arr2) => {
     return JSON.stringify(arr1) == JSON.stringify(arr2)
 }
 
@@ -18,7 +18,7 @@ const checkIfValid = (row, coll) => {
         return { error: true, message: "You are not allowed to step there!" }
     }
 
-    if ((row === 4 && coll === 8)) {
+    if ((row === 4 && coll === 8) || (row === 5 && coll === 8)) {
         return { error: true, message: "You can't go throgh this buidling!" }
     }
     return { error: false }
@@ -40,4 +40,4 @@ const validBigCells = {
     c3: false
 }
 
-export { swapArrayElements, validDiagonals, arrayChecker, validBigCells, getRandomNumberFromRange, checkIfValid }
+export { swapArrayElements, validDiagonals, compareArrayValues, validBigCells, getRandomNumberFromRange, checkIfValid }
