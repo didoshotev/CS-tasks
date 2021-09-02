@@ -1,4 +1,4 @@
-import GlobalReference from "../globals";
+import GlobalReference from "../globals.js";
 
 const swapArrayElements = (arr, x, y) => {
     if (arr.length === 1) return arr;

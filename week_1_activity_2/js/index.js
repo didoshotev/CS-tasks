@@ -1,9 +1,9 @@
-import { drawGrid } from './dom/DrawGrid.js';
-import DrawService from './dom/DrawPrimary.js';
-import { activateBomb, changeCordinates, changeLeader, getSoldierById, manageBombs } from './services/ArmyService.js';
+import { drawGrid } from './dom/drawGrid.js';
+import DrawService from './dom/drawPrimary.js';
+import { activateBomb, changeCordinates, changeLeader, getSoldierById, manageBombs } from './services/armyService.js';
 import GlobalReference from './globals.js';
-import DrawHunter from './dom/DrawHunter.js';
-import HunterReference from './services/HunterService.js';
+import DrawHunter from './dom/drawHunter.js';
+import HunterReference from './services/hunterService.js';
 
 let startBtn = document.getElementById('start-btn');
 let resetBtn = document.getElementById('reset-btn');

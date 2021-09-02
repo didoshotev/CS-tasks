@@ -1,6 +1,6 @@
+import GlobalReference from "../globals.js";
 const container = document.getElementById("grid-container");
 let rows = document.getElementsByClassName("gridRow");
-import GlobalReference from '../globals.js';
 
 export function drawGrid() {
     makeRows(15);
