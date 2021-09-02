@@ -14,7 +14,7 @@ function makeRows(rowNum) {
     for (let r = 0; r < rowNum; r++) {
         let row = document.createElement("div");
         
-        if(r === 0 || r === 14) {
+        if(r === GlobalReference.MIN_ROW_COLL_NUM || r === GlobalReference.MAX_ROW_COLL_NUM) {
             row.style.backgroundColor = 'gray';            
         }
         
@@ -30,7 +30,7 @@ function makeColumns(cellNum) {
         
             let newCell = document.createElement("div");
         
-            (i === 0 || i === 14) && (newCell.style.backgroundColor = 'gray');
+            (i === GlobalReference.MIN_ROW_COLL_NUM || i === GlobalReference.MAX_ROW_COLL_NUM) && (newCell.style.backgroundColor = 'gray');
 
             rows[j].appendChild(newCell).className = "cell";
             newCell.textContent= 'X'

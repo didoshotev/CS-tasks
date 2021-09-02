@@ -1,6 +1,6 @@
 import { drawGrid } from './dom/DrawGrid.js';
 import DrawService from './dom/DrawPrimary.js';
-import { activateBomb, armySoldiersCollection, changeCordinates, changeLeader, getActiveBombs, getSoldierById, manageBombs,  } from './services/ArmyService.js';
+import { activateBomb, changeCordinates, changeLeader, getSoldierById, manageBombs } from './services/ArmyService.js';
 import GlobalReference from './globals.js';
 import DrawHunter from './dom/DrawHunter.js';
 import HunterReference from './services/HunterService.js';

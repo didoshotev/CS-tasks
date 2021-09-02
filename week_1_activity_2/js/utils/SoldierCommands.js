@@ -1,4 +1,4 @@
-import { armySoldiersCollection } from "../services/ArmyService.js";
+import { armySoldiersCollection } from "../services/armyService.js";
 import { checkIfValid } from "./utils.js";
 
 

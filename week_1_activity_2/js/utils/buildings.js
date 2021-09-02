@@ -1,4 +1,4 @@
-import DrawService from "../dom/DrawPrimary.js";
+import DrawService from "../dom/drawPrimary.js";
 import GlobalReference from "../globals.js";
 import { validDiagonals, compareArrayValues, validBigCells } from "./utils.js";
 

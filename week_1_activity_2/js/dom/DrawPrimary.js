@@ -1,4 +1,4 @@
-import { armySoldiersCollection, getArmySoldiersCollection, getSoldierIndex } from '../services/ArmyService.js';
+import { armySoldiersCollection, getArmySoldiersCollection, getSoldierIndex } from '../services/armyService.js';
 
 let rows = document.getElementsByClassName('gridRow');
 

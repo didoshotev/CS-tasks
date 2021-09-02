@@ -1,6 +1,6 @@
-import { armySoldiersCollection, fireTowardsArmy } from "./ArmyService.js";
+import { armySoldiersCollection, fireTowardsArmy } from "./armyService.js";
 import { compareArrayValues, getRandomNumberFromRange } from "../utils/utils.js";
-import HunterCommands from "../utils/HunterCommands.js";
+import HunterCommands from "../utils/hunterCommands.js";
 import GlobalReference from "../globals.js";
 
 const startPositions = [[1, 1], [13, 1], [1, 13], [13, 13]];

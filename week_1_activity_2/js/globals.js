@@ -17,4 +17,7 @@ GlobalReference.BOMB_EXPLOSION_NUMBER = 6;
 GlobalReference.CORNERS_NUMBER = 4;
 GlobalReference.POSSIBLE_DIRECTIONS_NUMBER = 4;
 
+GlobalReference.MIN_ROW_COLL_NUM = 0;
+GlobalReference.MAX_ROW_COLL_NUM = 14;
+
 export default GlobalReference;

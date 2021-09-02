@@ -1,4 +1,4 @@
-import HunterReference from "../services/HunterService.js";
+import HunterReference from "../services/hunterService.js";
 import { checkIfValid } from "./utils.js";
 
 const HunterCommands = {}

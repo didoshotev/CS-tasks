@@ -1,7 +1,7 @@
 import { checkBigBuilding, checkMediumBuilding, checkSmallBuilding } from "../utils/buildings.js";
-import DrawService from "../dom/DrawPrimary.js";
+import DrawService from "../dom/drawPrimary.js";
 import { compareArrayValues } from "../utils/utils.js";
-import SoldierCommands from "../utils/SoldierCommands.js";
+import SoldierCommands from "../utils/soldierCommands.js";
 import GlobalReference from "../globals.js";
 
 

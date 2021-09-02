@@ -1,3 +1,5 @@
+import GlobalReference from "../globals";
+
 const swapArrayElements = (arr, x, y) => {
     if (arr.length === 1) return arr;
     arr.splice(y, 1, arr.splice(x, 1, arr[y])[0]);
@@ -13,8 +15,10 @@ const getRandomNumberFromRange = (maxNum) => {
 }
 
 const checkIfValid = (row, coll) => {
+    
+    const areCordinatesInTheField = (row === GlobalReference.MIN_ROW_COLL_NUM || row === GlobalReference.MAX_ROW_COLL_NUM) || (coll === GlobalReference.MIN_ROW_COLL_NUM || coll === GlobalReference.MAX_ROW_COLL_NUM); 
 
-    if ((row === 0 || row === 14) || (coll === 0 || coll === 14)) {
+    if (areCordinatesInTheField) {
         return { error: true, message: "You are not allowed to step there!" }
     }
 
