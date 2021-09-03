@@ -4,8 +4,13 @@ function $(selector) {
         element: document.querySelector(selector),
         html: () => self.element,
         
+        log: () => {
+            console.log(self.element);
+            return self;
+        },
+
         addEventListener: (event, callback) => { 
-            document.addEventListener(event, callback)
+            document.addEventListener(event, callback);
         },
         removeEventListener: (event, callback) => {
             document.removeEventListener(event, callback);
@@ -16,22 +21,22 @@ function $(selector) {
             } else {
                 self.element.setAttribute(name, value);
             }
-            return self.element;
+            return self;
         },
         addClass: (className) => {
             self.element.classList.add(className);
-            return self.element;
+            return self;
         },
         text: (text) => {
             if(text) {
                 self.element.innerText = text;
-                return self.element;
+                return self;
             }
             return self.element.innerText;
         },
         appendNode: (child) => {
             self.element.appendChild(child);
-            return self.element;
+            return self;
         },
         deleteNode: () => {
             self.element.remove();
@@ -40,29 +45,36 @@ function $(selector) {
             for (const key in styles) {
                 self.element.style[key] = styles[key];
             }
-        }
+            return self;
+        },
+        parentNode: () => {
+            return self.element.parentElement;
+        },
+        childNodes: () => {
+            return self.element.childNodes;
+        },
+
+        upperSibling: () => {
+            const parent = self.element.parentElement;
+            const nodes = [...parent.childNodes];
+            for (let i = 0; i < nodes.length; i++) {
+                if(nodes[i] == self.element) {
+                    return nodes[i - 1];
+                }
+            }
+            return null;
+        },
+        lowerSibling: () => {
+            const parent = self.element.parentElement;
+            const nodes = [...parent.childNodes];
+            for (let i = 0; i < nodes.length; i++) {
+                if(nodes[i] == self.element) {
+                    return nodes[i + 1];
+                }
+            }
+            return null;
+        },
     }
 
     return self;
 }
-
-let el3 = $('h3');
-
-// el3.attr('class', 'hello');
-
-let container = $('#demo');
-let newEl = document.createElement('div');
-newEl.textContent = '2030'
-newEl.classList.add('el123')
-container.appendNode(newEl);
-
-console.log(container.html());
-
-// const newElement = document.querySelector('.el123');
-const newElement = $('.el123');
-newElement.attr('id', 'ID09');
-newElement.css({
-    color: 'red',
-    fontSize: '30px'
-})
-console.log(newElement.html());
