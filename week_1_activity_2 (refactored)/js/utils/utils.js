@@ -31,14 +31,6 @@ const commandsDispatcher = (objectReference, positionToModify, operaion) => {
     operaion === GlobalReference.SUM_SYMBOL ? (objectReference.currentPosition[positionToModify] += 1) : (objectReference.currentPosition[positionToModify] -= 1)
 }
 
-
-const validDiagonals = {
-    a1: false,
-    a2: false,
-    b1: false,
-    b2: false,
-}
-
 const validBigCells = {
     a1: false,
     a3: false,
@@ -47,5 +39,5 @@ const validBigCells = {
     c3: false
 }
 
-export { swapArrayElements, validDiagonals, compareArrayValues, validBigCells,
+export { swapArrayElements, compareArrayValues, validBigCells,
      getRandomNumberFromRange, checkIfValid, commandsDispatcher }
