@@ -9,6 +9,17 @@ function $(selector) {
             return self;
         },
 
+        appendNodeWithClass: (tagName, className) => {
+            let newEl = document.createElement(tagName);
+            className ? newEl.classList.add(className) : null;
+            self.element.appendChild(newEl);
+            return self;
+        },
+
+        appendHtml: (html) => {
+            self.element.innerHTML = html + self.element.innerHTML;
+        },
+
         addEventListener: (event, callback) => { 
             document.addEventListener(event, callback);
         },
@@ -53,7 +64,6 @@ function $(selector) {
         childNodes: () => {
             return self.element.childNodes;
         },
-
         upperSibling: () => {
             const parent = self.element.parentElement;
             const nodes = [...parent.childNodes];
@@ -78,3 +88,5 @@ function $(selector) {
 
     return self;
 }
+
+export default $;

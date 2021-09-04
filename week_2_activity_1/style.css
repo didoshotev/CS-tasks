@@ -1,0 +1,46 @@
+body {
+    box-sizing: border-box;
+}
+:root {
+    --primary-color: #415462;
+    --secondary-color: #EF6E67;
+    --primary-bg-color: #ffff;
+    --secondary-bg-color: #DDDDDD;
+}
+
+.container {
+    margin-top: 50px;
+    background-color: antiquewhite;
+    color: var(--primary-color);
+    width: 700px;
+    height: 450px;
+    margin: 80px auto;
+}
+
+.cal-head {
+    background-color: var(--secondary-bg-color);
+    padding: 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--primary-color);
+}
+
+.head-content {
+    display: flex;
+    justify-content: space-evenly;
+    width: 200px;
+}
+
+.head-content--view {
+    
+}
+
+.border {
+    padding-right: 15px;
+    border-right: 2px solid var(--primary-color);
+}
+
+.secondary-text {
+    color: var(--secondary-color);
+}
