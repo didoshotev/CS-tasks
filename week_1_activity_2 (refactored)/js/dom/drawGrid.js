@@ -11,16 +11,19 @@ function makeRows2() {
     for (let i = 0; i < field.unitsCollection.length; i++) {
         
         const rollCollection = field.unitsCollection[i];
-        const row = document.createElement('div');
+        const row            = document.createElement('div');
+        
         container.appendChild(row).className = "gridRow";
         
         for (let j = 0; j < rollCollection.length; j++) {
 
             const rollItem = rollCollection[j]
-            const newCell = document.createElement('div');
-            newCell.className = 'cell'
+            const newCell  = document.createElement('div');
+        
+            newCell.className             = 'cell'
             newCell.style.backgroundColor = rollItem.backgroundColor
-            newCell.textContent = rollItem.defaultText;
+            newCell.textContent           = rollItem.defaultText;
+            
             row.appendChild(newCell);
         }
     }

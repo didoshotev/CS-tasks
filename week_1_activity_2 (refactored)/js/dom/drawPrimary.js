@@ -1,4 +1,5 @@
 import { armySoldiersCollection, getArmySoldiersCollection, getSoldierIndex } from '../services/armyService.js';
+import variables from './variables.js';
 
 let rows = document.getElementsByClassName('gridRow');
 
@@ -6,7 +7,6 @@ const DrawService = {
 
     start() {
         this.initDomSoldiersElements();
-        this.drawEnds();
         this.drawSoldiersInit();
     },
 
@@ -17,7 +17,7 @@ const DrawService = {
 
             let cellToPlace         = this.getCell(soldier.currentPosition[0], soldier.currentPosition[1]);
             
-            cellToPlace.textContent = '';
+            cellToPlace.textContent = variables.TEXT_EMTY;
             cellToPlace.appendChild(soldier.domElement)
         }
     },
@@ -31,21 +31,24 @@ const DrawService = {
             soldier.domElement.textContent = `${i+1}${soldier.id}`;
             
             let cellToPlace         = this.getCell(soldier.currentPosition[0], soldier.currentPosition[1]);
-            cellToPlace.textContent = '';
+            cellToPlace.textContent = variables.TEXT_EMTY;
             cellToPlace.appendChild(soldier.domElement);
             
             lastSoldier = soldier;
         }
 
         let emptyCell = this.getCell(lastSoldier.prevPosition[0], lastSoldier.prevPosition[1]);
-        emptyCell.textContent = 'X';
+        emptyCell.textContent = variables.TEXT_X;
+        
     },
 
     initDomSoldiersElements() {
 
         for (const soldier of armySoldiersCollection) {
-            let newEl = this.createCell('div', soldier.id, soldier.color);
+            
+            let newEl              = this.createCell('div', soldier.id, soldier.color);
             let curretSoldierIndex = getSoldierIndex(soldier.id);
+            
             armySoldiersCollection[curretSoldierIndex].domElement = newEl
         }
     },
@@ -65,13 +68,6 @@ const DrawService = {
         cell.style.backgroundColor = backgroundColor;
 
         return cell;
-    },
-
-    drawEnds() {
-        
-        let currCell = this.getCell(0, 0);
-        
-        currCell.style.backgroundColor = 'gray'
     },
 
     explodeCell(row, coll) {
@@ -94,7 +90,7 @@ const DrawService = {
 
     resetCell(row, coll) {
         const cell       = this.getCell(row, coll);
-        cell.innerText   = 'X';
+        cell.innerText   = variables.TEXT_X;
         cell.style.color = 'white';
     }
 

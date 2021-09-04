@@ -6,7 +6,7 @@ const b = { isWall: false, defaultText: 'X', backgroundColor: 'white', name: 'b'
 const sm = { isWall: false, defaultText: '&', backgroundColor: 'purple', name: GlobalReference.buildingNames.SMALL }
 const bg = { isWall: false, defaultText: '%', backgroundColor: 'red', name: GlobalReference.buildingNames.BIG, isDestroyed: false }
 const md = { isWall: false, defaultText: '#', backgroundColor: 'green', name: GlobalReference.buildingNames.MEDIUM, isDestroyed: false }
-const mda = { isWall: true, defaultText: '#', backgroundColor: 'green', name: GlobalReference.buildingNames.MEDIUM_WALL }
+// const mda = { isWall: true, defaultText: '#', backgroundColor: 'green', name: GlobalReference.buildingNames.MEDIUM_WALL }
 
 const field = {};
 field.get = {};
@@ -15,19 +15,19 @@ field.check = {};
 
 field.unitsCollection = [
     [a, a, a, a, a, a, a, a, a, a, a, a, a, a, a], //0
-    [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //1
-    [a, sm, sm, b, b, b, b, b, b, b, b, b, b, b, a], //2
-    [a, sm, sm, b, b, b, b, b, b, b, b, b, b, b, a], //3
+    [a, b, b, b, b, b, b, b, b, b, b, bg, bg, bg, a], //1
+    [a, sm, sm, b, b, b, b, b, b, b, b, bg, bg, bg, a], //2
+    [a, sm, sm, b, b, b, b, b, b, b, b, bg, bg, bg, a], //3
     [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //4
     [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //5
     [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //6
     [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //7 
-    [a, b, b, b, b, b, b, b, b, md, md, md, b, b, a], //8
-    [a, b, b, b, b, b, b, b, b, md, md, md, b, b, a], //9
-    [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //10
-    [a, bg, bg, bg, b, b, b, b, b, b, b, b, b, b, a], //11
-    [a, bg, bg, bg, b, b, b, b, b, b, b, b, b, b, a], //12
-    [a, bg, bg, bg, b, b, b, b, b, b, b, b, b, b, a], //13
+    [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //8
+    [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //9
+    [a, b, md, md, md, b, b, b, b, b, b, b, b, b, a], //10
+    [a, b, md, md, md, b, b, b, b, b, b, b, b, b, a], //11
+    [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //12
+    [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //13
     [a, b, b, b, b, b, b, b, b, b, b, b, b, b, a], //14
     [a, a, a, a, a, a, a, a, a, a, a, a, a, a, a], //15
 ];

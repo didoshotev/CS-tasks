@@ -1,5 +1,6 @@
 import HunterReference from "../services/hunterService.js";
 import DrawService from "./drawPrimary.js";
+import variables from "./variables.js";
 
 
 const DrawHunter = {
@@ -19,11 +20,11 @@ const DrawHunter = {
     drawHunter() {
 
         let cellToPlace         = DrawService.getCell(HunterReference.hunterObject.currentPosition[0], HunterReference.hunterObject.currentPosition[1]);
-        cellToPlace.textContent = '';
+        cellToPlace.textContent = variables.TEXT_EMTY;
         cellToPlace.appendChild(HunterReference.hunterObject.domElement);
 
         let emptyCell         = DrawService.getCell(HunterReference.hunterObject.prevPosition[0], HunterReference.hunterObject.prevPosition[1]);
-        emptyCell.textContent = 'X';
+        emptyCell.textContent = variables.TEXT_X;
     }
 
 
