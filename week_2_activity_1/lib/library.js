@@ -50,7 +50,6 @@ function $(selector) {
             return self;
         },
         deleteNode: () => {
-            console.log(self.element);
             self.element.remove();
         },
         styleDisplay: () => {

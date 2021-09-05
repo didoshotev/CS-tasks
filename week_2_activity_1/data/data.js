@@ -1,6 +1,6 @@
 const data = {
     "2015": {
-        "Januray": {
+        "January": {
             "1": { "event": {} },
             "2": { "event": {} },
             "3": { "event": {} },
@@ -394,7 +394,7 @@ const data = {
         }
     },
     "2016": {
-        "Januray": {
+        "January": {
             "1": { "event": {} },
             "2": { "event": {} },
             "3": { "event": {} },
@@ -788,7 +788,7 @@ const data = {
         }
     },
     "2017": {
-        "Januray": {
+        "January": {
             "1": { "event": {} },
             "2": { "event": {} },
             "3": { "event": {} },

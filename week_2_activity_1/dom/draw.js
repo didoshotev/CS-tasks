@@ -38,18 +38,16 @@ draw.body = (year, month, days) => {
     for (const key in days) {
         bodyEl.appendNodeWithClass('div', 'cal-body-item');
     }
-    draw.changeText(year, month, days);
+    draw.changeHeadText(year, month, days);
 };
 
-draw.changeText = (year, month, days) => {
-
+draw.changeHeadText = (year, month, days) => {
+    
     $('.head-content-month').text(month);
     $('.head-content-year').text(year);
+    
     draw.changeCellsText(days);
-
-    draw.addRemoveCells(days);
-   
-
+    draw.addOrRemoveCells(days);
 }
 
 draw.changeCellsText = (days) => {
@@ -65,8 +63,8 @@ draw.changeCellsText = (days) => {
     }
 }
 
-draw.addRemoveCells = (days) => {
-
+draw.addOrRemoveCells = (days) => {
+    
     const daysCollection    = Object.values(days);
     const bodyEl            = $('.cal-body');
     const elementCollection = [...bodyEl.childNodes()];
@@ -79,6 +77,7 @@ draw.addRemoveCells = (days) => {
             const cell = $(`.cal-body-item:nth-child(${i})`);
             cell.deleteNode();
         }
+
     } else if(daysCollection.length > elementCollection.length) {
 
         for (let i = daysCollection.length; i > elementCollection.length; i--) {
@@ -93,12 +92,12 @@ draw.attachEvents = () => {
     
     const nextBtn = $('.btn-group-second');
     nextBtn.addEventListener('click', () => {
-        CalendarService.changeData(GlobalReference.NEXT_TEXT);
+        CalendarService.nextOrPrevMonth(GlobalReference.NEXT_TEXT);
     });
 
     const prevBtn = $('.btn-group-first');
     prevBtn.addEventListener('click', () => {
-        CalendarService.changeData(GlobalReference.PREV_TEXT);
+        CalendarService.nextOrPrevMonth(GlobalReference.PREV_TEXT);
     });
 }
 
