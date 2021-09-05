@@ -25,12 +25,12 @@ CalendarService.changeYear = (type) => {
     }
 }
 
-CalendarService.readDataInit = () => {
+CalendarService.processDataInit = () => {
     const currentYear = data[viewObject.year];
     draw.body(viewObject.year, viewObject.month, currentYear[viewObject.month]);
 }
 
-CalendarService.readData = () => {
+CalendarService.processData = () => {
     const currentYear = data[viewObject.year];
     draw.changeHeadText(viewObject.year, viewObject.month, currentYear[viewObject.month]);
 }
@@ -41,26 +41,50 @@ CalendarService.nextOrPrevMonth = (type) => {
 
         if(viewObject.monthOrder === LAST_MONTH_NUMBER) {
             CalendarService.changeYear(GlobalReference.NEXT_TEXT);
-            CalendarService.readData();
+            CalendarService.processData();
             return;
         }
 
         viewObject.monthOrder = viewObject.monthOrder + 1;
         viewObject.month = months[viewObject.monthOrder];
-        CalendarService.readData();
+        CalendarService.processData();
 
     } else if(type === GlobalReference.PREV_TEXT) {
        
         if(viewObject.monthOrder === FIRST_MONTH_NUMBER) {
             CalendarService.changeYear(GlobalReference.PREV_TEXT);
-            CalendarService.readData();
+            CalendarService.processData();
             return;
         }
 
         viewObject.monthOrder = viewObject.monthOrder - 1;
         viewObject.month = months[viewObject.monthOrder];
-        CalendarService.readData();
+        CalendarService.processData();
     }
+}
+
+CalendarService.readViewObject = () => {
+    return viewObject;
+}
+
+CalendarService.addEvent = (day, { title, description }) => {
+    
+    const selectedDay =  data[viewObject.year][viewObject.month][day];
+    selectedDay.event = { title, description };
+    
+    data[viewObject.year][viewObject.month][day] = selectedDay;
+}
+
+CalendarService.getEvent = (day) => {
+    
+    const selectedDay =  data[viewObject.year][viewObject.month][day];
+    const checkForEvents = (Object.keys(selectedDay.event)).length <= 0; 
+
+    if(checkForEvents) {
+        return { hasEvents: false, message: 'There are no added events yet'}
+    }
+    
+    return { hasEvents: true, ...selectedDay }
 }
 
 export default CalendarService;

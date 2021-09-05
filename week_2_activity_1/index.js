@@ -12,4 +12,4 @@ const date = new Date("05/12/2015");
 
 // console.log(Date());
 
-CalendarService.readDataInit();
+CalendarService.processDataInit();

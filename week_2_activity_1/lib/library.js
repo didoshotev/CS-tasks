@@ -54,8 +54,10 @@ function $(selector) {
         },
         styleDisplay: () => {
             
-            const isHidden = self.element.style.display === 'none'; 
-            isHidden ? self.element.style.display = 'block' : self.element.style.display = 'block';  
+            // const isHidden = self.element.style.display === 'none'; 
+            // !isHidden ? self.element.style.display = 'block' : self.element.style.display = 'block';  
+            self.element.style.display = 'block';  
+        
         },
         css: (styles) => {
             for (const key in styles) {
