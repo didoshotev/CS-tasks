@@ -13,15 +13,15 @@ CalendarService.changeYear = (type) => {
 
     if(type === GlobalReference.NEXT_TEXT) {
         
-        viewObject.year = (+viewObject.year + 1).toString();
-        viewObject.month = months[1];
-        viewObject.monthOrder = 1;
+        viewObject.year       = (+viewObject.year + 1).toString();
+        viewObject.month      = months[FIRST_MONTH_NUMBER];
+        viewObject.monthOrder = FIRST_MONTH_NUMBER;
+
     } else if (type === GlobalReference.PREV_TEXT) {
 
-        viewObject.year = (+viewObject.year - 1).toString();
-        viewObject.month = months[12];
-        viewObject.monthOrder = 12;
-        
+        viewObject.year       = (+viewObject.year - 1).toString();
+        viewObject.month      = months[LAST_MONTH_NUMBER];
+        viewObject.monthOrder = LAST_MONTH_NUMBER;
     }
 }
 
@@ -77,7 +77,7 @@ CalendarService.addEvent = (day, { title, description }) => {
 
 CalendarService.getEvent = (day) => {
     
-    const selectedDay =  data[viewObject.year][viewObject.month][day];
+    const selectedDay    =  data[viewObject.year][viewObject.month][day];
     const checkForEvents = (Object.keys(selectedDay.event)).length <= 0; 
 
     if(checkForEvents) {

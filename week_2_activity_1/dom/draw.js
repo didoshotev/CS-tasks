@@ -8,6 +8,8 @@ let isPopupDrawn = false;
 let isInfoDrawn = false;
 let selectedDay;
 
+// how to return the newly create element
+
 const draw = {}
 
 draw.start = () => {
@@ -34,10 +36,9 @@ draw.init = () => {
     `);
 
     container.appendNodeWithClass('div', 'cal-body');
-    // let newEl = $('.cal-body');
 };
 
-// year, month, days
+
 draw.body = (year, month, days) => {
 
     const bodyEl = $('.cal-body');
@@ -97,22 +98,8 @@ draw.addOrRemoveCells = (days) => {
 
 draw.attachEvents = () => {
 
-    const nextBtn = $('.btn-group-second');
-    nextBtn.addEventListener('click', () => {
-        removeFocusedCell();
-        CalendarService.nextOrPrevMonth(GlobalReference.NEXT_TEXT);
-    });
-
-    const prevBtn = $('.btn-group-first');
-    prevBtn.addEventListener('click', () => {
-        removeFocusedCell();
-        CalendarService.nextOrPrevMonth(GlobalReference.PREV_TEXT);
-    });
-
-}
-
-draw.getCell = () => {
-
+    attachEvent(GlobalReference.NEXT_TEXT, $('.btn-group-second'));
+    attachEvent(GlobalReference.PREV_TEXT, $('.btn-group-first'));
 }
 
 draw.selectCell = (day) => {
@@ -125,8 +112,6 @@ draw.selectCell = (day) => {
 };
 
 draw.eventPopup = (event) => {
-
-    const eventPopupEl = $('.events-popup');
 
     if (!event.hasEvents && !isPopupDrawn) {
 
@@ -144,8 +129,6 @@ draw.eventPopup = (event) => {
         return;
     }
 
-
-    // eventPopupEl.text(event.message);
     // eventPopupEl.styleDisplay();
 }
 
@@ -189,6 +172,14 @@ draw.eventPopupContent = ({ title, description }) => {
     isInfoDrawn = true;
 }
 
+function attachEvent(textType, buttonReference){
+
+    buttonReference.addEventListener('click', () => {
+        removeFocusedCell();
+        CalendarService.nextOrPrevMonth(textType);
+    });
+}
+
 function handleSubmitEvent() {
 
     // should check input
@@ -220,7 +211,6 @@ function removeFocusedCell() {
         selectedCells.shift();
     }
 }
-
 
 
 export default draw;
