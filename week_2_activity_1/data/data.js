@@ -1,4 +1,4 @@
-{
+const data = {
     "2015": {
         "Januray": {
             "1": { "event": {} },
@@ -127,7 +127,6 @@
             "28": { "event": {} },
             "29": { "event": {} },
             "30": { "event": {} },
-            "31": { "event": {} }
         },
         "May": {
             "1": { "event": {} },
@@ -522,7 +521,6 @@
             "28": { "event": {} },
             "29": { "event": {} },
             "30": { "event": {} },
-            "31": { "event": {} }
         },
         "May": {
             "1": { "event": {} },
@@ -585,10 +583,10 @@
             "25": { "event": {} },
             "26": { "event": {} },
             "27": { "event": {} },
-            "28": { "event": {} },
-            "29": { "event": {} },
-            "30": { "event": {} },
-            "31": { "event": {} }
+            // "28": { "event": {} },
+            // "29": { "event": {} },
+            // "30": { "event": {} },
+            // "31": { "event": {} }
         },
         "July": {
             "1": { "event": {} },
@@ -1184,19 +1182,21 @@
             "31": { "event": {} }
         }
     },
-  
-    "months": {
-        "1": "January",
-        "2": "February",
-        "3": "March",
-        "4": "April",
-        "5": "May",
-        "6": "June",
-        "7": "July",
-        "8": "August",
-        "9": "September",
-        "10": "October",
-        "11": "November",
-        "12": "December"
-    }
 }
+
+const months = {
+    "1": "January",
+    "2": "February",
+    "3": "March",
+    "4": "April",
+    "5": "May",
+    "6": "June",
+    "7": "July",
+    "8": "August",
+    "9": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+}
+
+export { data, months };

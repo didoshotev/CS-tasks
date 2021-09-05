@@ -21,10 +21,10 @@ function $(selector) {
         },
 
         addEventListener: (event, callback) => { 
-            document.addEventListener(event, callback);
+            self.element.addEventListener(event, callback);
         },
         removeEventListener: (event, callback) => {
-            document.removeEventListener(event, callback);
+            self.element.removeEventListener(event, callback);
         },
         attr: (name, value) => {
             if(value == null) {
@@ -50,7 +50,13 @@ function $(selector) {
             return self;
         },
         deleteNode: () => {
+            console.log(self.element);
             self.element.remove();
+        },
+        styleDisplay: () => {
+            
+            const isHidden = self.element.style.display === 'none'; 
+            isHidden ? self.element.style.display = 'block' : self.element.style.display = 'block';  
         },
         css: (styles) => {
             for (const key in styles) {
