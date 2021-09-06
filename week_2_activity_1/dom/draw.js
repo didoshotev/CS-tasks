@@ -46,7 +46,7 @@ draw.body2 = (year, month, daysInMonthCount) => {
     for (let i = 0; i < daysInMonthCount; i++) {
         bodyEl.appendNodeWithClass('div', 'cal-body-item');
     }
-    
+
     draw.changeHeadText(year, month, daysInMonthCount);
 }
 
@@ -78,38 +78,34 @@ draw.changeCellsText = (days) => {
 
         const el = $(`.cal-body-item:nth-child(${i + 1})`);
         el.text(`${i + 1}`);
-        el.addEventListener('click', (e) => clickHandler(e, i + 1))
+        el.addEventListener('click', (e) => cellClickHandler(e, i + 1))
     }
-    // bodyEl.addEventListener('click', (e) => { 
-    //     console.log(e.path[0].textContent);
-    // });
-    
-    // bodyEl.addEventListener('click', (e) => clickHandler(e, +e.path[0].textContent))
 }
 
 draw.addOrRemoveCells = (daysInMonthCount) => {
 
     const bodyEl = $('.cal-body');
     const elementCollection = [...bodyEl.childNodes()];
-    
+
+    const cellsViewNeedChange = daysInMonthCount === elementCollection.length;
+
+    if (!cellsViewNeedChange) { return; }
+
     if (daysInMonthCount < elementCollection.length) {
 
-        //              31                      31 > 28
         for (let i = elementCollection.length; i > daysInMonthCount; i--) {
 
             const cell = $(`.cal-body-item:nth-child(${i})`);
-            cell.removeEventListener('click', clickHandler);
+            cell.removeEventListener('click', cellClickHandler);
             cell.deleteNode();
         }
-
-    } else if (daysInMonthCount > elementCollection.length) {
-
-        for (let i = daysInMonthCount; i > elementCollection.length; i--) {
-            bodyEl.appendNodeWithClass('div', 'cal-body-item');
-        }
-        draw.changeCellsText(daysInMonthCount);
+        return;
     }
 
+    for (let i = daysInMonthCount; i > elementCollection.length; i--) {
+        bodyEl.appendNodeWithClass('div', 'cal-body-item');
+    }
+    draw.changeCellsText(daysInMonthCount);
 }
 
 draw.attachEvents = () => {
@@ -128,7 +124,7 @@ draw.selectCell = (day) => {
 };
 
 draw.eventPopup = (event) => {
-    
+
     if (!event.hasEvents && !isPopupDrawn) {
 
         draw.formPopupContent();
@@ -139,8 +135,7 @@ draw.eventPopup = (event) => {
     } else if (event.hasEvents) {
 
         const formEl = $('.events-popup-form-content');
-        console.log(formEl);
-        formEl &&  formEl.deleteNode();
+        formEl.element && formEl.deleteNode();
         isPopupDrawn = false;
 
         draw.eventPopupContent(event.currentEvent);
@@ -187,11 +182,12 @@ draw.eventPopupContent = ({ title, description }) => {
     isInfoDrawn = true;
 }
 
+
 function attachEvent(textType, buttonReference) {
 
     buttonReference.addEventListener('click', () => {
         removeFocusedCell();
-        CalendarService.nextOrPrevMonth2(textType);
+        CalendarService.nextOrPrevMonth(textType);
     });
 }
 
@@ -201,13 +197,13 @@ function handleSubmitEvent() {
     const title = $('.title-input').html();
     const description = $('.description-input').html();
 
-    CalendarService.addEvent2(selectedDay, { title: title.value, description: description.value });
+    CalendarService.addEvent(selectedDay, { title: title.value, description: description.value });
     title.value = '';
     description.value = '';
 }
 
-function clickHandler(e, day) {
-    const event = CalendarService.getEvent2(day);
+function cellClickHandler(e, day) {
+    const event = CalendarService.getEvent(day);
     removeFocusedCell();
 
     draw.selectCell(day);
