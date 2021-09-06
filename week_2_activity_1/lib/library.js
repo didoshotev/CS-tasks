@@ -1,9 +1,9 @@
 function $(selector) {
 
-    const self = { 
+    const self = {
         element: document.querySelector(selector),
         html: () => self.element,
-        
+
         log: () => {
             console.log(self.element);
             return self;
@@ -20,14 +20,14 @@ function $(selector) {
             self.element.innerHTML = html + self.element.innerHTML;
         },
 
-        addEventListener: (event, callback) => { 
+        addEventListener: (event, callback) => {
             self.element.addEventListener(event, callback);
         },
         removeEventListener: (event, callback) => {
             self.element.removeEventListener(event, callback);
         },
         attr: (name, value) => {
-            if(value == null) {
+            if (value == null) {
                 self.element.getAttribute(name);
             } else {
                 self.element.setAttribute(name, value);
@@ -39,7 +39,7 @@ function $(selector) {
             return self;
         },
         text: (text) => {
-            if(text) {
+            if (text) {
                 self.element.innerText = text;
                 return self;
             }
@@ -53,11 +53,10 @@ function $(selector) {
             self.element.remove();
         },
         styleDisplay: () => {
-            
             // const isHidden = self.element.style.display === 'none'; 
             // !isHidden ? self.element.style.display = 'block' : self.element.style.display = 'block';  
-            self.element.style.display = 'block';  
-        
+            self.element.style.display = 'block';
+
         },
         css: (styles) => {
             for (const key in styles) {
@@ -75,25 +74,34 @@ function $(selector) {
             const parent = self.element.parentElement;
             const nodes = [...parent.childNodes];
             for (let i = 0; i < nodes.length; i++) {
-                if(nodes[i] == self.element) {
+                if (nodes[i] == self.element) {
                     return nodes[i - 1];
                 }
             }
             return null;
         },
         lowerSibling: () => {
-            const parent = self.element.parentElement;
-            const nodes = [...parent.childNodes];
-            for (let i = 0; i < nodes.length; i++) {
-                if(nodes[i] == self.element) {
-                    return nodes[i + 1];
-                }
-            }
-            return null;
+
+            return selectSibling((nodes, index) => {
+                return nodes[index + 1];
+            })
+
         },
     }
 
     return self;
+}
+
+const selectSibling = (callback) => {
+    
+    const parent = self.element.parentElement;
+    const nodes = [...parent.childNodes];
+    for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i] == self.element) {
+            return callback(nodes, i);
+        }
+    }
+    return null;
 }
 
 export default $;

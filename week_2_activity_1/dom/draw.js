@@ -21,6 +21,7 @@ draw.start = () => {
 
 draw.init = () => {
 
+
     const container = $('.container');
     container.appendHtml(`
     <div class="cal-head">
@@ -38,6 +39,16 @@ draw.init = () => {
     container.appendNodeWithClass('div', 'cal-body');
 };
 
+draw.body2 = (year, month, daysInMonthCount) => {
+
+    const bodyEl = $('.cal-body');
+
+    for (let i = 0; i < daysInMonthCount; i++) {
+        bodyEl.appendNodeWithClass('div', 'cal-body-item');
+    }
+    
+    draw.changeHeadText(year, month, daysInMonthCount);
+}
 
 draw.body = (year, month, days) => {
 
@@ -49,13 +60,13 @@ draw.body = (year, month, days) => {
     draw.changeHeadText(year, month, days);
 };
 
-draw.changeHeadText = (year, month, days) => {
+draw.changeHeadText = (year, month, daysInMonthCount) => {
 
     $('.head-content-month').text(month);
     $('.head-content-year').text(year);
 
-    draw.changeCellsText(days);
-    draw.addOrRemoveCells(days);
+    draw.changeCellsText(daysInMonthCount);
+    draw.addOrRemoveCells(daysInMonthCount);
 }
 
 draw.changeCellsText = (days) => {
@@ -69,29 +80,34 @@ draw.changeCellsText = (days) => {
         el.text(`${i + 1}`);
         el.addEventListener('click', (e) => clickHandler(e, i + 1))
     }
+    // bodyEl.addEventListener('click', (e) => { 
+    //     console.log(e.path[0].textContent);
+    // });
+    
+    // bodyEl.addEventListener('click', (e) => clickHandler(e, +e.path[0].textContent))
 }
 
-draw.addOrRemoveCells = (days) => {
+draw.addOrRemoveCells = (daysInMonthCount) => {
 
-    const daysCollection = Object.values(days);
     const bodyEl = $('.cal-body');
     const elementCollection = [...bodyEl.childNodes()];
-
-    if (daysCollection.length < elementCollection.length) {
+    
+    if (daysInMonthCount < elementCollection.length) {
 
         //              31                      31 > 28
-        for (let i = elementCollection.length; i > daysCollection.length; i--) {
+        for (let i = elementCollection.length; i > daysInMonthCount; i--) {
 
             const cell = $(`.cal-body-item:nth-child(${i})`);
+            cell.removeEventListener('click', clickHandler);
             cell.deleteNode();
         }
 
-    } else if (daysCollection.length > elementCollection.length) {
+    } else if (daysInMonthCount > elementCollection.length) {
 
-        for (let i = daysCollection.length; i > elementCollection.length; i--) {
+        for (let i = daysInMonthCount; i > elementCollection.length; i--) {
             bodyEl.appendNodeWithClass('div', 'cal-body-item');
         }
-        draw.changeCellsText(days);
+        draw.changeCellsText(daysInMonthCount);
     }
 
 }
@@ -112,24 +128,24 @@ draw.selectCell = (day) => {
 };
 
 draw.eventPopup = (event) => {
-
+    
     if (!event.hasEvents && !isPopupDrawn) {
 
         draw.formPopupContent();
-        isInfoDrawn && ($('.event-popup-info').deleteNode(), isInfoDrawn = false)  
+        isInfoDrawn && ($('.event-popup-info').deleteNode(), isInfoDrawn = false)
 
         return
 
     } else if (event.hasEvents) {
 
-        $('.events-popup-form-content').deleteNode();
+        const formEl = $('.events-popup-form-content');
+        console.log(formEl);
+        formEl &&  formEl.deleteNode();
         isPopupDrawn = false;
 
-        draw.eventPopupContent(event.event);
+        draw.eventPopupContent(event.currentEvent);
         return;
     }
-
-    // eventPopupEl.styleDisplay();
 }
 
 draw.formPopupContent = () => {
@@ -157,7 +173,6 @@ draw.formPopupContent = () => {
 }
 
 draw.eventPopupContent = ({ title, description }) => {
-
     const eventPopupEl = $('.events-popup');
 
     eventPopupEl.appendNodeWithClass('div', 'event-popup-info');
@@ -172,11 +187,11 @@ draw.eventPopupContent = ({ title, description }) => {
     isInfoDrawn = true;
 }
 
-function attachEvent(textType, buttonReference){
+function attachEvent(textType, buttonReference) {
 
     buttonReference.addEventListener('click', () => {
         removeFocusedCell();
-        CalendarService.nextOrPrevMonth(textType);
+        CalendarService.nextOrPrevMonth2(textType);
     });
 }
 
@@ -186,14 +201,13 @@ function handleSubmitEvent() {
     const title = $('.title-input').html();
     const description = $('.description-input').html();
 
-    CalendarService.addEvent(selectedDay, { title: title.value, description: description.value });
+    CalendarService.addEvent2(selectedDay, { title: title.value, description: description.value });
     title.value = '';
     description.value = '';
 }
 
 function clickHandler(e, day) {
-    const event = CalendarService.getEvent(day);
-
+    const event = CalendarService.getEvent2(day);
     removeFocusedCell();
 
     draw.selectCell(day);
