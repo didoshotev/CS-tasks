@@ -1,6 +1,7 @@
 import GlobalReference from "../global.js";
 import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
+import drawWeekly from "./drawWeekly.js";
 
 const selectedCells = [];
 
@@ -9,18 +10,16 @@ let isInfoDrawn = false;
 let selectedDay;
 
 // how to return the newly create element
+// pass param to non anonymous function in event listener
 
 const draw = {}
 
 draw.start = () => {
-
     draw.init();
     draw.attachEvents();
-    // draw.eventPopup();
 };
 
 draw.init = () => {
-
 
     const container = $('.container');
     container.appendHtml(`
@@ -30,17 +29,22 @@ draw.init = () => {
             <div class="secondary-text head-content-year"></div>
         </div>
         <div class="head-content head-content--view">
-            <div class="border">week view</div>
-            <div class="secondary-text">month view</div>
+            <div class="border week-view">week view</div>
+            <div class="secondary-text month-view">month view</div>
         </div>
     </div>
     `);
-
-    container.appendNodeWithClass('div', 'cal-body');
 };
 
-draw.body2 = (year, month, daysInMonthCount) => {
+draw.body = (year, month, daysInMonthCount) => {
 
+    const container = $('.container');
+    
+    const nodes = container.childNodes();
+    
+    if(nodes.length >= 4) { return; }
+
+    container.appendNodeWithClass('div', 'cal-body');
     const bodyEl = $('.cal-body');
 
     for (let i = 0; i < daysInMonthCount; i++) {
@@ -50,15 +54,12 @@ draw.body2 = (year, month, daysInMonthCount) => {
     draw.changeHeadText(year, month, daysInMonthCount);
 }
 
-draw.body = (year, month, days) => {
+draw.deleteBody = () => {
+    $('.btn-group-second').removeEventListener('click', handleNextClickBtn);
+    $('.btn-group-first').removeEventListener('click', handlePrevClickBtn);
 
-    const bodyEl = $('.cal-body');
-
-    for (const key in days) {
-        bodyEl.appendNodeWithClass('div', 'cal-body-item');
-    }
-    draw.changeHeadText(year, month, days);
-};
+    $('.cal-body').deleteNode();
+}
 
 draw.changeHeadText = (year, month, daysInMonthCount) => {
 
@@ -78,7 +79,7 @@ draw.changeCellsText = (days) => {
 
         const el = $(`.cal-body-item:nth-child(${i + 1})`);
         el.text(`${i + 1}`);
-        el.addEventListener('click', (e) => cellClickHandler(e, i + 1))
+        el.addEventListener('click', (e) => draw.cellClickHandler(e, i + 1))
     }
 }
 
@@ -96,7 +97,7 @@ draw.addOrRemoveCells = (daysInMonthCount) => {
         for (let i = elementCollection.length; i > daysInMonthCount; i--) {
 
             const cell = $(`.cal-body-item:nth-child(${i})`);
-            cell.removeEventListener('click', cellClickHandler);
+            cell.removeEventListener('click', draw.cellClickHandler);
             cell.deleteNode();
         }
         return;
@@ -110,13 +111,32 @@ draw.addOrRemoveCells = (daysInMonthCount) => {
 
 draw.attachEvents = () => {
 
-    attachEvent(GlobalReference.NEXT_TEXT, $('.btn-group-second'));
-    attachEvent(GlobalReference.PREV_TEXT, $('.btn-group-first'));
+    $('.btn-group-second').addEventListener('click', handleNextClickBtn)
+    $('.btn-group-first').addEventListener('click', handlePrevClickBtn)
+
+    $('.week-view').addEventListener('click', () => { 
+        const viewObject = CalendarService.getViewObject();
+
+        draw.deleteBody();
+        drawWeekly.body(viewObject);
+    })
+
+    $('.month-view').addEventListener('click', () => {
+        const viewObject = CalendarService.getViewObject();
+
+        drawWeekly.deleteBody();
+        draw.body(viewObject.year, viewObject.month, viewObject.daysInMonthCount);
+    })
 }
 
 draw.selectCell = (day) => {
 
-    const currentEl = $(`.cal-body-item:nth-child(${day})`);
+    let currentEl = $(`.cal-body-item:nth-child(${day})`);
+    
+    if(!currentEl.element) { 
+        currentEl = $(`.cal-week-body-item:nth-child(${day})`);
+    }
+
     selectedCells.push(currentEl);
     currentEl.css({
         backgroundColor: '#DDDDDD'
@@ -182,15 +202,6 @@ draw.eventPopupContent = ({ title, description }) => {
     isInfoDrawn = true;
 }
 
-
-function attachEvent(textType, buttonReference) {
-
-    buttonReference.addEventListener('click', () => {
-        removeFocusedCell();
-        CalendarService.nextOrPrevMonth(textType);
-    });
-}
-
 function handleSubmitEvent() {
 
     // should check input
@@ -202,16 +213,16 @@ function handleSubmitEvent() {
     description.value = '';
 }
 
-function cellClickHandler(e, day) {
+draw.cellClickHandler = (e, day) => {
     const event = CalendarService.getEvent(day);
-    removeFocusedCell();
+    draw.removeFocusedCell();
 
     draw.selectCell(day);
     selectedDay = day;
     draw.eventPopup(event);
 };
 
-function removeFocusedCell() {
+draw.removeFocusedCell = function() {
 
     if (selectedCells.length > 0) {
 
@@ -221,6 +232,17 @@ function removeFocusedCell() {
         selectedCells.shift();
     }
 }
+
+function handlePrevClickBtn() { 
+    draw.removeFocusedCell();
+    CalendarService.nextOrPrevMonth(GlobalReference.PREV_TEXT);
+}
+
+function handleNextClickBtn() { 
+    draw.removeFocusedCell();
+    CalendarService.nextOrPrevMonth(GlobalReference.NEXT_TEXT);
+}
+
 
 
 export default draw;
