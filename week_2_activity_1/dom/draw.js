@@ -1,6 +1,7 @@
 import GlobalReference from "../global.js";
 import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
+import drawPicker from "./drawPicker.js";
 import drawWeekly from "./drawWeekly.js";
 
 const selectedCells = [];
@@ -16,7 +17,7 @@ const draw = {}
 
 draw.start = () => {
     draw.init();
-    draw.attachEvents();
+    drawPicker.init();    
 };
 
 draw.init = () => {
@@ -41,7 +42,7 @@ draw.body = (year, month, daysInMonthCount) => {
     const container = $('.container');
     
     const nodes = container.childNodes();
-    
+
     if(nodes.length >= 4) { return; }
 
     container.appendNodeWithClass('div', 'cal-body');
@@ -50,7 +51,7 @@ draw.body = (year, month, daysInMonthCount) => {
     for (let i = 0; i < daysInMonthCount; i++) {
         bodyEl.appendNodeWithClass('div', 'cal-body-item');
     }
-
+    draw.attachEvents();
     draw.changeHeadText(year, month, daysInMonthCount);
 }
 

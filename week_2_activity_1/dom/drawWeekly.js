@@ -1,3 +1,4 @@
+import { monthNames } from "../data/data.js";
 import GlobalReference from "../global.js";
 import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
@@ -23,12 +24,6 @@ drawWeekly.body = () => {
 
     $('.btn-group-second').addEventListener('click', handleWeekButton);
     $('.btn-group-first').addEventListener('click', handleWeekButton);
-}
-
-drawWeekly.changeCellsText = () => { 
-    const viewObject = CalendarService.getViewObject();
-    console.log(viewObject);   
-    drawWeekly.changeCellsText(); 
 }
 
 drawWeekly.changeCellsText = () => {
@@ -62,8 +57,18 @@ function handleWeekButton(e) {
     //const isPrevClicked = e.srcElement === $('.btn-group-second').html();
     
     isNextClicked ? CalendarService.nextOrPrevWeek(GlobalReference.NEXT_TEXT) : CalendarService.nextOrPrevWeek(GlobalReference.PREV_TEXT); 
+    
+    changeHead();
+
     draw.removeFocusedCell();
     drawWeekly.changeCellsText();
+}
+
+const changeHead = () => {
+    const viewObject = CalendarService.getViewObject();
+    
+    $('.head-content-month').text(monthNames[viewObject.date.getMonth()]);
+    $('.head-content-year').text(viewObject.date.getFullYear());
 }
 
 function getWeek(fromDate) {

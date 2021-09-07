@@ -2,6 +2,7 @@ import { monthNames } from "../data/data.js";
 import events from "../data/events.js";
 import draw from "../dom/draw.js";
 import GlobalReference from "../global.js";
+import { getDaysInMonth } from "../utils/utils.js";
 
 const LAST_MONTH_NUMBER = 12;
 const FIRST_MONTH_NUMBER = 1;
@@ -17,7 +18,7 @@ CalendarService.processDataInit = () => {
     viewObject2.year = startDate.getFullYear();
     viewObject2.month = monthNames[startDate.getMonth()];
     viewObject2.monthOrder = startDate.getMonth() + 1;
-    viewObject2.daysInMonthCount = daysInMonth(viewObject2.monthOrder, viewObject2.year);
+    viewObject2.daysInMonthCount = getDaysInMonth(viewObject2.monthOrder, viewObject2.year);
     viewObject2.date = startDate;
     console.log(viewObject2);
 
@@ -47,11 +48,10 @@ CalendarService.getEvent = (day) => {
 }
 
 CalendarService.changeOnlyMonth = (type) => {
-
     const newMonth = (type === GlobalReference.NEXT_TEXT) ? 1 : -1;
     viewObject2.monthOrder = viewObject2.monthOrder + newMonth;
     viewObject2.month = monthNames[viewObject2.monthOrder - 1];
-    viewObject2.daysInMonthCount = daysInMonth(viewObject2.monthOrder, viewObject2.year);
+    viewObject2.daysInMonthCount = getDaysInMonth(viewObject2.monthOrder, viewObject2.year);
     viewObject2.date.setMonth(viewObject2.monthOrder);
     CalendarService.processData();
 }
@@ -73,6 +73,14 @@ CalendarService.nextOrPrevWeek = (type) => {
     viewObject2.date.setDate(viewObject2.date.getDate() + newDate);
 }
 
+CalendarService.changeYear = (type) => {
+
+    const newYear = (type === GlobalReference.NEXT_TEXT) ? 1 : -1;
+    viewObject2.year = (+viewObject2.year + newYear).toString();
+
+    type === GlobalReference.NEXT_TEXT ? processChangeYear(FIRST_MONTH_NUMBER) : processChangeYear(LAST_MONTH_NUMBER);
+}
+
 const checkForYearChange = (type) => {
 
     const shouldIncrementYear = type === GlobalReference.NEXT_TEXT && viewObject2.monthOrder === LAST_MONTH_NUMBER;
@@ -84,20 +92,8 @@ const checkForYearChange = (type) => {
     return shouldDecrementYear || shouldIncrementYear;
 }
 
-CalendarService.changeYear = (type) => {
-
-    const newYear = (type === GlobalReference.NEXT_TEXT) ? 1 : -1;
-    viewObject2.year = (+viewObject2.year + newYear).toString();
-
-    type === GlobalReference.NEXT_TEXT ? processChangeYear(FIRST_MONTH_NUMBER) : processChangeYear(LAST_MONTH_NUMBER);
-}
-
 const checkYearText = (textType) => {
     CalendarService.changeYear(textType); 
-}
-
-const daysInMonth = (month, year) => { // Use 1 for January...
-    return new Date(year, month, 0).getDate();
 }
 
 const processChangeYear = (monthOrder) => {

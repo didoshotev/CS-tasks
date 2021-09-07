@@ -1,5 +1,6 @@
 import draw from "./dom/draw.js";
 import CalendarService from "./services/calendar.js";
+import { getDaysInMonth } from "./utils/utils.js";
 
 draw.start();
 
@@ -16,3 +17,5 @@ CalendarService.processDataInit(startDate);
 // console.log(date.getMonth() + 1); // return the month
 // console.log(date.getUTCDate()); // return the year
 // console.log(date.toJSON()); // return the year
+
+// console.log(getDaysInMonth(9, 2021));
