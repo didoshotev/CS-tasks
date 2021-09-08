@@ -1,4 +1,3 @@
-import { monthNames } from "../data/data.js";
 import GlobalReference from "../global.js";
 import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
@@ -46,8 +45,7 @@ draw.body = (year, month, daysInMonthCount) => {
 
     if(nodes.length >= 4) { return; }
 
-    container.appendNodeWithClass('div', 'cal-body');
-    const bodyEl = $('.cal-body');
+    const bodyEl = container.appendAndGetNode('div', 'cal-body')
 
     for (let i = 0; i < daysInMonthCount; i++) {
         bodyEl.appendNodeWithClass('div', 'cal-body-item');
@@ -164,24 +162,20 @@ draw.eventPopup = (event) => {
 
 draw.formPopupContent = () => {
 
-    const eventPopupEl = $('.events-popup');
+    const formPopupContentEl = $('.events-popup').appendAndGetNode('div', 'events-popup-form-content');
 
-    eventPopupEl.appendNodeWithClass('div', 'events-popup-form-content');
-    const formPopupContentEl = $('.events-popup-form-content');
+    (formPopupContentEl.appendAndGetNode('p', 'event-heading')).text('No added events yet. Enter title and description for a new one!').css({ fontSize: '19px' });
 
-    formPopupContentEl.appendNodeWithClass('p', 'event-heading');
-    $('.event-heading').text('No added events yet. Enter title and description for a new one!').css({ fontSize: '19px' });
-
-    formPopupContentEl.appendNodeWithClass('label', 'title-label');
-    $('.title-label').text('Title').css({ marginRight: '10px' });
+    (formPopupContentEl.appendAndGetNode('label', 'title-label')).text('Title').css({ marginRight: '10px' });
+    
     formPopupContentEl.appendNodeWithClass('input', 'title-input');
 
-    formPopupContentEl.appendNodeWithClass('label', 'description-label');
-    $('.description-label').text('Description').css({ margin: '0 10px' });
+    (formPopupContentEl.appendAndGetNode('label', 'description-label')).text('Description').css({ margin: '0 10px' });
+
     formPopupContentEl.appendNodeWithClass('input', 'description-input');
 
-    formPopupContentEl.appendNodeWithClass('button', 'event-btn');
-    $('.event-btn').text('Submit').css({ marginLeft: '10px' }).addEventListener('click', handleSubmitEvent);
+    (formPopupContentEl.appendAndGetNode('button', 'event-btn'))
+        .text('Submit').css({ marginLeft: '10px' }).addEventListener('click', handleSubmitEvent);
 
     isPopupDrawn = true;
 }
@@ -189,14 +183,11 @@ draw.formPopupContent = () => {
 draw.eventPopupContent = ({ title, description }) => {
     const eventPopupEl = $('.events-popup');
 
-    eventPopupEl.appendNodeWithClass('div', 'event-popup-info');
-    const eventPopupInfo = $('.event-popup-info');
+    const eventPopupInfo = eventPopupEl.appendAndGetNode('div', 'event-popup-info');
 
-    eventPopupInfo.appendNodeWithClass('p', 'event-title')
-    $('.event-title').text(`Title: ${title}`);
+    (eventPopupInfo.appendAndGetNode('p', 'event-title')).text(`Title: ${title}`);
 
-    eventPopupInfo.appendNodeWithClass('p', 'event-description')
-    $('.event-description').text(`Description: ${description}`);
+    (eventPopupInfo.appendAndGetNode('p', 'event-description')).text(`Description: ${description}`);
 
     isInfoDrawn = true;
 }

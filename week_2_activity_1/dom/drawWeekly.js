@@ -14,8 +14,7 @@ drawWeekly.body = () => {
 
     if(nodes.length >= 4) { return; }
 
-    container.appendNodeWithClass('div', 'cal-week-body');
-    const bodyEl = $('.cal-week-body');
+    const bodyEl = container.appendAndGetNode('div', 'cal-week-body');
 
     for (let i = 0; i < GlobalReference.WEEK_DAYS; i++) {
         bodyEl.appendNodeWithClass('div', 'cal-week-body-item');

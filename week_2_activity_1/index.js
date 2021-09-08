@@ -1,6 +1,5 @@
 import draw from "./dom/draw.js";
 import CalendarService from "./services/calendar.js";
-import { getDaysInMonth } from "./utils/utils.js";
 
 draw.start();
 

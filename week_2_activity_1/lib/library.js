@@ -16,6 +16,15 @@ function $(selector) {
             return self;
         },
 
+        appendAndGetNode: (tagName, className) => {
+
+            let newEl = document.createElement(tagName);
+            
+            newEl.classList.add(className);
+            self.element.appendChild(newEl);
+            return new $(`.${className}`)
+        },
+
         appendHtml: (html) => {
             self.element.innerHTML = html + self.element.innerHTML;
         },
@@ -71,33 +80,30 @@ function $(selector) {
             return self.element.childNodes;
         },
         upperSibling: () => {
-            const parent = self.element.parentElement;
-            const nodes = [...parent.childNodes];
-            for (let i = 0; i < nodes.length; i++) {
-                if (nodes[i] == self.element) {
-                    return nodes[i - 1];
-                }
-            }
-            return null;
+            return selectSibling.call(self, upperSilbingCallback);
         },
         lowerSibling: () => {
-
-            return selectSibling((nodes, index) => {
-                return nodes[index + 1];
-            })
-
+            return selectSibling.call(self, lowerSilbingCallback);
         },
     }
-
     return self;
 }
 
-const selectSibling = (callback) => {
-    
-    const parent = self.element.parentElement;
+function lowerSilbingCallback(nodes, index) {
+    return nodes[index + 1];
+}
+
+const upperSilbingCallback = (nodes, index) => {
+    return nodes[index - 1];
+}
+
+function selectSibling(callback) {
+
+    const parent = this.element.parentElement;
     const nodes = [...parent.childNodes];
+
     for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i] == self.element) {
+        if (nodes[i] == this.element) {
             return callback(nodes, i);
         }
     }

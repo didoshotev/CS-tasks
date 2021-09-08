@@ -3,41 +3,39 @@ import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
 import { getDaysInMonth } from "../utils/utils.js";
 
-const drawPicker = { };
+const drawPicker = {};
 
 let isPickerOpened = false;
 // const viewObject = CalendarService.getViewObject();
-const drawPickerViewObject = { } 
+const drawPickerViewObject = {}
 
-drawPicker.init = () => { 
+drawPicker.init = () => {
 
     // Object.assign(drawPickerViewObject, CalendarService.getViewObject());
-    $('.datepicker-container').appendNodeWithClass('button', 'button-datepicker');
-    const buttonPicker = $('.button-datepicker')
-    .css({ marginLeft: '20px', fontSize: '20px', border: '2px solid #EF6E67', position: 'relative'}).text('Datepicker')
-    
-    buttonPicker.addEventListener('click', setIsPickerOpened);
+
+    ($('.datepicker-container').appendAndGetNode('button', 'button-datepicker'))
+        .css({ marginLeft: '20px', fontSize: '20px', border: '2px solid #EF6E67', position: 'relative' })
+        .text('Datepicker')
+        .addEventListener('click', setIsPickerOpened);
 }
 
-drawPicker.show = () => { 
+drawPicker.show = () => {
     const viewObject = CalendarService.getViewObject();
     Object.assign(drawPickerViewObject, viewObject);
-    
-    $('.datepicker-container').appendNodeWithClass('div', 'datepicker-body');
-    const datePickerBodyEl = $('.datepicker-body');
-    datePickerBodyEl.appendNodeWithClass('div', 'datepicker-content');
-    
+
+    const datePickerBodyEl = ($('.datepicker-container').appendAndGetNode('div', 'datepicker-body'))
+        .appendNodeWithClass('div', 'datepicker-content');
+
     $('.datepicker-content').appendHtml(`
-    ${monthNames[viewObject.date.getMonth()]} ${viewObject.year}`);
+        ${monthNames[viewObject.date.getMonth()]} ${viewObject.year}`);
 
-    datePickerBodyEl.appendNodeWithClass('button', 'datepicker-prev');
-    datePickerBodyEl.appendNodeWithClass('button', 'datepicker-next');
+    datePickerBodyEl.appendAndGetNode('button', 'datepicker-prev')
+        .text('<').addEventListener('click', prevOrNextArrowsHanlder);
 
-    $('.datepicker-next').text('>').css({marginLeft: '70px'}).addEventListener('click', prevOrNextArrowsHanlder);
-    $('.datepicker-prev').text('<').addEventListener('click', prevOrNextArrowsHanlder);
+    datePickerBodyEl.appendAndGetNode('button', 'datepicker-next')
+        .text('>').css({ marginLeft: '70px' }).addEventListener('click', prevOrNextArrowsHanlder);
 
-    datePickerBodyEl.appendNodeWithClass('div', 'datepicker-content-grid');
-    const datepickerContentGrid = $('.datepicker-content-grid');
+    const datepickerContentGrid = datePickerBodyEl.appendAndGetNode('div', 'datepicker-content-grid');
 
     for (let i = 0; i < viewObject.daysInMonthCount; i++) {
         datepickerContentGrid.appendNodeWithClass('div', 'datepicker-grid-item');
@@ -45,9 +43,9 @@ drawPicker.show = () => {
     drawPicker.changeCellsText();
 }
 
-drawPicker.changeCellsText = () => { 
+drawPicker.changeCellsText = () => {
     const datepickerContentGrid = $('.datepicker-content-grid');
-    
+
     const elementCollection = [...datepickerContentGrid.childNodes()];
 
     for (let i = 0; i < elementCollection.length; i++) {
@@ -58,7 +56,7 @@ drawPicker.changeCellsText = () => {
     }
 }
 
-drawPicker.changeContent = (daysInMonthCount) => { 
+drawPicker.changeContent = (daysInMonthCount) => {
     $('.datepicker-content').text(`${monthNames[drawPickerViewObject.date.getMonth()]} ${drawPickerViewObject.date.getFullYear()}`)
 
     const datepickerGridEl = $('.datepicker-content-grid');
@@ -71,7 +69,7 @@ drawPicker.changeContent = (daysInMonthCount) => {
             cell.removeEventListener('click', cellClickHandler);
             cell.deleteNode();
         }
-    } else if ( daysInMonthCount > elementCollection.length) { 
+    } else if (daysInMonthCount > elementCollection.length) {
 
         for (let i = daysInMonthCount; i > elementCollection.length; i--) {
             datepickerGridEl.appendNodeWithClass('div', 'datepicker-grid-item');
@@ -80,12 +78,12 @@ drawPicker.changeContent = (daysInMonthCount) => {
     }
 }
 
-drawPicker.hide = () => { 
+drawPicker.hide = () => {
     isPickerOpened = false;
     $('.datepicker-body').deleteNode();
 }
 
-function cellClickHandler(e) { 
+function cellClickHandler(e) {
     const clickedDate = e.target.textContent;
 
     drawPickerViewObject.date.setDate(clickedDate);
@@ -93,14 +91,14 @@ function cellClickHandler(e) {
     drawPicker.hide();
 }
 
-function prevOrNextArrowsHanlder(e) { 
+function prevOrNextArrowsHanlder(e) {
 
     const nextMonth = e.target === $('.datepicker-next').html() ? +1 : -1;
 
-    drawPickerViewObject.monthOrder       = drawPickerViewObject.monthOrder + nextMonth;
-    drawPickerViewObject.month            = monthNames[drawPickerViewObject.monthOrder - 1];
+    drawPickerViewObject.monthOrder = drawPickerViewObject.monthOrder + nextMonth;
+    drawPickerViewObject.month = monthNames[drawPickerViewObject.monthOrder - 1];
     drawPickerViewObject.daysInMonthCount = getDaysInMonth(drawPickerViewObject.monthOrder, drawPickerViewObject.year);
-    
+
     drawPickerViewObject.date.setMonth(drawPickerViewObject.monthOrder - 1);
     // drawPicker.changeCellsText();
     drawPicker.changeContent(drawPickerViewObject.daysInMonthCount);
@@ -109,7 +107,7 @@ function prevOrNextArrowsHanlder(e) {
 const setIsPickerOpened = () => {
     isPickerOpened = !isPickerOpened;
 
-    isPickerOpened ? drawPicker.show() : drawPicker.hide(); 
+    isPickerOpened ? drawPicker.show() : drawPicker.hide();
 }
 
 export default drawPicker;
