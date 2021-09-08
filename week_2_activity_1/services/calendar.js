@@ -63,7 +63,6 @@ CalendarService.nextOrPrevMonth = (type) => {
     if(isYearChanged){ return }
 
     CalendarService.changeOnlyMonth(type);
-    CalendarService.processData();
 }
 
 CalendarService.nextOrPrevWeek = (type) => { 
@@ -76,9 +75,23 @@ CalendarService.nextOrPrevWeek = (type) => {
 CalendarService.changeYear = (type) => {
 
     const newYear = (type === GlobalReference.NEXT_TEXT) ? 1 : -1;
-    viewObject2.year = (+viewObject2.year + newYear).toString();
+    viewObject2.year = (+viewObject2.year + newYear);
+    viewObject2.date.setYear(viewObject2.date.getFullYear() + 1);
+    console.log(viewObject2);
 
     type === GlobalReference.NEXT_TEXT ? processChangeYear(FIRST_MONTH_NUMBER) : processChangeYear(LAST_MONTH_NUMBER);
+}
+
+CalendarService.selectDate = (date) => { 
+    console.log(date);
+    viewObject2.date = date;
+    viewObject2.month = monthNames[viewObject2.date.getMonth()];
+    viewObject2.monthOrder = viewObject2.date.getMonth() + 1;
+    viewObject2.daysInMonthCount = getDaysInMonth(viewObject2.date.getMonth(), viewObject2.year);
+    console.log(viewObject2);
+    CalendarService.processData();
+    // draw.selectCell(viewObject2.date.getDate());
+    draw.cellClickHandler(viewObject2.date.getDate());
 }
 
 const checkForYearChange = (type) => {

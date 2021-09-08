@@ -39,7 +39,7 @@ drawWeekly.changeCellsText = () => {
         const currentEl = $(`.cal-week-body-item:nth-child(${i + 1})`);
         currentEl.text(`${week[i].getDate()}`)
 
-        currentEl.addEventListener('click', (e) => draw.cellClickHandler(e, i + 1));
+        currentEl.addEventListener('click', (e) => draw.cellClickHandler(i + 1));
     }
 }
 

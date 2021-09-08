@@ -1,13 +1,17 @@
+import { monthNames } from "../data/data.js";
 import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
+import { getDaysInMonth } from "../utils/utils.js";
 
 const drawPicker = { };
 
 let isPickerOpened = false;
-const viewObject = CalendarService.getViewObject();
+// const viewObject = CalendarService.getViewObject();
+const drawPickerViewObject = { } 
 
 drawPicker.init = () => { 
 
+    // Object.assign(drawPickerViewObject, CalendarService.getViewObject());
     $('.datepicker-container').appendNodeWithClass('button', 'button-datepicker');
     const buttonPicker = $('.button-datepicker')
     .css({ marginLeft: '20px', fontSize: '20px', border: '2px solid #EF6E67', position: 'relative'}).text('Datepicker')
@@ -16,13 +20,21 @@ drawPicker.init = () => {
 }
 
 drawPicker.show = () => { 
+    const viewObject = CalendarService.getViewObject();
+    Object.assign(drawPickerViewObject, viewObject);
     
     $('.datepicker-container').appendNodeWithClass('div', 'datepicker-body');
     const datePickerBodyEl = $('.datepicker-body');
     datePickerBodyEl.appendNodeWithClass('div', 'datepicker-content');
     
-    const datepickerContentEl = $('.datepicker-content').appendHtml(`
-    <div>${viewObject.date.toDateString()}</div>`);
+    $('.datepicker-content').appendHtml(`
+    ${monthNames[viewObject.date.getMonth()]} ${viewObject.year}`);
+
+    datePickerBodyEl.appendNodeWithClass('button', 'datepicker-prev');
+    datePickerBodyEl.appendNodeWithClass('button', 'datepicker-next');
+
+    $('.datepicker-next').text('>').css({marginLeft: '70px'}).addEventListener('click', prevOrNextArrowsHanlder);
+    $('.datepicker-prev').text('<').addEventListener('click', prevOrNextArrowsHanlder);
 
     datePickerBodyEl.appendNodeWithClass('div', 'datepicker-content-grid');
     const datepickerContentGrid = $('.datepicker-content-grid');
@@ -31,7 +43,6 @@ drawPicker.show = () => {
         datepickerContentGrid.appendNodeWithClass('div', 'datepicker-grid-item');
     }
     drawPicker.changeCellsText();
-    // drawPicker.body();
 }
 
 drawPicker.changeCellsText = () => { 
@@ -47,13 +58,52 @@ drawPicker.changeCellsText = () => {
     }
 }
 
-function cellClickHandler(e) { 
-    const clickedDate = e.target.textContent;
-    
+drawPicker.changeContent = (daysInMonthCount) => { 
+    $('.datepicker-content').text(`${monthNames[drawPickerViewObject.date.getMonth()]} ${drawPickerViewObject.date.getFullYear()}`)
+
+    const datepickerGridEl = $('.datepicker-content-grid');
+    const elementCollection = [...datepickerGridEl.childNodes()];
+
+    if (daysInMonthCount < elementCollection.length) {
+        for (let i = elementCollection.length; i > daysInMonthCount; i--) {
+
+            const cell = $(`.datepicker-grid-item:nth-child(${i})`);
+            cell.removeEventListener('click', cellClickHandler);
+            cell.deleteNode();
+        }
+    } else if ( daysInMonthCount > elementCollection.length) { 
+
+        for (let i = daysInMonthCount; i > elementCollection.length; i--) {
+            datepickerGridEl.appendNodeWithClass('div', 'datepicker-grid-item');
+        }
+        drawPicker.changeCellsText(daysInMonthCount);
+    }
 }
 
 drawPicker.hide = () => { 
+    isPickerOpened = false;
     $('.datepicker-body').deleteNode();
+}
+
+function cellClickHandler(e) { 
+    const clickedDate = e.target.textContent;
+
+    drawPickerViewObject.date.setDate(clickedDate);
+    CalendarService.selectDate(drawPickerViewObject.date);
+    drawPicker.hide();
+}
+
+function prevOrNextArrowsHanlder(e) { 
+
+    const nextMonth = e.target === $('.datepicker-next').html() ? +1 : -1;
+
+    drawPickerViewObject.monthOrder       = drawPickerViewObject.monthOrder + nextMonth;
+    drawPickerViewObject.month            = monthNames[drawPickerViewObject.monthOrder - 1];
+    drawPickerViewObject.daysInMonthCount = getDaysInMonth(drawPickerViewObject.monthOrder, drawPickerViewObject.year);
+    
+    drawPickerViewObject.date.setMonth(drawPickerViewObject.monthOrder - 1);
+    // drawPicker.changeCellsText();
+    drawPicker.changeContent(drawPickerViewObject.daysInMonthCount);
 }
 
 const setIsPickerOpened = () => {

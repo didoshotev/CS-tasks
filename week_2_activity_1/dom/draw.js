@@ -1,3 +1,4 @@
+import { monthNames } from "../data/data.js";
 import GlobalReference from "../global.js";
 import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
@@ -63,7 +64,9 @@ draw.deleteBody = () => {
 }
 
 draw.changeHeadText = (year, month, daysInMonthCount) => {
-
+    // const viewObject = CalendarService.getViewObject();
+    // $('.head-content-month').text(monthNames[viewObject.date.getMonth()]);
+    // $('.head-content-year').text(viewObject.date.getFullYear());
     $('.head-content-month').text(month);
     $('.head-content-year').text(year);
 
@@ -80,7 +83,7 @@ draw.changeCellsText = (days) => {
 
         const el = $(`.cal-body-item:nth-child(${i + 1})`);
         el.text(`${i + 1}`);
-        el.addEventListener('click', (e) => draw.cellClickHandler(e, i + 1))
+        el.addEventListener('click', (e) => draw.cellClickHandler(i + 1))
     }
 }
 
@@ -89,25 +92,20 @@ draw.addOrRemoveCells = (daysInMonthCount) => {
     const bodyEl = $('.cal-body');
     const elementCollection = [...bodyEl.childNodes()];
 
-    const cellsViewNeedChange = daysInMonthCount === elementCollection.length;
-
-    if (!cellsViewNeedChange) { return; }
-
     if (daysInMonthCount < elementCollection.length) {
-
         for (let i = elementCollection.length; i > daysInMonthCount; i--) {
 
             const cell = $(`.cal-body-item:nth-child(${i})`);
             cell.removeEventListener('click', draw.cellClickHandler);
             cell.deleteNode();
         }
-        return;
-    }
+    } else if ( daysInMonthCount > elementCollection.length) { 
 
-    for (let i = daysInMonthCount; i > elementCollection.length; i--) {
-        bodyEl.appendNodeWithClass('div', 'cal-body-item');
+        for (let i = daysInMonthCount; i > elementCollection.length; i--) {
+            bodyEl.appendNodeWithClass('div', 'cal-body-item');
+        }
+        draw.changeCellsText(daysInMonthCount);
     }
-    draw.changeCellsText(daysInMonthCount);
 }
 
 draw.attachEvents = () => {
@@ -214,10 +212,10 @@ function handleSubmitEvent() {
     description.value = '';
 }
 
-draw.cellClickHandler = (e, day) => {
+draw.cellClickHandler = (day) => {
     const event = CalendarService.getEvent(day);
     draw.removeFocusedCell();
-
+    
     draw.selectCell(day);
     selectedDay = day;
     draw.eventPopup(event);
