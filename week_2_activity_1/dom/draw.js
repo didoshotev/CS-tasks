@@ -1,6 +1,8 @@
+import { monthNames } from "../data/data.js";
 import GlobalReference from "../global.js";
 import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
+import { getDaysInMonth } from "../utils/utils.js";
 import drawPicker from "./drawPicker.js";
 import drawWeekly from "./drawWeekly.js";
 
@@ -37,13 +39,14 @@ draw.init = () => {
     `);
 };
 
-draw.body = (year, month, daysInMonthCount) => {
+draw.body = (daysInMonthCount) => {
 
     const container = $('.container');
     
     const nodes = container.childNodes();
 
-    if(nodes.length >= 4) { return; }
+    const isBodyAlreadyDrawn = nodes.length > GlobalReference.MAXIMUM_BODY_NODES;
+    if(isBodyAlreadyDrawn) { return; }
 
     const bodyEl = container.appendAndGetNode('div', 'cal-body')
 
@@ -51,7 +54,7 @@ draw.body = (year, month, daysInMonthCount) => {
         bodyEl.appendNodeWithClass('div', 'cal-body-item');
     }
     draw.attachEvents();
-    draw.changeHeadText(year, month, daysInMonthCount);
+    draw.changeHeadText(daysInMonthCount);
 }
 
 draw.deleteBody = () => {
@@ -61,13 +64,12 @@ draw.deleteBody = () => {
     $('.cal-body').deleteNode();
 }
 
-draw.changeHeadText = (year, month, daysInMonthCount) => {
-    // const viewObject = CalendarService.getViewObject();
-    // $('.head-content-month').text(monthNames[viewObject.date.getMonth()]);
-    // $('.head-content-year').text(viewObject.date.getFullYear());
-    $('.head-content-month').text(month);
-    $('.head-content-year').text(year);
-
+draw.changeHeadText = (daysInMonthCount) => {
+    const viewObject = CalendarService.getViewObject();
+    $('.head-content-month').text(monthNames[viewObject.date.getMonth()]);
+    $('.head-content-year').text(viewObject.date.getFullYear());
+    // $('.head-content-month').text(month);
+    // $('.head-content-year').text(year);
     draw.changeCellsText(daysInMonthCount);
     draw.addOrRemoveCells(daysInMonthCount);
 }
@@ -122,7 +124,7 @@ draw.attachEvents = () => {
         const viewObject = CalendarService.getViewObject();
 
         drawWeekly.deleteBody();
-        draw.body(viewObject.year, viewObject.month, viewObject.daysInMonthCount);
+        draw.body(getDaysInMonth(viewObject.date.getMonth() + 1, viewObject.date.getFullYear()));
     })
 }
 
@@ -142,11 +144,12 @@ draw.selectCell = (day) => {
 
 draw.eventPopup = (event) => {
 
-    if (!event.hasEvents && !isPopupDrawn) {
+    const shouldDrawForm = !event.hasEvents && !isPopupDrawn; 
+    
+    if (shouldDrawForm) {
 
         draw.formPopupContent();
         isInfoDrawn && ($('.event-popup-info').deleteNode(), isInfoDrawn = false)
-
         return
 
     } else if (event.hasEvents) {
@@ -198,7 +201,7 @@ function handleSubmitEvent() {
     const title = $('.title-input').html();
     const description = $('.description-input').html();
 
-    CalendarService.addEvent(selectedDay, { title: title.value, description: description.value });
+    CalendarService.addEvent({ title: title.value, description: description.value });
     title.value = '';
     description.value = '';
 }

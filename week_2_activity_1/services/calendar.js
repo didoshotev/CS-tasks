@@ -15,21 +15,21 @@ const viewObject2 = {};
 
 CalendarService.processDataInit = () => {
 
-    viewObject2.year = startDate.getFullYear();
-    viewObject2.month = monthNames[startDate.getMonth()];
-    viewObject2.monthOrder = startDate.getMonth() + 1;
-    viewObject2.daysInMonthCount = getDaysInMonth(viewObject2.monthOrder, viewObject2.year);
     viewObject2.date = startDate;
-
-    draw.body(viewObject2.year, viewObject2.month, viewObject2.daysInMonthCount);
+    draw.body(getDaysInMonth(startDate.getMonth() + 1, viewObject2.date.getFullYear()));
 }
 
 CalendarService.processData = () => {
-    draw.changeHeadText(viewObject2.year, viewObject2.month, viewObject2.daysInMonthCount);
+    draw.changeHeadText(getDaysInMonth(startDate.getMonth() + 1, viewObject2.date.getFullYear()));
 }
 
-CalendarService.addEvent = (day, { title, description }) => {
-    events.push({ day: day, month: viewObject2.month, year: viewObject2.year, title, description });
+CalendarService.addEvent = ({ title, description }) => {
+    
+    const dateObject = Object.assign({}, viewObject2); 
+    const dateString = `${dateObject.date.getMonth() + 1}/${dateObject.date.getDate()}/${dateObject.date.getFullYear()}`;
+    const eventDate  = new Date(dateString);
+    
+    events.push({date: eventDate ,title, description});
 }
 
 CalendarService.getViewObject = () => {
@@ -38,30 +38,45 @@ CalendarService.getViewObject = () => {
 
 CalendarService.getEvent = (day) => {
 
-    const currentEvent = events.find(event => {
-        return event.day === day && event.month === viewObject2.month && event.year === viewObject2.year;
+    const currentDate = viewObject2.date;
+    currentDate.setDate(day);
+
+    const currentEvent = events.find(event =>{ 
+        return event.date.getDay() === currentDate.getDay() &&
+            event.date.getMonth() === currentDate.getMonth() &&
+            event.date.getFullYear() === currentDate.getFullYear();
     })
 
     const result = currentEvent ? { hasEvents: true, currentEvent } : { hasEvents: false, message: 'There are no added events yet' };
     return result;
 }
 
-CalendarService.changeOnlyMonth = (type) => {
-    const newMonth = (type === GlobalReference.NEXT_TEXT) ? 1 : -1;
-    viewObject2.monthOrder = viewObject2.monthOrder + newMonth;
-    viewObject2.month = monthNames[viewObject2.monthOrder - 1];
-    viewObject2.daysInMonthCount = getDaysInMonth(viewObject2.monthOrder, viewObject2.year);
-    viewObject2.date.setMonth(viewObject2.monthOrder);
+
+CalendarService.nextOrPrevMonth = (type) => {
+    const isYearChanged = CalendarService.checkForYearChange(type);
+
+    if(!isYearChanged){
+        CalendarService.changeOnlyMonth(type);
+    }
     CalendarService.processData();
 }
 
-CalendarService.nextOrPrevMonth = (type) => {
+CalendarService.checkForYearChange = (type) => {
 
-    const isYearChanged = checkForYearChange(type);
+    const shouldIncrementYear = type === GlobalReference.NEXT_TEXT && viewObject2.date.getMonth() + 1 === LAST_MONTH_NUMBER;
+    const shouldDecrementYear = type === GlobalReference.PREV_TEXT && viewObject2.date.getMonth() + 1 === FIRST_MONTH_NUMBER;
 
-    if(isYearChanged){ return }
+    shouldIncrementYear ? CalendarService.changeYear(GlobalReference.NEXT_TEXT) : shouldDecrementYear && CalendarService.changeYear(GlobalReference.PREV_TEXT);
 
-    CalendarService.changeOnlyMonth(type);
+    return shouldDecrementYear || shouldIncrementYear;
+}
+
+CalendarService.changeYear = (type) => {
+
+    const newYear = (type === GlobalReference.NEXT_TEXT) ? 1 : -1;
+    
+    viewObject2.date.setFullYear(viewObject2.date.getFullYear() + newYear);
+    viewObject2.date.setMonth(newYear === 1 ? 0 : 11);
 }
 
 CalendarService.nextOrPrevWeek = (type) => { 
@@ -71,42 +86,18 @@ CalendarService.nextOrPrevWeek = (type) => {
     viewObject2.date.setDate(viewObject2.date.getDate() + newDate);
 }
 
-CalendarService.changeYear = (type) => {
-
-    const newYear = (type === GlobalReference.NEXT_TEXT) ? 1 : -1;
-    viewObject2.year = (+viewObject2.year + newYear);
-    viewObject2.date.setYear(viewObject2.date.getFullYear() + 1);
-
-    type === GlobalReference.NEXT_TEXT ? processChangeYear(FIRST_MONTH_NUMBER) : processChangeYear(LAST_MONTH_NUMBER);
+CalendarService.changeOnlyMonth = (type) => {
+    const newMonth = (type === GlobalReference.NEXT_TEXT) ? 1 : -1;
+    
+    viewObject2.date.setMonth(viewObject2.date.getMonth() + newMonth);
 }
+
 
 CalendarService.selectDate = (date) => { 
     viewObject2.date = date;
-    viewObject2.month = monthNames[viewObject2.date.getMonth()];
-    viewObject2.monthOrder = viewObject2.date.getMonth() + 1;
-    viewObject2.daysInMonthCount = getDaysInMonth(viewObject2.date.getMonth(), viewObject2.year);
     CalendarService.processData();
     draw.cellClickHandler(viewObject2.date.getDate());
 }
 
-const checkForYearChange = (type) => {
-
-    const shouldIncrementYear = type === GlobalReference.NEXT_TEXT && viewObject2.monthOrder === LAST_MONTH_NUMBER;
-    const shouldDecrementYear = type === GlobalReference.PREV_TEXT && viewObject2.monthOrder === FIRST_MONTH_NUMBER;
-
-    shouldIncrementYear ? checkYearText(GlobalReference.NEXT_TEXT) : shouldDecrementYear && checkYearText(GlobalReference.PREV_TEXT);
-    CalendarService.processData();
-
-    return shouldDecrementYear || shouldIncrementYear;
-}
-
-const checkYearText = (textType) => {
-    CalendarService.changeYear(textType); 
-}
-
-const processChangeYear = (monthOrder) => {
-    viewObject2.month = monthNames[monthOrder - 1];
-    viewObject2.monthOrder = monthOrder;
-}
 
 export default CalendarService;

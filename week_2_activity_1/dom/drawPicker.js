@@ -6,7 +6,6 @@ import { getDaysInMonth } from "../utils/utils.js";
 const drawPicker = {};
 
 let isPickerOpened = false;
-// const viewObject = CalendarService.getViewObject();
 const drawPickerViewObject = {}
 
 drawPicker.init = () => {
@@ -20,14 +19,13 @@ drawPicker.init = () => {
 }
 
 drawPicker.show = () => {
-    const viewObject = CalendarService.getViewObject();
-    Object.assign(drawPickerViewObject, viewObject);
+    Object.assign(drawPickerViewObject, CalendarService.getViewObject());
 
     const datePickerBodyEl = ($('.datepicker-container').appendAndGetNode('div', 'datepicker-body'))
         .appendNodeWithClass('div', 'datepicker-content');
 
     $('.datepicker-content').appendHtml(`
-        ${monthNames[viewObject.date.getMonth()]} ${viewObject.year}`);
+        ${monthNames[drawPickerViewObject.date.getMonth()]} ${drawPickerViewObject.date.getFullYear()}`);
 
     datePickerBodyEl.appendAndGetNode('button', 'datepicker-prev')
         .text('<').addEventListener('click', prevOrNextArrowsHanlder);
@@ -37,7 +35,7 @@ drawPicker.show = () => {
 
     const datepickerContentGrid = datePickerBodyEl.appendAndGetNode('div', 'datepicker-content-grid');
 
-    for (let i = 0; i < viewObject.daysInMonthCount; i++) {
+    for (let i = 0; i < getDaysInMonth(drawPickerViewObject.date.getMonth() + 1, drawPickerViewObject.date.getFullYear()); i++) {
         datepickerContentGrid.appendNodeWithClass('div', 'datepicker-grid-item');
     }
     drawPicker.changeCellsText();
@@ -95,13 +93,9 @@ function prevOrNextArrowsHanlder(e) {
 
     const nextMonth = e.target === $('.datepicker-next').html() ? +1 : -1;
 
-    drawPickerViewObject.monthOrder = drawPickerViewObject.monthOrder + nextMonth;
-    drawPickerViewObject.month = monthNames[drawPickerViewObject.monthOrder - 1];
-    drawPickerViewObject.daysInMonthCount = getDaysInMonth(drawPickerViewObject.monthOrder, drawPickerViewObject.year);
-
-    drawPickerViewObject.date.setMonth(drawPickerViewObject.monthOrder - 1);
+    drawPickerViewObject.date.setMonth(drawPickerViewObject.date.getMonth() + nextMonth);
     // drawPicker.changeCellsText();
-    drawPicker.changeContent(drawPickerViewObject.daysInMonthCount);
+    drawPicker.changeContent(getDaysInMonth(drawPickerViewObject.date.getMonth() + 1, drawPickerViewObject.date.getFullYear()));
 }
 
 const setIsPickerOpened = () => {

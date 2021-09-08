@@ -2,9 +2,11 @@ import { monthNames } from "../data/data.js";
 import GlobalReference from "../global.js";
 import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
+import { getWeek } from "../utils/utils.js";
 import draw from "./draw.js";
 
 const drawWeekly = { };
+
 
 drawWeekly.body = () => { 
     
@@ -12,7 +14,8 @@ drawWeekly.body = () => {
     
     const nodes = container.childNodes();
 
-    if(nodes.length >= 4) { return; }
+    const isBodyAlreadyDrawn = nodes.length > GlobalReference.MAXIMUM_BODY_NODES;
+    if(isBodyAlreadyDrawn) { return; }
 
     const bodyEl = container.appendAndGetNode('div', 'cal-week-body');
 
@@ -53,7 +56,6 @@ drawWeekly.deleteBody = () => {
 function handleWeekButton(e) {
 
     const isNextClicked = e.srcElement === $('.btn-group-second').html();
-    //const isPrevClicked = e.srcElement === $('.btn-group-second').html();
     
     isNextClicked ? CalendarService.nextOrPrevWeek(GlobalReference.NEXT_TEXT) : CalendarService.nextOrPrevWeek(GlobalReference.PREV_TEXT); 
     
@@ -68,15 +70,6 @@ const changeHead = () => {
     
     $('.head-content-month').text(monthNames[viewObject.date.getMonth()]);
     $('.head-content-year').text(viewObject.date.getFullYear());
-}
-
-function getWeek(fromDate) {
-    var sunday = new Date(fromDate.setDate(fromDate.getDate() - fromDate.getDay())),
-      result = [new Date(sunday)];
-    while (sunday.setDate(sunday.getDate() + 1) && sunday.getDay() !== 0) {
-      result.push(new Date(sunday));
-    }
-    return result;
 }
 
 export default drawWeekly;
