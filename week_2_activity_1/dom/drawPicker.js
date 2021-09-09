@@ -1,4 +1,5 @@
 import { monthNames } from "../data/data.js";
+import GlobalReference from "../global.js";
 import $ from "../lib/library.js";
 import CalendarService from "../services/calendar.js";
 import { getDaysInMonth } from "../utils/utils.js";
@@ -25,10 +26,10 @@ drawPicker.show = () => {
     $('.datepicker-content').appendHtml(`
         ${monthNames[drawPickerViewObject.date.getMonth()]} ${drawPickerViewObject.date.getFullYear()}`);
 
-    datePickerBodyEl.appendAndGetNode('button', 'datepicker-prev')
+    datePickerBodyEl.appendAndGetNode('button', 'datepicker-prev').attr('data-direction', 'previous')
         .text('<').addEventListener('click', prevOrNextArrowsHanlder);
 
-    datePickerBodyEl.appendAndGetNode('button', 'datepicker-next')
+    datePickerBodyEl.appendAndGetNode('button', 'datepicker-next').attr('data-direction', 'next')
         .text('>').css({ marginLeft: '70px' }).addEventListener('click', prevOrNextArrowsHanlder);
 
     const datepickerContentGrid = datePickerBodyEl.appendAndGetNode('div', 'datepicker-content-grid');
@@ -87,7 +88,8 @@ const setIsPickerOpened = () => {
 
 function prevOrNextArrowsHanlder(e) {
 
-    const nextMonth = e.target === $('.datepicker-next').html() ? +1 : -1;
+    const isNextClicked = e.target.dataset.direction === GlobalReference.NEXT_TEXT;
+    const nextMonth     = isNextClicked ? +1 : -1;
 
     drawPickerViewObject.date.setMonth(drawPickerViewObject.date.getMonth() + nextMonth);
 

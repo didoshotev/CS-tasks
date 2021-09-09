@@ -226,7 +226,7 @@ function handleSubmitEvent() {
 }
 
 function handlePrevOrNextClickBtn(e) {
-    const nextOrPrevBtnClicked = e.target.textContent.toLowerCase() === GlobalReference.NEXT_TEXT;
+    const nextOrPrevBtnClicked = e.target.dataset.direction === GlobalReference.NEXT_TEXT;
 
     draw.removeFocusedCell();
 

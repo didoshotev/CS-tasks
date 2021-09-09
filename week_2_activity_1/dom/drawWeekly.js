@@ -61,13 +61,11 @@ const changeHead = () => {
 
 
 function handleWeekButton(e) {
-
-    const isNextClicked = e.srcElement === $('.btn-group-second').html();
+    const isNextClicked = e.target.dataset.direction === GlobalReference.NEXT_TEXT;
     
     isNextClicked ? CalendarService.nextOrPrevWeek(GlobalReference.NEXT_TEXT) : CalendarService.nextOrPrevWeek(GlobalReference.PREV_TEXT); 
     
     changeHead();
-
     draw.removeFocusedCell();
     drawWeekly.changeCellsText();
 }
