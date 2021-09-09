@@ -19,7 +19,7 @@ const draw = {}
 
 draw.start = () => {
     draw.init();
-    drawPicker.init();    
+    drawPicker.init();
 };
 
 draw.init = () => {
@@ -42,11 +42,10 @@ draw.init = () => {
 draw.body = (daysInMonthCount) => {
 
     const container = $('.container');
-    
-    const nodes = container.childNodes();
+    const nodes     = container.childNodes();
 
     const isBodyAlreadyDrawn = nodes.length > GlobalReference.MAXIMUM_BODY_NODES;
-    if(isBodyAlreadyDrawn) { return; }
+    if (isBodyAlreadyDrawn) { return; }
 
     const bodyEl = container.appendAndGetNode('div', 'cal-body')
 
@@ -58,8 +57,8 @@ draw.body = (daysInMonthCount) => {
 }
 
 draw.deleteBody = () => {
-    $('.btn-group-second').removeEventListener('click', handleNextClickBtn);
-    $('.btn-group-first').removeEventListener('click', handlePrevClickBtn);
+    $('.btn-group-second').removeEventListener('click', handlePrevOrNextClickBtn);
+    $('.btn-group-first').removeEventListener('click', handlePrevOrNextClickBtn);
 
     $('.cal-body').deleteNode();
 }
@@ -99,7 +98,7 @@ draw.addOrRemoveCells = (daysInMonthCount) => {
             cell.removeEventListener('click', draw.cellClickHandler);
             cell.deleteNode();
         }
-    } else if ( daysInMonthCount > elementCollection.length) { 
+    } else if (daysInMonthCount > elementCollection.length) {
 
         for (let i = daysInMonthCount; i > elementCollection.length; i--) {
             bodyEl.appendNodeWithClass('div', 'cal-body-item');
@@ -110,10 +109,10 @@ draw.addOrRemoveCells = (daysInMonthCount) => {
 
 draw.attachEvents = () => {
 
-    $('.btn-group-second').addEventListener('click', handleNextClickBtn)
-    $('.btn-group-first').addEventListener('click', handlePrevClickBtn)
+    $('.btn-group-second').addEventListener('click', handlePrevOrNextClickBtn)
+    $('.btn-group-first').addEventListener('click', handlePrevOrNextClickBtn)
 
-    $('.week-view').addEventListener('click', () => { 
+    $('.week-view').addEventListener('click', () => {
         const viewObject = CalendarService.getViewObject();
 
         draw.deleteBody();
@@ -131,8 +130,8 @@ draw.attachEvents = () => {
 draw.selectCell = (day) => {
 
     let currentEl = $(`.cal-body-item:nth-child(${day})`);
-    
-    if(!currentEl.element) { 
+
+    if (!currentEl.element) {
         currentEl = $(`.cal-week-body-item:nth-child(${day})`);
     }
 
@@ -144,8 +143,8 @@ draw.selectCell = (day) => {
 
 draw.eventPopup = (event) => {
 
-    const shouldDrawForm = !event.hasEvents && !isPopupDrawn; 
-    
+    const shouldDrawForm = !event.hasEvents && !isPopupDrawn;
+
     if (shouldDrawForm) {
 
         draw.formPopupContent();
@@ -170,7 +169,7 @@ draw.formPopupContent = () => {
     (formPopupContentEl.appendAndGetNode('p', 'event-heading')).text('No added events yet. Enter title and description for a new one!').css({ fontSize: '19px' });
 
     (formPopupContentEl.appendAndGetNode('label', 'title-label')).text('Title').css({ marginRight: '10px' });
-    
+
     formPopupContentEl.appendNodeWithClass('input', 'title-input');
 
     (formPopupContentEl.appendAndGetNode('label', 'description-label')).text('Description').css({ margin: '0 10px' });
@@ -184,16 +183,36 @@ draw.formPopupContent = () => {
 }
 
 draw.eventPopupContent = ({ title, description }) => {
-    const eventPopupEl = $('.events-popup');
-
+    
+    const eventPopupEl   = $('.events-popup');
     const eventPopupInfo = eventPopupEl.appendAndGetNode('div', 'event-popup-info');
 
     (eventPopupInfo.appendAndGetNode('p', 'event-title')).text(`Title: ${title}`);
-
     (eventPopupInfo.appendAndGetNode('p', 'event-description')).text(`Description: ${description}`);
 
     isInfoDrawn = true;
 }
+
+draw.cellClickHandler = (day) => {
+    
+    const event = CalendarService.getEvent(day);
+    draw.removeFocusedCell();
+
+    draw.selectCell(day);
+    selectedDay = day;
+    draw.eventPopup(event);
+};
+
+draw.removeFocusedCell = function () {
+
+    if (selectedCells.length === 0) { return; }
+
+    selectedCells[0].css({
+        backgroundColor: 'white'
+    })
+    selectedCells.shift();
+}
+
 
 function handleSubmitEvent() {
 
@@ -206,36 +225,13 @@ function handleSubmitEvent() {
     description.value = '';
 }
 
-draw.cellClickHandler = (day) => {
-    const event = CalendarService.getEvent(day);
+function handlePrevOrNextClickBtn(e) {
+    const nextOrPrevBtnClicked = e.target.textContent.toLowerCase() === GlobalReference.NEXT_TEXT;
+
     draw.removeFocusedCell();
-    
-    draw.selectCell(day);
-    selectedDay = day;
-    draw.eventPopup(event);
-};
 
-draw.removeFocusedCell = function() {
-
-    if (selectedCells.length > 0) {
-
-        selectedCells[0].css({
-            backgroundColor: 'white'
-        })
-        selectedCells.shift();
-    }
+    nextOrPrevBtnClicked ? CalendarService.nextOrPrevMonth(GlobalReference.NEXT_TEXT) :
+        CalendarService.nextOrPrevMonth(GlobalReference.PREV_TEXT)
 }
-
-function handlePrevClickBtn() { 
-    draw.removeFocusedCell();
-    CalendarService.nextOrPrevMonth(GlobalReference.PREV_TEXT);
-}
-
-function handleNextClickBtn() { 
-    draw.removeFocusedCell();
-    CalendarService.nextOrPrevMonth(GlobalReference.NEXT_TEXT);
-}
-
-
 
 export default draw;

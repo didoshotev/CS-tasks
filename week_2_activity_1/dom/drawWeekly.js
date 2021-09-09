@@ -11,8 +11,7 @@ const drawWeekly = { };
 drawWeekly.body = () => { 
     
     const container = $('.container');
-    
-    const nodes = container.childNodes();
+    const nodes     = container.childNodes();
 
     const isBodyAlreadyDrawn = nodes.length > GlobalReference.MAXIMUM_BODY_NODES;
     if(isBodyAlreadyDrawn) { return; }
@@ -53,6 +52,14 @@ drawWeekly.deleteBody = () => {
     $('.cal-week-body').deleteNode();
 }
 
+const changeHead = () => {
+    const viewObject = CalendarService.getViewObject();
+    
+    $('.head-content-month').text(monthNames[viewObject.date.getMonth()]);
+    $('.head-content-year').text(viewObject.date.getFullYear());
+}
+
+
 function handleWeekButton(e) {
 
     const isNextClicked = e.srcElement === $('.btn-group-second').html();
@@ -65,11 +72,5 @@ function handleWeekButton(e) {
     drawWeekly.changeCellsText();
 }
 
-const changeHead = () => {
-    const viewObject = CalendarService.getViewObject();
-    
-    $('.head-content-month').text(monthNames[viewObject.date.getMonth()]);
-    $('.head-content-year').text(viewObject.date.getFullYear());
-}
 
 export default drawWeekly;

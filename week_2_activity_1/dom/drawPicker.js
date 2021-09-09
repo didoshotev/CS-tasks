@@ -10,8 +10,6 @@ const drawPickerViewObject = {}
 
 drawPicker.init = () => {
 
-    // Object.assign(drawPickerViewObject, CalendarService.getViewObject());
-
     ($('.datepicker-container').appendAndGetNode('button', 'button-datepicker'))
         .css({ marginLeft: '20px', fontSize: '20px', border: '2px solid #EF6E67', position: 'relative' })
         .text('Datepicker')
@@ -81,12 +79,10 @@ drawPicker.hide = () => {
     $('.datepicker-body').deleteNode();
 }
 
-function cellClickHandler(e) {
-    const clickedDate = e.target.textContent;
+const setIsPickerOpened = () => {
+    isPickerOpened = !isPickerOpened;
 
-    drawPickerViewObject.date.setDate(clickedDate);
-    CalendarService.selectDate(drawPickerViewObject.date);
-    drawPicker.hide();
+    isPickerOpened ? drawPicker.show() : drawPicker.hide();
 }
 
 function prevOrNextArrowsHanlder(e) {
@@ -94,14 +90,16 @@ function prevOrNextArrowsHanlder(e) {
     const nextMonth = e.target === $('.datepicker-next').html() ? +1 : -1;
 
     drawPickerViewObject.date.setMonth(drawPickerViewObject.date.getMonth() + nextMonth);
-    // drawPicker.changeCellsText();
+
     drawPicker.changeContent(getDaysInMonth(drawPickerViewObject.date.getMonth() + 1, drawPickerViewObject.date.getFullYear()));
 }
 
-const setIsPickerOpened = () => {
-    isPickerOpened = !isPickerOpened;
+function cellClickHandler(e) {
+    const clickedDate = e.target.textContent;
 
-    isPickerOpened ? drawPicker.show() : drawPicker.hide();
+    drawPickerViewObject.date.setDate(clickedDate);
+    CalendarService.selectDate(drawPickerViewObject.date);
+    drawPicker.hide();
 }
 
 export default drawPicker;
