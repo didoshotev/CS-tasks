@@ -49,7 +49,6 @@ const userSchema = new Schema({
         startDate: { type: Date },
         endDate: { type: Date },
         money: Number,
-        trim: true
     }
 })
 
