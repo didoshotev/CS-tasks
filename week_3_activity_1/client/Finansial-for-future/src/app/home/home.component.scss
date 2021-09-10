@@ -1,0 +1,14 @@
+
+.home { 
+    display: flex;
+
+    &-table { 
+        width: 100%;
+        background-color: aliceblue;
+    }
+
+    &-info { 
+        width: 100%;
+        background-color: azure;
+    }
+}

@@ -1,0 +1,10 @@
+
+<ul>
+    <h3>Users list</h3>
+    <ul>
+        <li>
+            <app-user-item *ngFor="let user of users; let i = index"
+            [user]="user" [index]=[i]></app-user-item>
+        </li>
+    </ul>
+</ul>   
