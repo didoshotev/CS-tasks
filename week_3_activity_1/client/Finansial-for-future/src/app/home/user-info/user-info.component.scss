@@ -1,0 +1,25 @@
+.info { 
+    height: 500px;
+    border: 2px solid orange;
+    border-radius: 10px;
+    padding: 10px 30px;
+
+    &-names { 
+        margin: 30px 0;
+    }
+
+    &-cards { 
+
+    }
+
+    &-btn-container { 
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        margin-top: 80px;
+    }
+}
+
+.row { 
+    margin-bottom: 20px;
+}

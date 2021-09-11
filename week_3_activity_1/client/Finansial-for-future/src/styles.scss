@@ -6,6 +6,18 @@ body {
     padding: 0;
 }
 
+
+.btn-primary { 
+    border: none;
+    width: 170px;
+    height: 35px;
+    color: white;
+    background-color: orange;
+    font-size: 16px;
+    border: 1px solid black;
+}
+
 ul, ol { 
     list-style: none;
+    padding: 0;
 }

@@ -1,14 +1,17 @@
 
 .home { 
     display: flex;
+    justify-content: space-between;
 
-    &-table { 
-        width: 100%;
+    &-list { 
+        width: 48%;
+        padding: 0 30px;
         background-color: aliceblue;
     }
 
     &-info { 
-        width: 100%;
+        width: 48%;
         background-color: azure;
+        // margin-right: 20px;
     }
 }

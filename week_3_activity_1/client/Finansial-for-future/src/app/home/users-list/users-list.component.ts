@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { IUser } from 'src/app/shared/interfaces';
 import { UsersService } from '../users.service';
 
 @Component({
@@ -7,22 +8,18 @@ import { UsersService } from '../users.service';
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss']
 })
-export class UsersListComponent implements OnInit, OnDestroy {
+export class UsersListComponent implements OnInit {
 
-  subscription: Subscription;
-  public users = [];
+  @Input() users;
+  @Output() newItemEvent = new EventEmitter<IUser>();
 
-  constructor(private userService: UsersService) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.subscription = this.userService.getAllUsers()
-      .subscribe(data => {
-        console.log(data);
-        return this.users = data
-      });
+        
   }
 
-  ngOnDestroy(): void { 
-    this.subscription.unsubscribe();
+  onClick(user) { 
+    this.newItemEvent.emit(user);
   }
 }

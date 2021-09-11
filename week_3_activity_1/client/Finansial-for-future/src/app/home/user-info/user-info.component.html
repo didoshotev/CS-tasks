@@ -1,1 +1,19 @@
-<p>user-info works!</p>
+<div class="info">
+    <ul class="info-names">
+        <li class="row">First name: {{ user.firstName }}</li>
+        <li class="row">Middle name: {{ user.middleName }}</li>
+        <li class="row">Last name: {{ user.lastName }}</li>
+    </ul>
+
+    <!-- <div *ngIf="user.cards">
+        <strong>cards</strong>
+        <ul class="info-cards">
+            <li class="row">VISA</li>
+            <li class="row">MASTER CARD</li>
+        </ul>
+    </div> -->
+
+    <div class="info-btn-container">
+        <button class="btn-primary">private info</button>
+    </div>
+</div>

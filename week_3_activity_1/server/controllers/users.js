@@ -2,7 +2,6 @@ const models = require('../models');
 
 module.exports = {
     get: (req, res, next) => {
-        console.log('HELLO FROM controllers/users');
         models.User.find()
             .then((users) => res.send(users))
             .catch(next);
