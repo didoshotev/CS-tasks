@@ -1,3 +1,6 @@
+<button class="btn-primary" (click)="handleCreateUserNavigate()">
+    Create User
+</button>
 <section class="home">
     <div class="home-list">
         <app-users-list [users]="users" (newItemEvent)="triggerInfo($event)"></app-users-list>

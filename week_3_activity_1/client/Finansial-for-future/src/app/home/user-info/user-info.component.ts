@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { IUser } from 'src/app/shared/interfaces';
+import { UsersService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-user-info',
@@ -8,16 +9,26 @@ import { IUser } from 'src/app/shared/interfaces';
 })
 export class UserInfoComponent implements OnInit, OnChanges {
 
-  @Input() user:IUser;
+  @Input() user: IUser;
 
-  constructor() { }
+  public isPrivateShown: Boolean = false;
+
+  constructor(private usersService: UsersService) { }
 
   ngOnInit(): void {
 
   }
 
-  ngOnChanges(changes: SimpleChanges) { 
+  ngOnChanges(changes: SimpleChanges) {
     this.user = changes.user.currentValue;
+  }
+
+  handlePrivateInfo() {
+    this.isPrivateShown = !this.isPrivateShown
+  }
+
+  handleDelete() {
+    this.usersService.deleteUser(this.user._id);
   }
 
 }

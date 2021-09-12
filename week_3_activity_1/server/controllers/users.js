@@ -16,8 +16,8 @@ module.exports = {
     },
 
     post: (req, res, next) => {
-        const { firstName, middleName, lastName, streetAddress, moneyBalance } = req.body;
-        models.User.create({ firstName, middleName, lastName, streetAddress, moneyBalance })
+        console.log('creating user');        
+        models.User.create(req.body)
             .then((createduser) => {
                 res.send(createduser);
             }).catch(next);
@@ -25,8 +25,8 @@ module.exports = {
 
     put: (req, res, next) => {
         const id = req.params.id;
-        const { firstName, middleName, lastName, streetAddress, moneyBalance, loan } = req.body;
-        models.User.updateOne({ _id: id }, { firstName, middleName, lastName, streetAddress, moneyBalance, loan })
+        const { firstName, middleName, lastName, streetAddress, moneyBalance, creditCards, loan } = req.body;
+        models.User.updateOne({ _id: id }, { firstName, middleName, lastName, streetAddress, moneyBalance, creditCards, loan })
             .then((updateduser) => res.send(updateduser))
             .catch(next)
     },

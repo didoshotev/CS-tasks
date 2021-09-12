@@ -1,7 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IUser } from 'src/app/shared/interfaces';
-import { UsersService } from '../users.service';
 
 @Component({
   selector: 'app-users-list',

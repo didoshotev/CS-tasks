@@ -45,6 +45,11 @@ const userSchema = new Schema({
         trim: true
     },
 
+    creditCards: { 
+        type: Array,
+        default: [],
+    },
+
     loan: { 
         startDate: { type: Date },
         endDate: { type: Date },

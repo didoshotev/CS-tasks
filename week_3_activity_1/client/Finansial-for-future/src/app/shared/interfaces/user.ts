@@ -7,5 +7,6 @@ export interface IUser extends IBase {
     lastName: string;
     streetAddress: string;
     moneyBalance: number;
+    creditCards: [];
     loan?: ILoan[]
 }
