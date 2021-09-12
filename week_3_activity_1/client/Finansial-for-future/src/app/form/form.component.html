@@ -1,5 +1,4 @@
-<h2>Welcome to the form page</h2>
-
+<h2 style="color: orange">{{ editMode ? 'Edit Mode' :  'Create Mode'}}</h2>
 
 <form (ngSubmit)="onSubmitForm()" #f="ngForm">
     <div id="user-data" ngModelGroup="userData"

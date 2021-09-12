@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IUser } from 'src/app/shared/interfaces';
 import { UsersService } from 'src/app/shared/services/users.service';
 
@@ -13,7 +14,11 @@ export class UserInfoComponent implements OnInit, OnChanges {
 
   public isPrivateShown: Boolean = false;
 
-  constructor(private usersService: UsersService) { }
+  constructor(
+    private usersService: UsersService,
+    private router: Router,    
+    private route: ActivatedRoute,
+    ) { }
 
   ngOnInit(): void {
 
@@ -31,4 +36,9 @@ export class UserInfoComponent implements OnInit, OnChanges {
     this.usersService.deleteUser(this.user._id);
   }
 
+  handleEdit() { 
+    console.log(this.user._id);
+    
+    this.router.navigate(['/form', 'edit', this.user._id]);
+  }
 }

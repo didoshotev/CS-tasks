@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleCreateUserNavigate() { 
-    this.router.navigateByUrl('/form');
+    this.router.navigateByUrl('/form/new');
   }
 
   triggerInfo(event:IUser): void { 

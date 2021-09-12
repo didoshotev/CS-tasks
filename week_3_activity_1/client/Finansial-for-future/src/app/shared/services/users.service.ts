@@ -32,6 +32,22 @@ export class UsersService {
     ).subscribe();
   }
 
+  editUser(user: IFormCreateResponse, id) {
+    console.log('editing');
+    console.log(user);
+    console.log(id);
+    
+    return this.http.put(
+      `${API_URL}/users/${id}`,
+      user 
+    ).pipe(
+      catchError(err => { 
+        console.log('ERROR occured while editing user', err);
+        return err
+      }),
+    ).subscribe();
+  }
+
   deleteUser(id) { 
     this.http.delete(`${API_URL}/users/${id}`)
       .subscribe();
