@@ -41,4 +41,8 @@ export class UserInfoComponent implements OnInit, OnChanges {
     
     this.router.navigate(['/form', 'edit', this.user._id]);
   }
+  
+  handleLoan() { 
+    this.router.navigate(['/loan', this.user._id]);
+  }
 }

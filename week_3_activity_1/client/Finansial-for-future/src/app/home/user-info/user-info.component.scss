@@ -14,9 +14,13 @@
 
     &-btn-container { 
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-evenly;
-        align-items: flex-end;
         margin-top: 80px;
+        
+       &--loan { 
+           margin-top: 10px;
+       }
     }
 }
 

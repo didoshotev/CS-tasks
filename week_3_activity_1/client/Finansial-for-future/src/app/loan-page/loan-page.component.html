@@ -1,0 +1,43 @@
+<h3>Loan page</h3>
+
+<div class="wrapper">
+    <section class="content">
+        <div class="content-head">
+
+            <div class="content-head-info">{{date.format('MMMM')}} {{date.format('YYYY')}}</div>
+            <button class="btn-primary content-head-actionFirst" (click)="prevMonth()">Previous</button>
+            <button class="btn-primary" (click)="nextMonth()">Next</button>
+
+        </div>
+
+        <ul class="content-list">
+            <li class="content-list-day weekly">S</li>
+            <li class="content-list-day weekly">M</li>
+            <li class="content-list-day weekly">T</li>
+            <li class="content-list-day weekly">W</li>
+            <li class="content-list-day weekly">T</li>
+            <li class="content-list-day weekly">F</li>
+            <li class="content-list-day weekly">S</li>
+        </ul>
+        <ul class="content-list">
+            <li *ngFor="let day of daysArr" class="content-list-day daily"
+                [ngClass]="{'inactive': !day, 'current': todayCheck(day), 'selected': isSelected(day)}"
+                (click)="selectedDate(day)">
+                {{ day?.date() }}</li>
+        </ul>
+
+        <div *ngIf="loanMsg">
+            {{loanMsg}}
+        </div>
+
+        <div>
+            <form [formGroup]="dateForm">
+                <input formControlName='dateFrom' name='dateFrom' type="text" placeholder="Start Date">
+                <input  formControlName='dateTo' name='dateTo' type="text" placeholder="End Date">
+                <button class="btn-primary" (click)="handleSubmit()">Submit</button>
+            </form>
+            <button class="btn-primary content-reset-form" (click)="resetForm()">Reset form</button>
+        </div>
+
+    </section>
+</div>

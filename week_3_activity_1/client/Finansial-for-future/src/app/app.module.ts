@@ -8,10 +8,13 @@ import { HomeModule } from './home/home.module';
 import { CommonModule } from '@angular/common';
 import { FormModule } from './form/form.module';
 import { SharedModule } from './shared/shared.module';
+import { LoanPageComponent } from './loan-page/loan-page.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    AppComponent, 
+    AppComponent,
+    LoanPageComponent
   ],
   
   imports: [
@@ -22,6 +25,7 @@ import { SharedModule } from './shared/shared.module';
     FormModule,
     SharedModule,
     HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
