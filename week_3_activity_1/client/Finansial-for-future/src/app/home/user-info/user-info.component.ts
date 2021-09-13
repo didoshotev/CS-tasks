@@ -13,6 +13,7 @@ export class UserInfoComponent implements OnInit, OnChanges {
   @Input() user: IUser;
 
   public isPrivateShown: Boolean = false;
+  public loansCollection = [];
 
   constructor(
     private usersService: UsersService,
@@ -21,7 +22,8 @@ export class UserInfoComponent implements OnInit, OnChanges {
     ) { }
 
   ngOnInit(): void {
-
+    console.log(this.user);
+    this.user.loan && this.handleLoanOutput();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -43,6 +45,14 @@ export class UserInfoComponent implements OnInit, OnChanges {
   }
   
   handleLoan() { 
-    this.router.navigate(['/loan', this.user._id]);
+    this.router.navigate(['/loan', this.user._id], { state: this.user });
+  }
+
+  handleLoanOutput() { 
+    for (let i = 0; i < this.user.loan.length; i++) {
+        const startDate = new Date(this.user.loan[i].startDate).toLocaleDateString();
+        const endDate = new Date(this.user.loan[i].endDate).toLocaleDateString();
+        this.loansCollection.push({ startDate, endDate, money: this.user.loan[i].money})
+    }
   }
 }

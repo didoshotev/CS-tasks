@@ -34,6 +34,8 @@
             <form [formGroup]="dateForm">
                 <input formControlName='dateFrom' name='dateFrom' type="text" placeholder="Start Date">
                 <input  formControlName='dateTo' name='dateTo' type="text" placeholder="End Date">
+                <input  formControlName='money' name='money' type="number" placeholder="Money">
+                
                 <button class="btn-primary" (click)="handleSubmit()">Submit</button>
             </form>
             <button class="btn-primary content-reset-form" (click)="resetForm()">Reset form</button>

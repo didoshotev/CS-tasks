@@ -32,6 +32,7 @@ export class FormComponent implements OnInit {
   }
 
   onSubmitForm() {
+    // strong checks
     
     !this.formReference.value.userData.creditCards ? delete this.formReference.value.userData.creditCards : null;
     

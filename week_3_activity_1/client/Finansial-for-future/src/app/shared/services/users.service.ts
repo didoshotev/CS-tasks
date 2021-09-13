@@ -33,9 +33,6 @@ export class UsersService {
   }
 
   editUser(user: IFormCreateResponse, id) {
-    console.log('editing');
-    console.log(user);
-    console.log(id);
     
     return this.http.put(
       `${API_URL}/users/${id}`,
@@ -43,6 +40,22 @@ export class UsersService {
     ).pipe(
       catchError(err => { 
         console.log('ERROR occured while editing user', err);
+        return err
+      }),
+    ).subscribe();
+  }
+
+  addLoan(user: IUser) {
+    const { firstName, middleName, lastName, loan, moneyBalance, creditCards, streetAddress} = user;
+    const newUserObject = { 
+      firstName, middleName, lastName, loan, moneyBalance, creditCards, streetAddress }
+    
+    return this.http.put(
+      `${API_URL}/users/${user._id}`,
+      newUserObject 
+    ).pipe(
+      catchError(err => { 
+        console.log('ERROR occured while adding LOAN to the user', err);
         return err
       }),
     ).subscribe();
