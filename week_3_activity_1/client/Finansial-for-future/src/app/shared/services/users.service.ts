@@ -62,7 +62,12 @@ export class UsersService {
   }
 
   deleteUser(id) { 
-    this.http.delete(`${API_URL}/users/${id}`)
-      .subscribe();
+    this.http.delete(`${API_URL}/users/${id}`).subscribe();
+  
+  }
+
+  fetchUsers(): Observable<IUser[]> { 
+    const users = this.http.get<IUser[]>(`${API_URL}/users`);
+    return users;
   }
 }

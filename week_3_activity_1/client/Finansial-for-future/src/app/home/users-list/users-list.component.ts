@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IUser } from 'src/app/shared/interfaces';
 
 @Component({
@@ -6,7 +6,7 @@ import { IUser } from 'src/app/shared/interfaces';
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss']
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnChanges {
 
   @Input() users;
   @Output() newItemEvent = new EventEmitter<IUser>();
@@ -15,6 +15,11 @@ export class UsersListComponent implements OnInit {
 
   ngOnInit(): void {
         
+  }
+
+  ngOnChanges(changes: SimpleChanges) { 
+    console.log(changes);
+    
   }
 
   onClick(user) { 
