@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FormComponent } from './form/form.component';
 import { HomeComponent } from './home/home.component';
 import { LoanPageComponent } from './loan-page/loan-page.component';
+import { LoginPageComponent } from './login-page/login-page.component';
 import { UserDataResolverService } from './shared/services/resolvers/user-data-resolver.service';
 import { UsersDataResolverService } from './shared/services/resolvers/users-data-resolver.service';
 
@@ -11,7 +12,8 @@ const routes: Routes = [
     { path: 'home',  component: HomeComponent, resolve: {usersCollection: UsersDataResolverService},},
     { path: 'form/new', component: FormComponent },
     { path: 'form/edit/:id', component: FormComponent, resolve: {user: UserDataResolverService}},
-    { path: 'loan/:id', component: LoanPageComponent, resolve: { user: UserDataResolverService}}
+    { path: 'loan/:id', component: LoanPageComponent, resolve: { user: UserDataResolverService}},
+    { path: 'login', component: LoginPageComponent },
 ];
 
 @NgModule({

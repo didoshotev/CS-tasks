@@ -11,11 +11,13 @@ import { SharedModule } from './shared/shared.module';
 import { LoanPageComponent } from './loan-page/loan-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { LoginPageComponent } from './login-page/login-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoanPageComponent
+    LoanPageComponent,
+    LoginPageComponent
   ],
   
   imports: [

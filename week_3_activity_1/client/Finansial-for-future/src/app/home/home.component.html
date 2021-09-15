@@ -1,6 +1,19 @@
-<button class="btn-primary" (click)="handleCreateUserNavigate()">
-    Create User
-</button>
+<header class="header">
+    <button class="btn-primary" (click)="handleCreateUserNavigate()">
+        Create User
+    </button>
+    <div>
+        <button *ngIf="!agent" class="btn-primary" (click)="handleLoginNavigate()">
+            Login
+        </button>    
+        <button *ngIf="agent" class="btn-primary" (click)="handleLogout()">
+            Logout
+        </button>
+    </div>
+    
+</header>
+
+<h3 *ngIf="agent">Hello, {{agent.username}}</h3>
 <section class="home">
     <div class="home-list">
         <app-users-list [users]="usersCollection" (newItemEvent)="triggerInfo($event)"></app-users-list>

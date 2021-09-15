@@ -4,7 +4,6 @@ const utils = require('../utils');
 
 module.exports = {
     get: (req, res, next) => {
-        console.log('getting agents');
         models.Agent.find()
             .then((users) => res.send(users))
             .catch(next)
@@ -32,8 +31,9 @@ module.exports = {
                         res.status(401).send('Invalid password');
                         return;
                     }
+                    
                     const token = utils.jwt.createToken({ id: user._id, type: user.type });
-                    res.header('Authorization', token).send(user);
+                    res.send({ user, token});
                 })
                 .catch(next);
         },

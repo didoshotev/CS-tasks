@@ -1,4 +1,11 @@
 
+.header { 
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
 .home { 
     display: flex;
     justify-content: space-between;

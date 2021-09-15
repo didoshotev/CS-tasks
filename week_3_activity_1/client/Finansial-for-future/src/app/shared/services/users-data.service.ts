@@ -5,8 +5,9 @@ import { catchError, map, tap } from 'rxjs/operators'
 import { IFormCreateResponse, IUserNew } from '../interfaces';
 import { UserNew } from '../models/user.modelNew';
 import { LocalUsersService } from './local-users.service';
+import { environment } from '../../../environments/environment';
 
-const API_URL = 'http://localhost:5000/api'
+// const api_url = 'http://localhost:5000/api'
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class UsersDataService {
     ) { }
 
     fetchUsers() {
-        return this.http.get<UserNew[]>(`${API_URL}/users`)
+        return this.http.get<UserNew[]>(`${environment.api_url}/users`)
             .pipe(
                 map(users => {
                     return users.map(user => {
@@ -41,7 +42,7 @@ export class UsersDataService {
     }
 
     fetchUserById(id: string) {
-        return this.http.get<UserNew>(`${API_URL}/users/${id}`)
+        return this.http.get<UserNew>(`${environment.api_url}/users/${id}`)
             .pipe(
                 map(user => {
                     const userObject = new UserNew(
@@ -59,13 +60,13 @@ export class UsersDataService {
     //  ------
 
     getAllUsers(): Observable<IUserNew[]> {
-        const users = this.http.get<IUserNew[]>(`${API_URL}/users`);
+        const users = this.http.get<IUserNew[]>(`${environment.api_url}/users`);
         return users;
     }
 
     createUser(user: IFormCreateResponse) {
         return this.http.post(
-            `${API_URL}/users`,
+            `${environment.api_url}/users`,
             user
         ).pipe(
             catchError(err => {
@@ -81,7 +82,7 @@ export class UsersDataService {
         delete user.id;
 
         return this.http.put(
-            `${API_URL}/users/${id}`,
+            `${environment.api_url}/users/${id}`,
             user
         ).pipe(
             catchError(err => {
@@ -93,6 +94,6 @@ export class UsersDataService {
 
     deleteUser(id) {
         this.localUsersService.deleteUser(id);
-        this.http.delete(`${API_URL}/users/${id}`).subscribe();
+        this.http.delete(`${environment.api_url}/users/${id}`).subscribe();
     }
 }
