@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IUser, IUserNew } from 'src/app/shared/interfaces';
+import {  Router } from '@angular/router';
+import { IUserNew } from 'src/app/shared/interfaces';
 import { LocalUsersService } from 'src/app/shared/services/local-users.service';
 import { UsersDataService } from 'src/app/shared/services/users-data.service';
 
@@ -25,7 +25,6 @@ export class UserInfoComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     // this.user.loan && this.handleLoanOutput();
-    // console.log(this.user.loansCollection);
   }
 
   ngOnChanges(changes: SimpleChanges) {

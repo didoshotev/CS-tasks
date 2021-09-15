@@ -1,4 +1,4 @@
-import { ILoan, IUser, IUserNew } from "../interfaces";
+import { ILoan, IUserNew } from "../interfaces";
 
 export class UserNew {
     public firstName: string;

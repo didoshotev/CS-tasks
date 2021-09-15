@@ -4,6 +4,8 @@ const Schema = mongoose.Schema;
 const Model = mongoose.model;
 const { String, Number } = Schema.Types;
 
+const loan = new Schema()
+
 const userSchema = new Schema({
 
     firstName: {
@@ -55,9 +57,7 @@ const userSchema = new Schema({
     },
 
     loansCollection: { 
-        startDate: { type: Date },
-        endDate: { type: Date },
-        money: { type: Number},
+        type: Array,
         default: []
     }
 })

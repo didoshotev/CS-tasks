@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IUser, IUserNew } from '../shared/interfaces';
+import { IUserNew } from '../shared/interfaces';
 import { LocalUsersService } from '../shared/services/local-users.service';
 
 
@@ -13,7 +13,7 @@ import { LocalUsersService } from '../shared/services/local-users.service';
 })
 export class HomeComponent implements OnInit {
 	
-	public clickedUser: IUser;
+	public clickedUser: IUserNew;
 
 	public usersCollection: IUserNew[];
 	public usersCollectionSubscription: Subscription;
@@ -26,12 +26,11 @@ export class HomeComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.localUsersService.getUsersCollection().subscribe(data => { 
-			console.log('BS usersCollections', data);
+			// console.log('BS usersCollections', data);
 		})		
 
 		this.route.data.subscribe((res) => { 
 			this.usersCollection = res.usersCollection;
-			// console.log(this.usersCollection);
 		})
 	}
 
@@ -39,12 +38,11 @@ export class HomeComponent implements OnInit {
 		this.router.navigateByUrl('/form/new');
 	}
 
-	triggerInfo(event: IUser): void {
+	triggerInfo(event: IUserNew): void {
 		this.clickedUser = event;
 	}
 
 	handleDeleteUser(value) {
-		console.log(value);
 		this.clickedUser = null;
 	}
 

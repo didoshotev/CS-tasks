@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators'
-import { IFormCreateResponse, IUser, IUserNew } from '../interfaces';
+import { IFormCreateResponse, IUserNew } from '../interfaces';
 import { UserNew } from '../models/user.modelNew';
 import { LocalUsersService } from './local-users.service';
 
@@ -35,7 +35,7 @@ export class UsersDataService {
                     })
                 }),
                 tap(users => {
-                    this.localUsersService.setUsers2(users);
+                    this.localUsersService.setUsers(users);
                 })
             )
     }
@@ -47,9 +47,8 @@ export class UsersDataService {
                     const userObject = new UserNew(
                         user.firstName, user.middleName, user.lastName, user.streetAddress,
                         user.moneyBalance, user.creditCards, user._id, user.type, user.loansCollection || []);
-                    const processedUser = userObject.currentUser;
-                    // console.log('processedUser', processedUser);
-
+                    
+                        const processedUser = userObject.currentUser;
                     return {
                         ...processedUser
                     }
@@ -59,8 +58,8 @@ export class UsersDataService {
 
     //  ------
 
-    getAllUsers(): Observable<IUser[]> {
-        const users = this.http.get<IUser[]>(`${API_URL}/users`);
+    getAllUsers(): Observable<IUserNew[]> {
+        const users = this.http.get<IUserNew[]>(`${API_URL}/users`);
         return users;
     }
 
@@ -69,9 +68,6 @@ export class UsersDataService {
             `${API_URL}/users`,
             user
         ).pipe(
-            map(res => {
-                console.log('res in pipe map', res);
-            }),
             catchError(err => {
                 console.log('ERROR occured while creating user', err);
                 return err
@@ -80,7 +76,7 @@ export class UsersDataService {
     }
 
     editUser(user: IUserNew, id: string) {
-        this.localUsersService.updateUser2(id, user);
+        this.localUsersService.updateUser(id, user);
 
         delete user.id;
 
@@ -95,25 +91,8 @@ export class UsersDataService {
         ).subscribe();
     }
 
-    addLoan(user: IUser) {
-        const { firstName, middleName, lastName, loan, moneyBalance, creditCards, streetAddress } = user;
-        const newUserObject = {
-            firstName, middleName, lastName, loan, moneyBalance, creditCards, streetAddress
-        }
-
-        return this.http.put(
-            `${API_URL}/users/${user._id}`,
-            newUserObject
-        ).pipe(
-            catchError(err => {
-                console.log('ERROR occured while adding LOAN to the user', err);
-                return err
-            }),
-        ).subscribe();
-    }
-
     deleteUser(id) {
-        this.localUsersService.deleteUser2(id);
+        this.localUsersService.deleteUser(id);
         this.http.delete(`${API_URL}/users/${id}`).subscribe();
     }
 }

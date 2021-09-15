@@ -1,23 +1,16 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ILoan, IUser } from '../shared/interfaces';
-import { LocalUsersService } from '../shared/services/local-users.service';
-import { Observable, Subscription } from 'rxjs';
+import { ILoan, IUserNew } from '../shared/interfaces';
+import { UsersDataService } from '../shared/services/users-data.service';
 
 @Component({
 	selector: 'app-loan-page',
 	templateUrl: './loan-page.component.html',
 	styleUrls: ['./loan-page.component.scss']
 })
-export class LoanPageComponent implements OnInit, OnDestroy {
-
-	// public date = new Date(Date.now());
-	public userId: string;
-	public userState;
-
-	public userActivated;
+export class LoanPageComponent implements OnInit {
 
 	public date = moment();
 	public daysArr;
@@ -25,37 +18,24 @@ export class LoanPageComponent implements OnInit, OnDestroy {
 	public dateForm: FormGroup;
 
 	public loanMsg: string;
-	public userSubscription: Subscription;
+
+	public currentUser:IUserNew;
 
 	constructor(
 		private fb: FormBuilder,
 		private route: Router,
 		private router: ActivatedRoute,
-		private localUsersService: LocalUsersService
+		private usersDataService: UsersDataService, 
 		) {
 		this.initDateForm()
-
-		this.userState = this.route.getCurrentNavigation().extras.state;
-
-		this.userSubscription =  this.localUsersService.getUser()
-			.subscribe(didActivate => {
-				this.userActivated = didActivate
-		}) 
 	}
 
 	ngOnInit(): void {
 		this.daysArr = this.createCalendar(this.date);
 
-		this.router.params.subscribe(data => { 
-			this.userId = data.id;
-		  });
-		
-		this.userSubscription = this.localUsersService.getUser()
-		.subscribe(didActivate => {
-			console.log('hello from loan page onInit observer body');
-			console.log(didActivate);
-			this.userActivated = didActivate
-		}) 
+		this.router.data.subscribe((res) => {
+			this.currentUser = res.user;
+		})
 	}
 
 	initDateForm() {
@@ -147,16 +127,10 @@ export class LoanPageComponent implements OnInit, OnDestroy {
 		const endDate  		   = new Date(dateToMoment);
 		const loanObject:ILoan = {startDate, endDate, money};
 
-		const newUserObject:IUser = { ...this.userState };
-		const hasLoans 			  = "loan" in newUserObject;
+		const newUserObject:IUserNew = { ...this.currentUser };
+		newUserObject.loansCollection.push(loanObject);
 
-		hasLoans ? newUserObject.loan.push(loanObject) : newUserObject["loan"] = [loanObject];
-
-		// this.usersService.addLoan(newUserObject);
+		this.usersDataService.editUser(newUserObject, newUserObject.id);
 		this.route.navigate(['/home']);		
-	}
-	
-	ngOnDestroy() { 
-		this.userSubscription.unsubscribe();
 	}
 }

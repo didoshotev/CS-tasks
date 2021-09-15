@@ -11,7 +11,7 @@ const routes: Routes = [
     { path: 'home',  component: HomeComponent, resolve: {usersCollection: UsersDataResolverService},},
     { path: 'form/new', component: FormComponent },
     { path: 'form/edit/:id', component: FormComponent, resolve: {user: UserDataResolverService}},
-    { path: 'loan/:id', component: LoanPageComponent}
+    { path: 'loan/:id', component: LoanPageComponent, resolve: { user: UserDataResolverService}}
 ];
 
 @NgModule({
