@@ -24,7 +24,8 @@ module.exports = {
 
     put: (req, res, next) => {
         const id = req.params.id;
-        const { firstName, middleName, lastName, streetAddress, moneyBalance, creditCards, loansCollection, type } = req.body;
+        const { firstName, middleName, lastName, streetAddress, moneyBalance,
+            creditCards, loansCollection, type } = req.body;
         models.User.updateOne({ _id: id }, { firstName, middleName, lastName, streetAddress, moneyBalance, creditCards, loansCollection, type })
             .then((updateduser) => res.send(updateduser))
             .catch(next)
@@ -35,5 +36,13 @@ module.exports = {
         models.User.deleteOne({ _id: id })
             .then((removeduser) => res.send(removeduser))
             .catch(next)
+    },
+
+    patch: (req, res, next) => {
+        const id = req.params.id;
+        const { type } = req.body
+        models.User.findOneAndUpdate({_id: id}, { $set: {type} }, { new: true})
+        .then((updated) => res.send(updated) )
+        .catch(next)
     }
 };

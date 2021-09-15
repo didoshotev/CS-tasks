@@ -4,8 +4,6 @@ const Schema = mongoose.Schema;
 const Model = mongoose.model;
 const { String, Number } = Schema.Types;
 
-const loan = new Schema()
-
 const userSchema = new Schema({
 
     firstName: {
