@@ -3,9 +3,9 @@
 </button>
 <section class="home">
     <div class="home-list">
-        <app-users-list [users]="users" (newItemEvent)="triggerInfo($event)"></app-users-list>
+        <app-users-list [users]="usersCollection" (newItemEvent)="triggerInfo($event)"></app-users-list>
     </div>
     <div class="home-info" *ngIf="clickedUser">
-        <app-user-info [user]="clickedUser"></app-user-info>
+        <app-user-info [user]="clickedUser" (isPrivateShows)="handleDeleteUser($event)"></app-user-info>
     </div>
 </section>

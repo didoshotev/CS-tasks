@@ -18,7 +18,6 @@ export class UsersListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) { 
-    console.log(changes);
     
   }
 

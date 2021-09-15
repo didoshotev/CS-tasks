@@ -4,5 +4,5 @@ export interface IFormCreateResponse {
     lastName: string;
     streetAddress: string;
     moneyBalance: number;
-    creditCard?: string;
+    creditCards?: [string] | [];
 }

@@ -1,20 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UsersService } from '../shared/services/users.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILoan, IUser } from '../shared/interfaces';
+import { LocalUsersService } from '../shared/services/local-users.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-loan-page',
 	templateUrl: './loan-page.component.html',
 	styleUrls: ['./loan-page.component.scss']
 })
-export class LoanPageComponent implements OnInit {
+export class LoanPageComponent implements OnInit, OnDestroy {
 
 	// public date = new Date(Date.now());
 	public userId: string;
 	public userState;
+
+	public userActivated;
 
 	public date = moment();
 	public daysArr;
@@ -22,15 +25,22 @@ export class LoanPageComponent implements OnInit {
 	public dateForm: FormGroup;
 
 	public loanMsg: string;
+	public userSubscription: Subscription;
 
 	constructor(
 		private fb: FormBuilder,
-		private usersService: UsersService,
 		private route: Router,
-		private router: ActivatedRoute) {
+		private router: ActivatedRoute,
+		private localUsersService: LocalUsersService
+		) {
 		this.initDateForm()
 
 		this.userState = this.route.getCurrentNavigation().extras.state;
+
+		this.userSubscription =  this.localUsersService.getUser()
+			.subscribe(didActivate => {
+				this.userActivated = didActivate
+		}) 
 	}
 
 	ngOnInit(): void {
@@ -39,6 +49,13 @@ export class LoanPageComponent implements OnInit {
 		this.router.params.subscribe(data => { 
 			this.userId = data.id;
 		  });
+		
+		this.userSubscription = this.localUsersService.getUser()
+		.subscribe(didActivate => {
+			console.log('hello from loan page onInit observer body');
+			console.log(didActivate);
+			this.userActivated = didActivate
+		}) 
 	}
 
 	initDateForm() {
@@ -79,7 +96,7 @@ export class LoanPageComponent implements OnInit {
 		this.daysArr = this.createCalendar(this.date);
 	}
 
-	resetForm() { 
+	resetForm() {
 		this.dateForm.setValue({ dateFrom: null, dateTo: null, money: null });
 	}
 
@@ -135,7 +152,11 @@ export class LoanPageComponent implements OnInit {
 
 		hasLoans ? newUserObject.loan.push(loanObject) : newUserObject["loan"] = [loanObject];
 
-		this.usersService.addLoan(newUserObject);
+		// this.usersService.addLoan(newUserObject);
 		this.route.navigate(['/home']);		
+	}
+	
+	ngOnDestroy() { 
+		this.userSubscription.unsubscribe();
 	}
 }

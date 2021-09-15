@@ -1,7 +1,8 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IUser } from 'src/app/shared/interfaces';
-import { UsersService } from 'src/app/shared/services/users.service';
+import { IUser, IUserNew } from 'src/app/shared/interfaces';
+import { LocalUsersService } from 'src/app/shared/services/local-users.service';
+import { UsersDataService } from 'src/app/shared/services/users-data.service';
 
 @Component({
   selector: 'app-user-info',
@@ -10,20 +11,21 @@ import { UsersService } from 'src/app/shared/services/users.service';
 })
 export class UserInfoComponent implements OnInit, OnChanges {
 
-  @Input() user: IUser;
+  @Input() user: IUserNew;
+  @Output() isInfoShown = new EventEmitter<boolean>();
 
   public isPrivateShown: Boolean = false;
   public loansCollection = [];
 
   constructor(
-    private usersService: UsersService,
+    private usersDataService: UsersDataService,
     private router: Router,    
-    private route: ActivatedRoute,
+    private localUsersService: LocalUsersService,
     ) { }
 
   ngOnInit(): void {
-    console.log(this.user);
-    this.user.loan && this.handleLoanOutput();
+    // this.user.loan && this.handleLoanOutput();
+    // console.log(this.user.loansCollection);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -35,24 +37,28 @@ export class UserInfoComponent implements OnInit, OnChanges {
   }
 
   handleDelete() {
-    this.usersService.deleteUser(this.user._id);
+    this.usersDataService.deleteUser(this.user.id);
+    this.isInfoShown.emit(false);
+    this.isPrivateShown = false;
   }
 
   handleEdit() { 
-    console.log(this.user._id);
-    
-    this.router.navigate(['/form', 'edit', this.user._id]);
+    this.router.navigate(['/form', 'edit', this.user.id]);
   }
   
   handleLoan() { 
-    this.router.navigate(['/loan', this.user._id], { state: this.user });
+    this.localUsersService.emitUser(this.user);
+    this.router.navigate(['/loan', this.user.id], { state: this.user });
   }
 
-  handleLoanOutput() { 
-    for (let i = 0; i < this.user.loan.length; i++) {
-        const startDate = new Date(this.user.loan[i].startDate).toLocaleDateString();
-        const endDate = new Date(this.user.loan[i].endDate).toLocaleDateString();
-        this.loansCollection.push({ startDate, endDate, money: this.user.loan[i].money})
-    }
+  emitUser() { 
   }
+
+  // handleLoanOutput() { 
+  //   for (let i = 0; i < this.user.loan.length; i++) {
+  //       const startDate = new Date(this.user.loan[i].startDate).toLocaleDateString();
+  //       const endDate = new Date(this.user.loan[i].endDate).toLocaleDateString();
+  //       this.loansCollection.push({ startDate, endDate, money: this.user.loan[i].money})
+  //   }
+  // }
 }

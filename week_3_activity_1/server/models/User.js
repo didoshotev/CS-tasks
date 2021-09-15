@@ -9,21 +9,18 @@ const userSchema = new Schema({
     firstName: {
         type: String,
         required: true,
-        match: [/^[A-Za-z0-9]+$/, 'First name is not valid'],
         trim: true
     },
 
     middleName: {
         type: String,
         required: true,
-        match: [/^[A-Za-z0-9]+$/, 'Middle name is not valid'],
         trim: true
     },
 
     lastName: {
         type: String,
         required: true,
-        match: [/^[A-Za-z0-9]+$/, 'Last name is not valid'],
         trim: true,
     },
 
@@ -50,10 +47,18 @@ const userSchema = new Schema({
         default: [],
     },
 
-    loan: { 
+    type: { 
+        type: String,
+        required: true,
+        enum: ['risky', 'standart', 'vip'],
+        default: 'standart'
+    },
+
+    loansCollection: { 
         startDate: { type: Date },
         endDate: { type: Date },
-        money: Number,
+        money: { type: Number},
+        default: []
     }
 })
 

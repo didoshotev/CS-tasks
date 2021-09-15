@@ -10,8 +10,8 @@
         <ul>
             <li class="row">Money Balance: {{ user.moneyBalance }}</li>
             <li class="row">Address: {{ user.streetAddress }}</li>
-            <li class="row" *ngIf="user.loan.length > 0">
-                <div *ngFor="let loan of loansCollection">
+            <li class="row" *ngIf="user.loansCollection.length> 0">
+                <div *ngFor="let loan of user.loansCollection">
                     Start date: {{loan.startDate}}
                     End date: {{loan.endDate}}
                     Money: {{(+loan.money).toFixed(2)}} BGN 
