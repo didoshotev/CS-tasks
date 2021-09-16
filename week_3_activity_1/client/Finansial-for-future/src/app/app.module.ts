@@ -12,12 +12,15 @@ import { LoanPageComponent } from './loan-page/loan-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { ManagerPanelPageComponent } from './manager-panel-page/manager-panel-page.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoanPageComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    ManagerPanelPageComponent
   ],
   
   imports: [
@@ -29,7 +32,8 @@ import { LoginPageComponent } from './login-page/login-page.component';
     SharedModule,
     HttpClientModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

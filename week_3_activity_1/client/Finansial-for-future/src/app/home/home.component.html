@@ -5,12 +5,18 @@
     <div>
         <button *ngIf="!agent" class="btn-primary" (click)="handleLoginNavigate()">
             Login
-        </button>    
+        </button>
         <button *ngIf="agent" class="btn-primary" (click)="handleLogout()">
             Logout
         </button>
+        <span *ngIf="agent">
+            <button *ngIf="agent.type === 'manager'" class="btn-primary" (click)="handleManagerPanelNavigate()">
+                Panel
+            </button>
+        </span>
     </div>
-    
+
+
 </header>
 
 <h3 *ngIf="agent">Hello, {{agent.username}}</h3>

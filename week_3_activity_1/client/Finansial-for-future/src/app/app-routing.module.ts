@@ -4,16 +4,18 @@ import { FormComponent } from './form/form.component';
 import { HomeComponent } from './home/home.component';
 import { LoanPageComponent } from './loan-page/loan-page.component';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { ManagerPanelPageComponent } from './manager-panel-page/manager-panel-page.component';
 import { UserDataResolverService } from './shared/services/resolvers/user-data-resolver.service';
 import { UsersDataResolverService } from './shared/services/resolvers/users-data-resolver.service';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full'},
-    { path: 'home',  component: HomeComponent, resolve: {usersCollection: UsersDataResolverService},},
+    { path: 'home',  component: HomeComponent, resolve: {usersCollection: UsersDataResolverService} },
     { path: 'form/new', component: FormComponent },
-    { path: 'form/edit/:id', component: FormComponent, resolve: {user: UserDataResolverService}},
-    { path: 'loan/:id', component: LoanPageComponent, resolve: { user: UserDataResolverService}},
+    { path: 'form/edit/:id', component: FormComponent, resolve: {user: UserDataResolverService} },
+    { path: 'loan/:id', component: LoanPageComponent, resolve: { user: UserDataResolverService} },
     { path: 'login', component: LoginPageComponent },
+    { path: 'manager-panel', component: ManagerPanelPageComponent,  resolve: {usersCollection: UsersDataResolverService} },
 ];
 
 @NgModule({

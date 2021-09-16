@@ -48,8 +48,8 @@ export class UsersDataService {
                     const userObject = new UserNew(
                         user.firstName, user.middleName, user.lastName, user.streetAddress,
                         user.moneyBalance, user.creditCards, user._id, user.type, user.loansCollection || []);
-                    
-                        const processedUser = userObject.currentUser;
+
+                    const processedUser = userObject.currentUser;
                     return {
                         ...processedUser
                     }
@@ -95,5 +95,24 @@ export class UsersDataService {
     deleteUser(id) {
         this.localUsersService.deleteUser(id);
         this.http.delete(`${environment.api_url}/users/${id}`).subscribe();
+    }
+
+    changeUserType(newType: string, id: string) {
+        console.log('newType', newType);
+
+        return this.http.patch(
+            `${environment.api_url}/users/${id}`,
+            {
+                type: newType
+            }
+        ).pipe(
+            tap(res => {
+                console.log('new user object', res);
+            }),
+            catchError(err => {
+                console.log('ERROR occured while changing user type', err);
+                return err
+            })
+        ).subscribe()
     }
 }

@@ -1,5 +1,6 @@
 import {  Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { IUserNew } from '../interfaces';
 
 @Injectable({

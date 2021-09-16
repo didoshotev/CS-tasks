@@ -1,0 +1,74 @@
+<section class="panel">
+    <div *ngIf="isDialogActive" class="panel-dialog">
+        <ul class="panel-dialog-list">
+            <li class="panel-dialog-list-item">
+                First name: <strong>{{ dialogInfo.firstName }}</strong>
+            </li>
+            <li class="panel-dialog-list-item">
+                Middle name: <strong>{{ dialogInfo.middleName }}</strong>
+            </li>
+            <li class="panel-dialog-list-item">
+                Last name: <strong>{{ dialogInfo.lastName }}</strong>
+            </li>
+            <li class="panel-dialog-list-item">
+                Street address: <strong>{{ dialogInfo.streetAddress }}</strong>
+            </li>
+            <li class="panel-dialog-list-item">
+                Money Balance: <strong>{{ dialogInfo.moneyBalance}}</strong>
+            </li>
+        </ul>
+    </div>
+    <ul class="panel-list" cdkDropListGroup>
+        <li class="panel-list-item">
+            <div class="panel-list-item-head">
+                <h3>Risky</h3>
+                <button class="btn-primary">Add</button>
+            </div>
+            <div data-collection="risky" cdkDropList #riskyGroup="cdkDropList" [cdkDropListData]="riskyCollection"
+                (cdkDropListDropped)="drop($event)" class="panel-list-item-body">
+                <div *ngFor="let item of riskyCollection" class="item" cdkDrag (click)="hanldePopupOpen(item)"
+                    attr.data-userId="{{item.id}}">
+                    {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
+                </div>
+                <div *ngIf="riskyCollection.length === 0" class="item"></div>
+            </div>
+        </li>
+        <li class="panel-list-item">
+            <div class="panel-list-item-head">
+                <h3>Standart</h3>
+                <button class="btn-primary">Add</button>
+            </div>
+
+            <div data-collection="standart" cdkDropList #standartGroup="cdkDropList"
+                [cdkDropListData]="standartCollection" (cdkDropListDropped)="drop($event)" class="panel-list-item-body">
+
+                <div *ngFor="let item of standartCollection" class="item" 
+                    cdkDrag 
+                    (click)="hanldePopupOpen(item)"
+                    attr.data-userId="{{item.id}}">
+                    {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
+                </div>
+                <div *ngIf="standartCollection.length === 0" class="item"></div>
+            </div>
+        </li>
+        <li class="panel-list-item">
+            <div class="panel-list-item-head">
+                <h3>VIP</h3>
+                <button class="btn-primary">Add</button>
+            </div>
+
+            <div data-collection="vip" cdkDropList #vipGroup="cdkDropList"
+                [cdkDropListData]="vipCollection"
+                (cdkDropListDropped)="drop($event)" class="panel-list-item-body">
+
+                <div *ngFor="let item of vipCollection" class="item"
+                 cdkDrag  attr.data-userId="{{item.id}}"
+                 (click)="hanldePopupOpen(item)"
+                 >
+                    {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
+                </div>
+                <div *ngIf="vipCollection.length === 0" class="item"></div>
+            </div>
+        </li>
+    </ul>
+</section>

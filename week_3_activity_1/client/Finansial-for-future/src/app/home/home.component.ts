@@ -45,24 +45,28 @@ export class HomeComponent implements OnInit {
 		})
 	}
 
-	handleCreateUserNavigate() {
+	public handleCreateUserNavigate() {
 		this.router.navigateByUrl('/form/new');
 	}
 
-	handleLoginNavigate() { 
+	public handleLoginNavigate() { 
 		this.router.navigateByUrl('/login');
 	}
 
-	handleLogout() { 
+	public handleLogout() { 
 		this.authService.logout();
 	}
 
-	triggerInfo(event: IUserNew): void {
+	public triggerInfo(event: IUserNew): void {
 		this.clickedUser = event;
 	}
 
-	handleDeleteUser(value) {
+	public handleDeleteUser(value) {
 		this.clickedUser = null;
+	}
+
+	private handleManagerPanelNavigate() { 
+		this.router.navigateByUrl('/manager-panel');
 	}
 
 	ngOnDestroy(): void {
