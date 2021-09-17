@@ -28,7 +28,8 @@
         </ul>
     </div>
 
-    <div class="info-btn-container">
+    <div class="info-btn-container" 
+    *ngIf="agent.type === agentTypes.MANAGER || agent.type === agentTypes.STANDART">
         <button class="btn-primary" (click)="handlePrivateInfo()">
             {{ !isPrivateShown ? 'Private Info' : 'Public Info'}}
         </button>

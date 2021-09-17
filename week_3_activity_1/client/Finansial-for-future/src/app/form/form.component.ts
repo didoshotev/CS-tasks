@@ -37,7 +37,6 @@ export class FormComponent implements OnInit {
       this.currentUser = res.user;
     })
 
-
     this.route.params.subscribe(data => {
       this.id = data.id;
       this.id && (this.editMode = true);

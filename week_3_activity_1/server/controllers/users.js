@@ -26,8 +26,13 @@ module.exports = {
         const id = req.params.id;
         const { firstName, middleName, lastName, streetAddress, moneyBalance,
             creditCards, loansCollection, type } = req.body;
-        models.User.updateOne({ _id: id }, { firstName, middleName, lastName, streetAddress, moneyBalance, creditCards, loansCollection, type })
-            .then((updateduser) => res.send(updateduser))
+            models.User.findOneAndUpdate({ _id: id }, 
+            { firstName, middleName, lastName, streetAddress, moneyBalance, creditCards, loansCollection, type },
+            {new: true})
+            .then((updateduser) =>{ 
+                // console.log(updateduser);
+                return res.send(updateduser);
+            })
             .catch(next)
     },
 

@@ -84,7 +84,6 @@ export class AuthService {
 
   public isAuthenticated(): boolean { 
     const agent = this.localStorageService.getData();
-    console.log(agent);
     return !this.helper.isTokenExpired(agent._token);
   }
 

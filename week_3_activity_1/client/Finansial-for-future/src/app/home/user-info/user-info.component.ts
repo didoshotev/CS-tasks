@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import {  Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import GlobalRefence from 'src/app/Globals';
 import { IUserNew } from 'src/app/shared/interfaces';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { LocalUsersService } from 'src/app/shared/services/local-users.service';
 import { UsersDataService } from 'src/app/shared/services/users-data.service';
 
@@ -17,14 +20,23 @@ export class UserInfoComponent implements OnInit, OnChanges {
   public isPrivateShown: Boolean = false;
   public loansCollection = [];
 
+  public agent;
+  public agentSubscription: Subscription;
+  public agentTypes = GlobalRefence.agentTypes;
+
   constructor(
     private usersDataService: UsersDataService,
     private router: Router,    
     private localUsersService: LocalUsersService,
+    private authService: AuthService,
     ) { }
 
   ngOnInit(): void {
     // this.user.loan && this.handleLoanOutput();
+    this.agentSubscription = this.authService.agent.subscribe(agent => { 
+			this.agent = agent;
+      
+    })
   }
 
   ngOnChanges(changes: SimpleChanges) {

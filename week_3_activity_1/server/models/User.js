@@ -58,6 +58,6 @@ const userSchema = new Schema({
         type: Array,
         default: []
     }
-})
+}, { versionKey: false })
 
 module.exports = new Model('User', userSchema);

@@ -26,7 +26,7 @@ const agentSchema = new Schema({
         enum: ['manager', 'restricted', 'standart'],
         required: true,
     }
-})
+}, { versionKey: false})
 
 
 agentSchema.methods = {

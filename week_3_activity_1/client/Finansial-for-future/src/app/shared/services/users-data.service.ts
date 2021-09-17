@@ -21,17 +21,12 @@ export class UsersDataService {
         private localStorageService: LocalStorageService,
     ) { }
 
-    fetchUsers() {
+    public fetchUsers() {
         return this.http.get<UserNew[]>(`${environment.api_url}/users`)
             .pipe(
                 map(users => {
                     return users.map(user => {
-
-                        const userObject = new UserNew(
-                            user.firstName, user.middleName, user.lastName, user.streetAddress,
-                            user.moneyBalance, user.creditCards, user._id, user.type, user.loansCollection || []);
-
-                        const processedUser = userObject.currentUser;
+                        const processedUser = this.processUser(user);
                         return {
                             ...processedUser
                         }
@@ -43,7 +38,7 @@ export class UsersDataService {
             )
     }
 
-    fetchUserById(id: string) {
+    public fetchUserById(id: string) {
         return this.http.get<UserNew>(`${environment.api_url}/users/${id}`)
             .pipe(
                 map(user => {
@@ -61,12 +56,12 @@ export class UsersDataService {
 
     //  ------
 
-    getAllUsers(): Observable<IUserNew[]> {
+    public getAllUsers(): Observable<IUserNew[]> {
         const users = this.http.get<IUserNew[]>(`${environment.api_url}/users`);
         return users;
     }
 
-    createUser(user: IFormCreateResponse) {
+    public createUser(user: IFormCreateResponse) {
         const localStorageData = this.localStorageService.getData();
         const headers = new HttpHeaders({ 'bearer': localStorageData._token });
 
@@ -75,6 +70,13 @@ export class UsersDataService {
             user,
             { headers }
         ).pipe(
+            map(user => { 
+                const newUser = this.processUser(user);
+                this.localUsersService.addUser(newUser);
+                return { 
+                    ...newUser
+                }
+            }), 
             catchError(err => {
                 console.log('ERROR occured while creating user', err);
                 return err
@@ -82,11 +84,9 @@ export class UsersDataService {
         ).subscribe();
     }
 
-    editUser(user: IUserNew, id: string) {
+    public editUser(user: IUserNew, id: string) {
         const localStorageData = this.localStorageService.getData();
         const headers = new HttpHeaders({ 'bearer': localStorageData._token });
-
-        this.localUsersService.updateUser(id, user);
 
         delete user.id;
 
@@ -95,6 +95,13 @@ export class UsersDataService {
             user,
             { headers }
         ).pipe(
+            map(newUser => { 
+                const processedUser = this.processUser(newUser);
+                this.localUsersService.updateUser(processedUser.id, processedUser);
+                return { 
+                    ...processedUser
+                }
+            }),
             catchError(err => {
                 console.log('ERROR occured while editing user', err);
                 return err
@@ -102,7 +109,7 @@ export class UsersDataService {
         ).subscribe();
     }
 
-    deleteUser(id) {
+    public deleteUser(id) {
         const localStorageData = this.localStorageService.getData();
         const headers = new HttpHeaders({ 'bearer': localStorageData._token });
 
@@ -110,7 +117,7 @@ export class UsersDataService {
         this.http.delete(`${environment.api_url}/users/${id}`,{ headers }).subscribe();
     }
 
-    changeUserType(newType: string, id: string) {
+    public changeUserType(newType: string, id: string) {
         const localStorageData = this.localStorageService.getData();
         const headers = new HttpHeaders({ 'bearer': localStorageData._token });
         
@@ -120,13 +127,26 @@ export class UsersDataService {
                 type: newType
             }, { headers }
         ).pipe(
-            tap(res => {
-                console.log('new user object', res);
+            tap(user => {
+                const processedUser = this.processUser(user)
+                this.localUsersService.updateUser(processedUser.id, processedUser);
+                
+                return { 
+                    ...processedUser
+                }
             }),
             catchError(err => {
                 console.log('ERROR occured while changing user type', err);
                 return err
             })
-        ).subscribe()
+        ).subscribe();
+    }
+
+    private processUser(user) { 
+        const userObject = new UserNew(
+            user.firstName, user.middleName, user.lastName, user.streetAddress,
+            user.moneyBalance, user.creditCards, user._id, user.type, user.loansCollection || []);
+
+        return userObject.currentUser;
     }
 }

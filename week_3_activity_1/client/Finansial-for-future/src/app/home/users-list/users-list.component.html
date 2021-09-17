@@ -1,5 +1,4 @@
 <div class="">
-    <h3>Users list</h3>
     <ul>
         <app-user-item *ngFor="let user of users; let i = index"
          [user]="user" [index]=[i] (click)="onClick(user)"></app-user-item>

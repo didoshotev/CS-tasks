@@ -67,7 +67,7 @@ export class ManagerPanelPageComponent implements OnInit {
     usersCollection.map(user => userTypes[user.type](user))
   }
 
-  public handleFormNavigate() { 
-    this.router.navigateByUrl('/form/new');    
+  public handleFormNavigate(type: string) {
+    this.router.navigateByUrl('/form/new');
   }
 }
