@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators'
@@ -6,6 +6,7 @@ import { IFormCreateResponse, IUserNew } from '../interfaces';
 import { UserNew } from '../models/user.modelNew';
 import { LocalUsersService } from './local-users.service';
 import { environment } from '../../../environments/environment';
+import { LocalStorageService } from './local-storage.service';
 
 // const api_url = 'http://localhost:5000/api'
 
@@ -13,10 +14,11 @@ import { environment } from '../../../environments/environment';
     providedIn: 'root'
 })
 export class UsersDataService {
-
+        
     constructor(
         private http: HttpClient,
-        private localUsersService: LocalUsersService
+        private localUsersService: LocalUsersService,
+        private localStorageService: LocalStorageService,
     ) { }
 
     fetchUsers() {
@@ -65,9 +67,13 @@ export class UsersDataService {
     }
 
     createUser(user: IFormCreateResponse) {
+        const localStorageData = this.localStorageService.getData();
+        const headers = new HttpHeaders({ 'bearer': localStorageData._token });
+
         return this.http.post(
             `${environment.api_url}/users`,
-            user
+            user,
+            { headers }
         ).pipe(
             catchError(err => {
                 console.log('ERROR occured while creating user', err);
@@ -77,13 +83,17 @@ export class UsersDataService {
     }
 
     editUser(user: IUserNew, id: string) {
+        const localStorageData = this.localStorageService.getData();
+        const headers = new HttpHeaders({ 'bearer': localStorageData._token });
+
         this.localUsersService.updateUser(id, user);
 
         delete user.id;
 
         return this.http.put(
             `${environment.api_url}/users/${id}`,
-            user
+            user,
+            { headers }
         ).pipe(
             catchError(err => {
                 console.log('ERROR occured while editing user', err);
@@ -93,18 +103,22 @@ export class UsersDataService {
     }
 
     deleteUser(id) {
+        const localStorageData = this.localStorageService.getData();
+        const headers = new HttpHeaders({ 'bearer': localStorageData._token });
+
         this.localUsersService.deleteUser(id);
-        this.http.delete(`${environment.api_url}/users/${id}`).subscribe();
+        this.http.delete(`${environment.api_url}/users/${id}`,{ headers }).subscribe();
     }
 
     changeUserType(newType: string, id: string) {
-        console.log('newType', newType);
-
+        const localStorageData = this.localStorageService.getData();
+        const headers = new HttpHeaders({ 'bearer': localStorageData._token });
+        
         return this.http.patch(
             `${environment.api_url}/users/${id}`,
             {
                 type: newType
-            }
+            }, { headers }
         ).pipe(
             tap(res => {
                 console.log('new user object', res);

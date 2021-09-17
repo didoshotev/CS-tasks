@@ -22,7 +22,7 @@
         <li class="panel-list-item">
             <div class="panel-list-item-head">
                 <h3>Risky</h3>
-                <button class="btn-primary">Add</button>
+                <button (click)="handleFormNavigate()" class="btn-primary">Add</button>
             </div>
             <div data-collection="risky" cdkDropList #riskyGroup="cdkDropList" [cdkDropListData]="riskyCollection"
                 (cdkDropListDropped)="drop($event)" class="panel-list-item-body">
@@ -36,7 +36,7 @@
         <li class="panel-list-item">
             <div class="panel-list-item-head">
                 <h3>Standart</h3>
-                <button class="btn-primary">Add</button>
+                <button (click)="handleFormNavigate()" class="btn-primary">Add</button>
             </div>
 
             <div data-collection="standart" cdkDropList #standartGroup="cdkDropList"
@@ -54,7 +54,7 @@
         <li class="panel-list-item">
             <div class="panel-list-item-head">
                 <h3>VIP</h3>
-                <button class="btn-primary">Add</button>
+                <button (click)="handleFormNavigate()" class="btn-primary">Add</button>
             </div>
 
             <div data-collection="vip" cdkDropList #vipGroup="cdkDropList"

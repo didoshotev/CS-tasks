@@ -1,16 +1,18 @@
 const controllers = require('../controllers/');
 const router = require('express').Router();
+const { auth } = require('../utils')
+
 
 router.get('/', controllers.users.get);
 
 router.get('/:id', controllers.users.getById);
 
-router.post('/', controllers.users.post);
+router.post('/', auth.basicAuth, auth.standartCheck, controllers.users.post);
 
-router.put('/:id', controllers.users.put);
+router.put('/:id', auth.basicAuth, auth.standartCheck, controllers.users.put);
 
-router.delete('/:id', controllers.users.delete);
+router.delete('/:id', auth.basicAuth, auth.standartCheck, controllers.users.delete);
 
-router.patch('/:id', controllers.users.patch);
+router.patch('/:id', auth.basicAuth, auth.managerCheck, controllers.users.patch);
 
 module.exports = router;

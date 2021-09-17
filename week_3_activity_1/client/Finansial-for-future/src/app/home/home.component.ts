@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IUserNew } from '../shared/interfaces';
@@ -17,11 +17,14 @@ export class HomeComponent implements OnInit {
 	
 	public clickedUser: IUserNew;
 
+	public usersSubscription: Subscription;
 	public usersCollection: IUserNew[];
 	public usersCollectionSubscription: Subscription;
 	
 	public agentSubscription: Subscription;
 	public agent: Agent
+
+	public sub: Subscription;
 
 	constructor(
 		private router: Router,
@@ -36,10 +39,14 @@ export class HomeComponent implements OnInit {
 			this.agent = agent;
 		})
 
-		this.localUsersService.getUsersCollection().subscribe(data => { 
-			// console.log('BS usersCollections', data);
-		})		
+		this.usersSubscription = this.localUsersService.getUsersCollection().subscribe(data => { 
+			// console.log('BS usersCollections', Object.values(data));
+			this.usersCollection = Object.values(data);
+		})
 
+		// this.usersCollection = this.localUsersService.usersCollectionLocal;
+		// console.log(this.localUsersService.usersCollectionLocal);
+		
 		this.route.data.subscribe((res) => { 
 			this.usersCollection = res.usersCollection;
 		})
@@ -70,6 +77,8 @@ export class HomeComponent implements OnInit {
 	}
 
 	ngOnDestroy(): void {
+		this.agentSubscription.unsubscribe();
+		this.usersSubscription.unsubscribe();
 		
 	}
 }

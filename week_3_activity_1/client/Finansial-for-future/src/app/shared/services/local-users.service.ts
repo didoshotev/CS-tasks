@@ -1,6 +1,5 @@
 import {  Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { IUserNew } from '../interfaces';
 
 @Injectable({
@@ -36,7 +35,7 @@ export class LocalUsersService {
   public updateUser(id: string, updatedUserObject: IUserNew) {
     const index: number = this.getUserIndexById2(id);
     this.usersCollectionLocal.splice(index, 1, updatedUserObject);
-    this.usersCollectionSubject.next({ ...this.usersCollectionLocal })
+    this.usersCollectionSubject.next( this.usersCollectionLocal )
   }
   
   public deleteUser(id: string) {

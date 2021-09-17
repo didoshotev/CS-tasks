@@ -1,6 +1,9 @@
 const models = require('../models');
 const config = require('../config/config');
 const utils = require('../utils');
+require('dotenv').config();
+
+let refreshTokens = [];
 
 module.exports = {
     get: (req, res, next) => {
@@ -33,9 +36,27 @@ module.exports = {
                     }
                     
                     const token = utils.jwt.createToken({ id: user._id, type: user.type });
-                    res.send({ user, token});
+                    const refreshToken = utils.jwt.createRefreshToken({ id: user._id, type: user.type });
+                    refreshTokens.push(refreshToken);
+                    res.json({ accessToken: token, refreshToken })
+                    // res.send({ user, token});
                 })
                 .catch(next);
+        },
+
+        token: async (req, res) => { 
+            const refreshToken = req.body.token;
+            if(refreshToken == null) { return res.send(401); }
+            if(!refreshTokens.includes(refreshToken)) { return res.send(403) }
+            try {
+                
+                const tokenResponse = await utils.jwt.verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET) 
+                const accessToken = utils.jwt.createToken({id: tokenResponse._id, type: tokenResponse.type});
+                res.json({accessToken})
+
+            } catch (error) {
+                return res.sendStatus(403)                
+            }
         },
 
         verifyLogin: (req, res, next) => {
@@ -74,15 +95,14 @@ module.exports = {
         },
 
         logout: (req, res, next) => {
-            const token = req.cookies[config.authCookieName];
-            console.log('-'.repeat(100));
-            console.log(token);
-            console.log('-'.repeat(100));
-            models.TokenBlacklist.create({ token })
-                .then(() => {
-                    res.clearCookie(config.authCookieName).send('Logout successfully!');
-                })
-                .catch(next);
+            refreshTokens = refreshTokens.filter(token => token !== req.body.token);
+            res.sendStatus(204);
+           
+            // models.TokenBlacklist.create({ token })
+            //     .then(() => {
+            //         res.clearCookie(config.authCookieName).send('Logout successfully!');
+            //     })
+            //     .catch(next);
         }
     },
 

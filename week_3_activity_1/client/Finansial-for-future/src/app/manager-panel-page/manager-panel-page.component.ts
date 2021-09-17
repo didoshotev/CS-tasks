@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IUserNew } from '../shared/interfaces';
 import GlobalRefence from '../Globals';
 import { UsersDataService } from '../shared/services/users-data.service';
@@ -25,6 +25,7 @@ export class ManagerPanelPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private usersDataService: UsersDataService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -64,5 +65,9 @@ export class ManagerPanelPageComponent implements OnInit {
     }
 
     usersCollection.map(user => userTypes[user.type](user))
+  }
+
+  public handleFormNavigate() { 
+    this.router.navigateByUrl('/form/new');    
   }
 }
