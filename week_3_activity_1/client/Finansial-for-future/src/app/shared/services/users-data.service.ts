@@ -62,13 +62,10 @@ export class UsersDataService {
 
     public createUser(user: IFormCreateResponse) {
         
-        const localStorageData = this.localStorageService.getData();
-        const headers          = new HttpHeaders({ 'bearer': localStorageData._token });
 
         return this.http.post(
             `${environment.api_url}/users`,
             user,
-            { headers }
         ).pipe(
             map(user => { 
                 const newUser = this.processUser(user);
@@ -85,16 +82,11 @@ export class UsersDataService {
     }
 
     public editUser(user: IUserNew, id: string) {
-        
-        const localStorageData = this.localStorageService.getData();
-        const headers          = new HttpHeaders({ 'bearer': localStorageData._token });
-
         delete user.id;
 
         return this.http.put(
             `${environment.api_url}/users/${id}`,
             user,
-            { headers }
         ).pipe(
             map(newUser => { 
                 const processedUser = this.processUser(newUser);
@@ -111,22 +103,17 @@ export class UsersDataService {
     }
 
     public deleteUser(id) {
-        const localStorageData = this.localStorageService.getData();
-        const headers          = new HttpHeaders({ 'bearer': localStorageData._token });
-
         this.localUsersService.deleteUser(id);
-        this.http.delete(`${environment.api_url}/users/${id}`,{ headers }).subscribe();
+        this.http.delete(`${environment.api_url}/users/${id}`).subscribe();
     }
 
     public changeUserType(newType: string, id: string) {
-        const localStorageData = this.localStorageService.getData();
-        const headers          = new HttpHeaders({ 'bearer': localStorageData._token });
         
         return this.http.patch(
             `${environment.api_url}/users/${id}`,
             {
                 type: newType
-            }, { headers }
+            }
         ).pipe(
             tap(user => {
                 const processedUser = this.processUser(user)

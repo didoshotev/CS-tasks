@@ -8,7 +8,8 @@ import { Agent } from '../models/agent.model';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { LocalStorageService } from './local-storage.service';
 import GlobalRefence from 'src/app/Globals';
- 
+import { InterceptorSkipHeader } from './interceptors/auth-skip'; 
+
 export interface IAuthResponseUser {
   passowrd: string,
   username: string,
@@ -43,7 +44,7 @@ export class AuthService {
         username,
         password
 
-      }, { observe: 'response' }).pipe(
+      }, { observe: 'response', headers: InterceptorSkipHeader }).pipe(
         map(res => {
           this.handleAuthentication(res.body.accessToken);
         }),
