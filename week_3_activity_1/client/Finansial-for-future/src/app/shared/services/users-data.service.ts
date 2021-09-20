@@ -8,7 +8,6 @@ import { LocalUsersService } from './local-users.service';
 import { environment } from '../../../environments/environment';
 import { LocalStorageService } from './local-storage.service';
 
-// const api_url = 'http://localhost:5000/api'
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +21,7 @@ export class UsersDataService {
     ) { }
 
     public fetchUsers() {
+        
         return this.http.get<UserNew[]>(`${environment.api_url}/users`)
             .pipe(
                 map(users => {
@@ -57,13 +57,13 @@ export class UsersDataService {
     //  ------
 
     public getAllUsers(): Observable<IUserNew[]> {
-        const users = this.http.get<IUserNew[]>(`${environment.api_url}/users`);
-        return users;
+        return this.http.get<IUserNew[]>(`${environment.api_url}/users`);
     }
 
     public createUser(user: IFormCreateResponse) {
+        
         const localStorageData = this.localStorageService.getData();
-        const headers = new HttpHeaders({ 'bearer': localStorageData._token });
+        const headers          = new HttpHeaders({ 'bearer': localStorageData._token });
 
         return this.http.post(
             `${environment.api_url}/users`,
@@ -85,8 +85,9 @@ export class UsersDataService {
     }
 
     public editUser(user: IUserNew, id: string) {
+        
         const localStorageData = this.localStorageService.getData();
-        const headers = new HttpHeaders({ 'bearer': localStorageData._token });
+        const headers          = new HttpHeaders({ 'bearer': localStorageData._token });
 
         delete user.id;
 
@@ -111,7 +112,7 @@ export class UsersDataService {
 
     public deleteUser(id) {
         const localStorageData = this.localStorageService.getData();
-        const headers = new HttpHeaders({ 'bearer': localStorageData._token });
+        const headers          = new HttpHeaders({ 'bearer': localStorageData._token });
 
         this.localUsersService.deleteUser(id);
         this.http.delete(`${environment.api_url}/users/${id}`,{ headers }).subscribe();
@@ -119,7 +120,7 @@ export class UsersDataService {
 
     public changeUserType(newType: string, id: string) {
         const localStorageData = this.localStorageService.getData();
-        const headers = new HttpHeaders({ 'bearer': localStorageData._token });
+        const headers          = new HttpHeaders({ 'bearer': localStorageData._token });
         
         return this.http.patch(
             `${environment.api_url}/users/${id}`,
@@ -143,6 +144,7 @@ export class UsersDataService {
     }
 
     private processUser(user) { 
+        
         const userObject = new UserNew(
             user.firstName, user.middleName, user.lastName, user.streetAddress,
             user.moneyBalance, user.creditCards, user._id, user.type, user.loansCollection || []);

@@ -83,6 +83,7 @@ export class AuthService {
   }
 
   public isAuthenticated(): boolean { 
+    
     const agent = this.localStorageService.getData();
     return !this.helper.isTokenExpired(agent._token);
   }
@@ -92,7 +93,7 @@ export class AuthService {
   }
 
   public isManagerOrStandart(): boolean { 
-    return this.localStorageService.getData().type === GlobalRefence.agentTypes.MANAGER ||
+    return this.isManager() ||
            this.localStorageService.getData().type === GlobalRefence.agentTypes.STANDART  
   }
 }

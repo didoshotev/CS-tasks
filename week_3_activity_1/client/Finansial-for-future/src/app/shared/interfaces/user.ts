@@ -1,4 +1,3 @@
-import { IBase } from "./base";
 import { ILoan } from "./loan";
 
 export interface IUserNew {

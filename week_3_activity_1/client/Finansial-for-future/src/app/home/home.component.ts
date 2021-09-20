@@ -37,19 +37,15 @@ export class HomeComponent implements OnInit {
 
 		this.agentSubscription = this.authService.agent.subscribe(agent => { 
 			this.agent = agent;
-		})
+		});
 
 		this.usersSubscription = this.localUsersService.getUsersCollection().subscribe(data => { 
-			// console.log('BS usersCollections', Object.values(data));
 			this.usersCollection = Object.values(data);
-		})
-
-		// this.usersCollection = this.localUsersService.usersCollectionLocal;
-		// console.log(this.localUsersService.usersCollectionLocal);
+		});
 		
 		this.route.data.subscribe((res) => { 
 			this.usersCollection = res.usersCollection;
-		})
+		});
 	}
 
 	public handleCreateUserNavigate() {

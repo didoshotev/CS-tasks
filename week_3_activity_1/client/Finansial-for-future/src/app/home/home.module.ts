@@ -4,7 +4,6 @@ import { UsersListComponent } from './users-list/users-list.component';
 import { HomeComponent } from './home.component';
 import { UserItemComponent } from './users-list/user-item/user-item.component';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [UserInfoComponent, UsersListComponent, HomeComponent, UserItemComponent],

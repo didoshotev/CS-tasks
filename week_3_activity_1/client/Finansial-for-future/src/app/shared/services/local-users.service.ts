@@ -19,6 +19,7 @@ export class LocalUsersService {
   constructor() { }
 
   public setUsers(users: IUserNew[]) {
+    
     this.usersCollectionLocal = users;
     this.usersCollectionSubject.next({ ...this.usersCollectionLocal });
   }
@@ -28,18 +29,23 @@ export class LocalUsersService {
   }
 
   public addUser(user: IUserNew) {
+    
     this.usersCollectionLocal.push(user);
     this.usersCollectionSubject.next({ ...this.usersCollectionLocal });
   }
 
   public updateUser(id: string, updatedUserObject: IUserNew) {
+    
     const index: number = this.getUserIndexById2(id);
+    
     this.usersCollectionLocal.splice(index, 1, updatedUserObject);
     this.usersCollectionSubject.next( this.usersCollectionLocal )
   }
   
   public deleteUser(id: string) {
+    
     const index:number = this.getUserIndexById2(id);
+    
     this.usersCollectionLocal.splice(index, 1);
     this.usersCollectionSubject.next({ ...this.usersCollectionLocal});
   }
@@ -52,11 +58,6 @@ export class LocalUsersService {
 
   getUser(): Observable<any> {
     return this.userSubject.asObservable();
-  }
-
-
-  private getUserById(id) { 
-    return this.usersCollectionLocal.find(user => user.id === id);
   }
 
   private getUserIndexById2(id) { 

@@ -29,6 +29,7 @@ export class ManagerPanelPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
     this.route.data.subscribe((res) => { 
 			this.usersCollection = res.usersCollection;
       this.splitCollections(this.usersCollection);
@@ -36,6 +37,7 @@ export class ManagerPanelPageComponent implements OnInit {
   }
 
   public drop(event: CdkDragDrop<string[]>) {
+    
     if (event.previousContainer === event.container) {      
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {

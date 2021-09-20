@@ -10,8 +10,6 @@ router.post('/login', controllers.agents.post.login);
 
 router.post('/token', controllers.agents.post.token);
 
-router.post('/verify', controllers.agents.post.verifyLogin);
-
 router.post('/logout', controllers.agents.post.logout);
 
 router.delete('/:id', controllers.agents.delete);
