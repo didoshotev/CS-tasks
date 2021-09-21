@@ -1,0 +1,40 @@
+<div class="info">
+    <ul class="info-names" *ngIf="!isPrivateShown">
+        <li class="row">First name: {{ user.firstName }}</li>
+        <li class="row">Middle name: {{ user.middleName }}</li>
+        <li class="row">Last name: {{ user.lastName }}</li>
+    </ul>
+
+    <div class="info-names" *ngIf="isPrivateShown">
+        Private information {{ user.firstName }} {{ user.lastName}}
+        <ul>
+            <li class="row">Money Balance: {{ user.moneyBalance }}</li>
+            <li class="row">Address: {{ user.streetAddress }}</li>
+            <li class="row" *ngIf="user.loansCollection.length> 0">
+                <strong>Loans: </strong>
+                <div class="row-loan" *ngFor="let loan of user.loansCollection">
+                    Start date: {{loan.startDate | date}}
+                    End date: {{loan.endDate | date}}
+                    Money: {{(+loan.money).toFixed(2)}} BGN 
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+    <div *ngIf="user.creditCards.length > 0">
+        <strong>cards</strong>
+        <ul class="info-cards" *ngFor="let card of user.creditCards">
+            <li class="row">{{ card }}</li>
+        </ul>
+    </div>
+
+    <div class="info-btn-container" 
+    *ngIf="agent.type === agentTypes.MANAGER || agent.type === agentTypes.STANDART">
+        <button class="btn-primary" (click)="handlePrivateInfo()">
+            {{ !isPrivateShown ? 'Private Info' : 'Public Info'}}
+        </button>
+        <button class="btn-primary" (click)="handleEdit()">Edit</button>
+        <button class="btn-primary" (click)="handleDelete()">Delete</button>
+        <button class="btn-primary info-btn-container--loan" (click)="handleLoan()">Loan</button>
+    </div>
+</div>

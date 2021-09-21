@@ -1,0 +1,67 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.content {
+    width: 472px;
+
+    &-list {
+        display: flex;
+        text-align: center;
+        flex-wrap: wrap;
+
+        &-day {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2px;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+        }
+    }
+
+    &-head {
+        text-align: center;
+
+        &-info {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        &-actionFirst { 
+            margin-right: 50px;
+        }
+    }
+
+    &-reset-form { 
+        width: 50%;
+        margin: 20px auto 0 auto;
+    }
+
+    &-calendar {
+    }
+}
+
+.weekly {
+    background-color: orange;
+    border: 1px solid black;
+}
+
+.daily {
+    background-color: antiquewhite;
+    border: 1px solid black;
+}
+
+.current { 
+    background-color: orangered;
+}
+
+.inactive {
+    opacity: 0.4;
+}
+
+.selected { 
+    background-color: salmon;
+}

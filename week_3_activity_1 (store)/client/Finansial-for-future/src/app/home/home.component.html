@@ -1,0 +1,33 @@
+<header class="header">
+    <span *ngIf="agent">
+        <button *ngIf="agent.type === 'manager' || agent.type === 'standart'" class="btn-primary"
+            (click)="handleCreateUserNavigate()">
+            Create User
+        </button>
+    </span>
+
+    <div>
+        <button *ngIf="!agent" class="btn-primary" (click)="handleLoginNavigate()">
+            Login
+        </button>
+        <button *ngIf="agent" class="btn-primary" (click)="handleLogout()">
+            Logout
+        </button>
+        <span *ngIf="agent">
+            <button *ngIf="agent.type === 'manager'" class="btn-primary" (click)="handleManagerPanelNavigate()">
+                Panel
+            </button>
+        </span>
+    </div>
+
+
+</header>
+
+<section class="home">
+    <div class="home-list">
+        <app-users-list [users]="usersCollection" (newItemEvent)="triggerInfo($event)"></app-users-list>
+    </div>
+    <div class="home-info" *ngIf="clickedUser">
+        <app-user-info [user]="clickedUser" (isPrivateShows)="handleDeleteUser($event)"></app-user-info>
+    </div>
+</section>

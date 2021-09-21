@@ -1,0 +1,40 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+.btn-primary { 
+    min-width: 100px;
+    height: 35px;
+    color: white;
+    background-color: orange;
+    font-size: 16px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.alert-text {
+    color: red;
+}
+
+ul, ol { 
+    list-style: none;
+    padding: 0;
+}
+
+input { 
+    height: 25px;
+}
+
+a { 
+    text-decoration: none;
+}
+
+h3 { 
+    margin: 0;
+    padding: 0;
+}
