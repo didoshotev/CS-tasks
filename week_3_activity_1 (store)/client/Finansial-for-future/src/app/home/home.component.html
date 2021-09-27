@@ -25,7 +25,7 @@
 
 <section class="home">
     <div class="home-list">
-        <app-users-list [users]="usersCollection" (newItemEvent)="triggerInfo($event)"></app-users-list>
+        <app-users-list [usersObs]="usersObs" (newItemEvent)="triggerInfo($event)"></app-users-list>
     </div>
     <div class="home-info" *ngIf="clickedUser">
         <app-user-info [user]="clickedUser" (isPrivateShows)="handleDeleteUser($event)"></app-user-info>

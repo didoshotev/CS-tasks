@@ -3,6 +3,8 @@ import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { IUserNew } from '../shared/interfaces';
 import { UsersDataService } from '../shared/services/users-data.service';
+import { Store } from '@ngrx/store';
+import * as UsersListActions from '../store/actions/users-list-actions';
 
 @Component({
   selector: 'app-form',
@@ -28,7 +30,8 @@ export class FormComponent implements OnInit {
     private usersDataService: UsersDataService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private store: Store<{ usersCollection: { users: IUserNew[] } }>,
   ) { }
 
   ngOnInit(): void {
@@ -46,7 +49,7 @@ export class FormComponent implements OnInit {
   }
 
   private initForm() {
-    
+
 
     const user = this.currentUser
 
@@ -85,10 +88,16 @@ export class FormComponent implements OnInit {
 
     } else {
 
-      this.usersDataService.createUser({
-        firstName, middleName, lastName,
-        streetAddress, moneyBalance, creditCards: (creditCards ? [creditCards] : [])
-      })
+      // this.usersDataService.createUser({
+      //   firstName, middleName, lastName,
+      //   streetAddress, moneyBalance, creditCards: (creditCards ? [creditCards] : [])
+      // })
+      this.store.dispatch(new UsersListActions.AddUser({
+          firstName, middleName, lastName,
+          streetAddress, moneyBalance, creditCards: (creditCards ? [creditCards] : []) 
+        }
+      ))
+
     }
 
     this.myForm.reset();

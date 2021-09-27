@@ -20,7 +20,6 @@ export class AuthInterceptorService implements HttpInterceptor {
       const headers = req.headers.delete(InterceptorSkip);
       return next.handle(req.clone({ headers }));
     }
-    console.log('not skipping');
 
     const authToken = this.localStorageService.getData() || '';
     if(!authToken) { this.router.navigateByUrl('/login'); }

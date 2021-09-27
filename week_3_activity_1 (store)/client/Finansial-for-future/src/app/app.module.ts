@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { StoreModule } from '@ngrx/store'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +16,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { ManagerPanelPageComponent } from './manager-panel-page/manager-panel-page.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AuthInterceptorService as AuthInterceptor} from './shared/services/interceptors/auth-interceptor.service';
+import { usersListReducer } from './store/reducers/users-list.reducer';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { AuthInterceptorService as AuthInterceptor} from './shared/services/inte
     AppRoutingModule,
     HomeModule,
     FormModule,
+    StoreModule.forRoot({ usersCollection: usersListReducer}),
     SharedModule,
     HttpClientModule,
     ReactiveFormsModule,
@@ -37,7 +40,7 @@ import { AuthInterceptorService as AuthInterceptor} from './shared/services/inte
     DragDropModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

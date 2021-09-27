@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "~10.1.4",
     "@angular/router": "~10.1.4",
     "@auth0/angular-jwt": "^5.0.2",
-    "@ngrx/store": "^12.4.0",
+    "@ngrx/store": "^10.1.2",
     "install": "^0.13.0",
     "moment": "^2.29.1",
     "npm": "^7.23.0",
