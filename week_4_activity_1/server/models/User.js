@@ -1,13 +1,14 @@
-const mongoose = require('mongoose');
-
-const Schema = mongoose.Schema;
-const Model = mongoose.model;
-const { String } = Schema.Types;
-const bcrypt = require('bcrypt');
 require('dotenv').config();
+
+const mongoose = require('mongoose');
+const Schema     = mongoose.Schema;
+const Model      = mongoose.model;
+const { String } = Schema.Types;
+const bcrypt     = require('bcrypt');
 const saltRounds = +process.env.SALT_ROUNDS;
 
-const agentSchema = new Schema({
+
+const userSchema = new Schema({
 
     username: {
         type: String,
@@ -28,14 +29,14 @@ const agentSchema = new Schema({
 }, { versionKey: false})
 
 
-agentSchema.methods = {
+userSchema.methods = {
 
     matchPassword: function (password) {
         return bcrypt.compare(password, this.password); // true or false
     }
 };
 
-agentSchema.pre('save', function (next) {
+userSchema.pre('save', function (next) {
     if (this.isModified('password')) {
 
         bcrypt.genSalt(saltRounds, (err, salt) => {
@@ -54,4 +55,4 @@ agentSchema.pre('save', function (next) {
 });
 
 
-module.exports = new Model('User', agentSchema);
+module.exports = new Model('User', userSchema);

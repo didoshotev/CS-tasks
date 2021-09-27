@@ -1,1 +1,9 @@
-<h1>Welcome</h1>
+<h2>Welcome to the {{ title }}</h2>
+
+<nav class="nav">
+    <button (click)="onHandleHomeNavigation()">Home</button>
+    <button class="nav-btn--1" (click)="onHandleLoginNavigation()">Login</button>
+    <button (click)="onHandleLogout()">Logout</button>
+</nav>
+
+<router-outlet></router-outlet>

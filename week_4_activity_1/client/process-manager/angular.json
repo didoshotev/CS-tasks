@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "process-manager"
+    }
+  },
+  "defaultProject": "process-manager",
+  "cli": {
+    "analytics": "be1f14f0-72cf-47f1-8cba-0a767299a2d5"
+  }
 }

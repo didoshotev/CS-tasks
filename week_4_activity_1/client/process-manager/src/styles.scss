@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+button { 
+    min-width: 100px;
+    height: 35px;
+    font-size: 17px;
+    background-color: aliceblue;
+    border: 1px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+a { 
+    text-decoration: none;
+    color: inherit;
+}
+
+input { 
+    height: 30px;
+}
+
+.alert-text { 
+    color: red;
+    font: 1.1rem;
+}

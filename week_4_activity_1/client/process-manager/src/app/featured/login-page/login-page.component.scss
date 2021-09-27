@@ -1,0 +1,8 @@
+.form-group { 
+    margin: 20px;
+    
+    & input { 
+        margin-left: 10px;
+        width: 200px;
+    }
+}  
