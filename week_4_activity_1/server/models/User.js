@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const mongoose = require('mongoose');
+const mongoose   = require('mongoose');
 const Schema     = mongoose.Schema;
 const Model      = mongoose.model;
 const { String } = Schema.Types;
@@ -8,7 +8,7 @@ const bcrypt     = require('bcrypt');
 const saltRounds = +process.env.SALT_ROUNDS;
 
 
-const userSchema = new Schema({
+var userSchema = new Schema({
 
     username: {
         type: String,
@@ -22,10 +22,12 @@ const userSchema = new Schema({
         trim: true
     },
 
-    organizationsCollection: { 
-        type: Array,
-        default: [],
-    }
+    organizationsCollection: [
+        { 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Organization'
+        }
+    ],
 }, { versionKey: false})
 
 

@@ -15,6 +15,7 @@ import { LocalStorageService } from './local-storage.service';
 export class AuthService {
 
   public helper = new JwtHelperService();
+  public user = new BehaviorSubject<User>(null);
 
   constructor(
     private http: HttpClient,
@@ -51,9 +52,10 @@ export class AuthService {
     const loadedUser = new User(
       user.username,
       user.organizationsCollection,
-      user.token,
-      user._id
+      user._id,
+      user.token
     );
+    this.user.next(user);
     this.localStorageService.setData(loadedUser);
   }
 
@@ -69,15 +71,16 @@ export class AuthService {
     const user = new User(
       username,
       decodedToken.organizationsCollection,
-      accessToken,
       decodedToken.id,
+      accessToken,
     );
 
+    this.user.next(user);
     this.localStorageService.setData(user);
   }
 
-  public isAuthenticated(): boolean { 
-    
+  public isAuthenticated(): boolean {
+
     const user = this.localStorageService.getData();
     return !this.helper.isTokenExpired(user.token);
   }

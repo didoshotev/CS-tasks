@@ -8,7 +8,7 @@ import { LoginPageComponent } from './featured/login-page/login-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ProcessListComponent } from './featured/home-page/process-list/process-list.component';
-import { ProcessInfoComponent } from './featured/home-page/process-info/process-info.component';
+import { ProcessInfoComponent } from './featured/home-page/process-list/process-info/process-info.component';
 import { OrgPageComponent } from './featured/org-page/org-page.component';
 
 @NgModule({

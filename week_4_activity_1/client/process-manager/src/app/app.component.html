@@ -1,8 +1,15 @@
 <nav class="nav">
     <button (click)="onHandleHomeNavigation()">Home</button>
-    <button (click)="onHandleAddOrgNavigation()">Add organization</button>
-    <button class="nav-btn--1" (click)="onHandleLoginNavigation()">Login</button>
-    <button (click)="onHandleLogout()">Logout</button>
+
+    <span *ngIf="user">
+        <button (click)="onHandleAddOrgNavigation()">Add organization</button>
+        <button (click)="onHandleLogout()">Logout</button>
+    </span>
+
+    <span *ngIf="!user">
+        <button class="nav-btn--1" (click)="onHandleLoginNavigation()">Login</button>
+    </span>
+
 </nav>
 
 <router-outlet></router-outlet>
