@@ -1,0 +1,27 @@
+.content-info { 
+    // width: 100%;
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-group { 
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    &-box { 
+        margin-bottom: 30px;
+        width: 200px;
+        height: 55px;
+        font-size: 20px;
+        color: wheat;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        background-color: rgb(236, 87, 87);
+        border-radius: 10px;
+    }
+}

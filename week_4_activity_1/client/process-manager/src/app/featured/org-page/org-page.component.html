@@ -1,0 +1,13 @@
+<div class="org-content">
+    <h3>Add organization</h3>
+    <form (ngSubmit)="onHandleSubmit()" [formGroup]="form">
+        <label for="organization">Organization name:</label>
+        <input type="text" placeholder="name" formControlName="name">
+
+        <div class="org-content-btn">
+            <button [disabled]="form.invalid">Submit</button>
+        </div>
+
+    </form>
+
+</div>

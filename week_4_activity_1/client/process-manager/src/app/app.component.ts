@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './shared/services/auth.service';
+import { LocalStorageService } from './shared/services/local-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,11 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private localStorageService: LocalStorageService 
   ) { }
 
-  public onHandleHomeNavigation() { 
+  public onHandleHomeNavigation() {
     this.router.navigateByUrl('/home');
   }
 
@@ -23,7 +25,11 @@ export class AppComponent {
     this.router.navigateByUrl('/login');
   }
 
-  public onHandleLogout() { 
+  public onHandleLogout() {
     this.authService.logout();
+  }
+
+  public onHandleAddOrgNavigation() { 
+    this.router.navigateByUrl('organization/new');
   }
 }

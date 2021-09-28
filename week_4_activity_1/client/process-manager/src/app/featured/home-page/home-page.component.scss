@@ -1,0 +1,39 @@
+.org-list { 
+    display: flex;
+    flex-flow: row wrap;
+    // justify-content: space-between;
+    margin-top: 30px;
+
+    &-item { 
+        margin-right: 20px;
+        background-color: rgb(194, 232, 255);
+        font-size: 1.1rem;
+        padding: 15px;
+        border-radius: 10px;
+    }
+}
+
+.content { 
+    background-color: aliceblue;
+    margin-top: 50px;
+    min-height: 600px;
+    border: 1px solid rgb(5, 85, 131);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    
+    &-list { 
+        width: 30%;
+        height: 100%;
+    }
+
+    &-info { 
+        width: 70%;
+        background-color: antiquewhite;
+    }
+}
+
+.wrapper { 
+    width: 95%;
+    margin: 0 auto;
+}
