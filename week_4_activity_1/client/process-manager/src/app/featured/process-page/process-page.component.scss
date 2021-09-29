@@ -1,15 +1,49 @@
-.wrapper { 
-    margin-top: 50px;
+.wrapper {
+  margin-top: 50px;
 }
 
-.heading { 
-    text-align: center;
+.heading {
+  text-align: center;
 }
 
 .mat-stepper-horizontal {
-    margin-top: 8px;
+  margin-top: 8px;
+}
+
+.mat-form-field {
+  margin-top: 16px;
+}
+
+.radio-container {
+  display: inline-block;
+  margin-left: 50px;
+  text-align: center;
+}
+
+.radio-item {
+  display: flex;
+  margin-left: 10px;
+}
+
+.radio-label {
+  margin-top: 6px;
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+.mat-radio-1 {
+  margin: 10px 20px;
+}
+
+.mr30 {
+  margin-right: 30px;
+}
+
+.steps-list-item {
+  width: 250px;
+  margin-top: 20px;
+
+  &-btn {
+    width: 100%;
   }
-  
-  .mat-form-field {
-    margin-top: 16px;
-  }
+}

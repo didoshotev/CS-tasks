@@ -1,70 +1,93 @@
 <div class="wrapper">
-    <h1 class="heading">Create new process</h1>
+  <h1 class="heading">Create new process</h1>
 </div>
 
 
 <mat-horizontal-stepper linear #stepper>
-  <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+
+  <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Fill out your name</ng-template>
+      <ng-template matStepLabel>Fill the process information</ng-template>
       <mat-form-field appearance="fill">
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="firstCtrl" placeholder="Last name, First name" required>
+        <mat-label>Process name</mat-label>
+        <input matInput formControlName="firstCtrl"> <!-- required -->
       </mat-form-field>
-      <div>
-        <button mat-button matStepperNext>Next</button>
+      <div class="radio-container">
+        <h2>Process Type</h2>   
+        <div class="radio-item">
+          <input formControlName="linear" type="radio" id="linear" value="linear">
+          <label class="radio-label" for="linear">linear</label>
+        </div>
+        
+        <div class="radio-item">
+          <input formControlName="paralel" type="radio" id="paralel" value="paralel">
+          <label class="radio-label" for="paralel">paralel</label>
+        </div>
+      </div>
+        
+        <div>
+        <button mat-flat-button matStepperNext color="primary">Next</button>
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Fill out your address</ng-template>
-      <mat-form-field appearance="fill">
-        <mat-label>Address</mat-label>
-        <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
-               required>
-      </mat-form-field>
+
+  <mat-step [stepControl]="stepsFormGroup">
+    <form [formGroup]="stepsFormGroup">
+      <ng-template matStepLabel>Choose process steps</ng-template>
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <h2>Choose a step type</h2>
+        <ul>
+          <ng-container *ngFor="let item of stepsTextMatcher | keyvalue">
+
+            <li class="steps-list-item">
+              <button mat-raised-button 
+              class="steps-list-item-btn" color="primary"
+              [data-type]=item.key
+              #buttonRef
+              (click)="onHandleStepClick(buttonRef)"
+              matStepperNext
+              >{{ item.value }}</button>
+            </li>
+
+          </ng-container>
+          
+        </ul>
       </div>
     </form>
   </mat-step>
+
+  <mat-step [stepControl]="stepsFormGroup" >
+    <form [formGroup]="stepsFormGroup">
+      <ng-template matStepLabel>Fill the blank</ng-template>
+      <div>
+        <h2>Fill the blank</h2>
+        <ng-container *ngFor="let stepGroup of steps.controls; let i = index">
+          <div class="step-form-row" [formGroup]="stepGroup">
+            
+            <mat-form-field class="mr30" appearance="fill" *ngFor="let stepInput of stepInputs;">
+                <mat-label> {{ stepInput.label }} </mat-label>
+                <input matInput class="textField" [type]="stepInput.type"
+                 [name]="stepInput.name" [id]="stepInput.name"
+                 [formControlName]="stepInput.name">
+            </mat-form-field>
+
+          </div>
+        </ng-container>
+      </div>
+
+      <div>
+        <button mat-flat-button color="primary" class="mr30" matStepperPrevious>Back</button>
+        <button mat-flat-button color="primary" matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
+    <h1>Your process is ready</h1>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-flat-button color="primary" (click)="onHandleSubmit()">Submit</button>
     </div>
   </mat-step>
+
 </mat-horizontal-stepper>
-
-<!-- <mat-horizontal-stepper linear [labelPosition]="'bottom' ">
-
-  <mat-step label="Step 1" [editable]="false" [completed]="false">
-    <ng-template matStepLabel>
-      <p>Like</p>
-    </ng-template>
-    <div>
-      <h1>Content for S1</h1>
-      <button matStepperNext>Next</button>
-    </div>
-  </mat-step>
-  <mat-step label="Step 2">
-    <div>
-      <h1>Content for S2</h1>
-      <button matStepperPrevious>Previous</button>
-      <button matStepperNext>Next</button>
-    </div>
-  </mat-step>
-  <mat-step label="Step 3">
-    <div>
-      <h1>Content for S3</h1>
-      <button matStepperPrevious>Previous</button>
-      <button>Finish</button>
-    </div>
-  </mat-step>
-
-</mat-horizontal-stepper> -->
-
