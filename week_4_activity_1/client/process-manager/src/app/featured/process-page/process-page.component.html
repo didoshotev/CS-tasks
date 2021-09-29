@@ -1,0 +1,70 @@
+<div class="wrapper">
+    <h1 class="heading">Create new process</h1>
+</div>
+
+
+<mat-horizontal-stepper linear #stepper>
+  <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Fill out your name</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="firstCtrl" placeholder="Last name, First name" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Fill out your address</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Address</mat-label>
+        <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
+               required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+
+<!-- <mat-horizontal-stepper linear [labelPosition]="'bottom' ">
+
+  <mat-step label="Step 1" [editable]="false" [completed]="false">
+    <ng-template matStepLabel>
+      <p>Like</p>
+    </ng-template>
+    <div>
+      <h1>Content for S1</h1>
+      <button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Step 2">
+    <div>
+      <h1>Content for S2</h1>
+      <button matStepperPrevious>Previous</button>
+      <button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Step 3">
+    <div>
+      <h1>Content for S3</h1>
+      <button matStepperPrevious>Previous</button>
+      <button>Finish</button>
+    </div>
+  </mat-step>
+
+</mat-horizontal-stepper> -->
+

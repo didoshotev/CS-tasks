@@ -1,6 +1,10 @@
-<ul *ngIf="organization" class="content-list">
-    <li class="content-list-item">Process 1</li>
-    <li class="content-list-item">Process 2</li>
-    <li class="content-list-item">Process 3</li>
-    <li class="content-list-item">Process 4</li>
-</ul>
+<div *ngIf="organization">
+    <h3 class="content-heading">{{organization.name}}</h3>
+    <button class="btn-organization" (click)="onHandleAdd()">Add Process</button>
+    <ul class="content-list">
+        <li class="content-list-item">Process 1</li>
+        <li class="content-list-item">Process 2</li>
+        <li class="content-list-item">Process 3</li>
+        <li class="content-list-item">Process 4</li>
+    </ul>
+</div>

@@ -6,9 +6,11 @@
             {{ item.name }}
         </li>
     </ul>
+
     <section class="content">
         <div class="content-list">
             <app-process-list [organizationObservable]="selectedOrganizationSubject.asObservable()"></app-process-list>
+
         </div>
         <div class="content-info">
            

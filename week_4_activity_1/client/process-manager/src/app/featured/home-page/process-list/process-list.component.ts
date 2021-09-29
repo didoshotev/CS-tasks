@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -13,19 +14,24 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   @Input() organizationObservable: Observable<any>;
   public organization = null;
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
 
-    this.organizationSubscription = this.organizationObservable.subscribe(data => { 
+    this.organizationSubscription = this.organizationObservable.subscribe(data => {
       this.organizationObservable = data;
       this.organization = data;
       console.log(this.organization);
-      
     })
   }
 
-  ngOnDestroy() { 
+  public onHandleAdd() {
+    this.router.navigateByUrl(`process/new/${this.organization._id}`);
+  }
+
+  ngOnDestroy() {
     this.organizationSubscription.unsubscribe();
   }
 }

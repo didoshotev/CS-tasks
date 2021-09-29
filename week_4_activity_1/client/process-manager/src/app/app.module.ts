@@ -10,6 +10,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProcessListComponent } from './featured/home-page/process-list/process-list.component';
 import { ProcessInfoComponent } from './featured/home-page/process-list/process-info/process-info.component';
 import { OrgPageComponent } from './featured/org-page/org-page.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material/material.module';
+import { ProcessPageComponent } from './featured/process-page/process-page.component';
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
@@ -18,13 +22,17 @@ import { OrgPageComponent } from './featured/org-page/org-page.component';
     LoginPageComponent,
     ProcessListComponent,
     ProcessInfoComponent,
-    OrgPageComponent
+    OrgPageComponent,
+    ProcessPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent]
