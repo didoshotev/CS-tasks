@@ -1,11 +1,17 @@
+import { IPriority } from "../interfaces/priority.interface";
+
+// Interface for all input fields if needed... 
+
 export class Step { 
     public name: string;
-    public type: string;
-    public priority: number;
+    public priority: IPriority;
+    public processId: string;
+    public fields: Object;
 
-    constructor(name: string, type: string, priority: number) { 
+    constructor(name: string, priority: IPriority, processId: string, fields: Object) { 
         this.name = name;
-        this.type = type;
         this.priority = priority;
+        this.processId = processId;
+        this.fields = fields;
     }
 }

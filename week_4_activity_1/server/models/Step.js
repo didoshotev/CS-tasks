@@ -11,21 +11,17 @@ var stepSchema = new Schema({
         trim: true
     },
 
-    type: { 
-        type: String,
-        required: true,
-    },
-
     priority: { 
-        type: Number,
+        type: Object,
         required: true
     },
 
-    field: { 
+    fields: { 
         type: Object,
+        required: true
     },
 
-    process: { 
+    processId: { 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Process'
     }

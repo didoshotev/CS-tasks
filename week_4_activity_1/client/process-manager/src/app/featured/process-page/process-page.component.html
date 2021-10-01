@@ -43,24 +43,21 @@
       <div>
         <!-- <h1 class="process-heading">Process: <strong>{{ currentProcess.name }}</strong></h1> -->
         <div class="steps-list-container">
-          
-          <div *ngIf="currentProcess.type == 'lineal'">
-            <h2>Steps level: {{ processCounter }}</h2>
+
+          <div>
+            <h2>Steps level: {{ priorityLevel[0] }}.{{ priorityLevel[1]}} (priority)</h2>
             <ul>
               <li class="steps-list-item" *ngFor="let item of stepsData">
-               
-                  <label>
-                    <input type="radio" name="stepChoosen" formControlName="stepChoosen"
-                    [value]="item.key" (change)="onCheckboxChange($event, item.key)">
-                    <span>{{ item.value }}</span>
-                  </label>
+
+                <label>
+                  <input type="radio" name="stepChoosen" formControlName="stepChoosen" [value]="item.key"
+                    (change)="onCheckboxChange($event, item.key)">
+                  <span>{{ item.value }}</span>
+                </label>
               </li>
             </ul>
-            <button mat-raised-button color="primary" matStepperNext>Next</button>
-             <!-- <button mat-raised-button class="steps-list-item-btn" color="primary" #buttonRef
-              (click)="onHandleStepClick(buttonRef)" matStepperNext>Add lineal step to level {{processCounter}}</button>
-              <button mat-raised-button class="steps-list-item-btn" color="accent" #buttonRef
-              (click)="onHandleStepClick(buttonRef)" matStepperNext>Add paralel step to level {{processCounter}}</button> -->
+            <button mat-raised-button color="primary" class="mr30" matStepperNext>Next</button>
+            <button mat-raised-button color="accent" (click)="handleFinish()">Finish</button>
           </div>
 
         </div>
@@ -68,31 +65,44 @@
     </form>
   </mat-step>
 
-  <ng-container *ngIf="this.currentProcess.type === 'lineal'">
+  <ng-container>
     <mat-step [stepControl]="stepsFormGroup">
       <form [formGroup]="stepsFormGroup">
         <ng-template matStepLabel>Fill the blank</ng-template>
         <div>
-          <h2>Fill the blank</h2>
+          <h2>You are currently on level: {{ priorityLevel[0] }}.{{ priorityLevel[1]}} (priority)</h2>
           <ng-container *ngFor="let stepGroup of steps.controls; let i = index">
             <div class="step-form-row" [formGroup]="stepGroup">
-  
+
               <mat-form-field class="mr30" appearance="fill" *ngFor="let stepInput of stepInputs;">
                 <mat-label> {{ stepInput.label }} </mat-label>
                 <input matInput class="textField" [type]="stepInput.type" [name]="stepInput.name" [id]="stepInput.name"
                   [formControlName]="stepInput.name">
               </mat-form-field>
-  
+
             </div>
           </ng-container>
         </div>
-  
+
         <div>
-          <button mat-flat-button color="accent" class="mr30" matStepperPrevious>Back</button>
-          <button mat-flat-button color="primary" class="mr30" matStepperPrevious (click)="handleAddStep()">Submit and add
-            more</button>
-  
-          <button mat-flat-button color="primary" matStepperNext>Continue</button>
+          <button mat-flat-button color="secondary" class="mr30" matStepperPrevious>Back</button>
+          <div class="btn-group">
+            
+            <button mat-flat-button color="primary" class="mr30" matStepperPrevious
+              (click)="handleSubmitParalel()">Submit as paralel and add
+              more</button>
+
+            <button mat-flat-button color="primary" class="mr30" matStepperPrevious
+              (click)="handleSubmitLineal()">Submit as lineal and add
+              more</button>
+          </div>
+
+          <div class="btn-group">
+            <button mat-flat-button color="accent" class="mr30" matStepperNext>Submit as paralel and continue</button>
+            <button mat-flat-button color="accent" matStepperNext>Submit as lineal and continue</button>
+          </div>
+
+
         </div>
       </form>
     </mat-step>

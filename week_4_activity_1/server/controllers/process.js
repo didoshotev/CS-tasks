@@ -7,7 +7,9 @@ module.exports = {
 
     get: (req, res, next) => {
 
-        models.Process.find()
+        models.Process
+            .find()
+            // .populate('stepsCollection')
             .then((users) => res.send(users))
             .catch(next)
     },

@@ -19,10 +19,10 @@ module.exports = {
             const { name, creatorId } = req.body;
 
             models.Organization.create({ name, creatorId })
-                .then(created => { 
+                .then(created => {
                     res.send(created);
                 })
                 .catch(next);
-        }
+        },
     }
 }
