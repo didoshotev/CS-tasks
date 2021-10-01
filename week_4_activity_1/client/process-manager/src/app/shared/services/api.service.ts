@@ -1,7 +1,9 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Process } from '../models/process.model';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
@@ -32,9 +34,31 @@ export class ApiService {
         creatorId
       }
     ).pipe(
-      tap(data => { 
+      tap(data => {
         console.log(data);
       })
     ).subscribe()
+  }
+
+
+  public createProcess(process: Process) {
+
+    return this.http.post<Process>(`${environment.api_url}/process/create`,
+      process,
+    ).pipe(
+      tap(data => {
+        console.log('new process create', data);
+      })
+    ).subscribe()
+  }
+
+  public fetchProcesses(): Observable<Process[]> {
+
+    return this.http.get<Process[]>(`${environment.api_url}/process`)
+      .pipe(
+        tap(data => {
+          console.log('processes data:', data);
+        })
+      )  
   }
 }

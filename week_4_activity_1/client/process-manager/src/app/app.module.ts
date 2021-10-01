@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { ProcessPageComponent } from './featured/process-page/process-page.component';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
-    MatStepperModule
+    MatStepperModule,
+    MatCheckboxModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

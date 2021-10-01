@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Process } from 'src/app/shared/models/process.model';
 import { User } from 'src/app/shared/models/user.model';
+import { ApiService } from 'src/app/shared/services/api.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import GlobalReference from 'src/utils/Globals';
 import { stepsInputs } from 'src/utils/steps';
@@ -14,22 +16,28 @@ import { stepsInputs } from 'src/utils/steps';
 })
 export class ProcessPageComponent implements OnInit {
 
-  public stepsObject = stepsInputs;
+  public GlobalReference = GlobalReference;
+
+  public processCounter:number = 1;
+
+  public stepsData = stepsInputs;
   public stepsTextMatcher = GlobalReference.stepsMatcher;
 
   public currentUser: User;
+  public currentProcess: Process;
   public organizationId;
 
-  firstFormGroup: FormGroup;
+  processFormGroup: FormGroup;
+  stepsChoicesFormGroup: FormGroup;
   stepsFormGroup: FormGroup;
   
   public stepInputs;
-
-  labelPosition: string;
+  public paralelStepInputs = [];
 
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
+    private apiService: ApiService,
     private fb: FormBuilder
   ) {
 
@@ -44,58 +52,77 @@ export class ProcessPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log(GlobalReference.stepsMatcher);
-    // console.log(stepsInputs);
 
-    // console.log(GlobalReference.stepsMatcher);
-    
-    this.firstFormGroup = this.fb.group({
-      firstCtrl: [''],
-      linear: [''],
-      paralel: [''],
+    this.currentProcess = new Process('test process', 'lineal', '123123dsf', [], '123123ddf');
+    this.initForms()
+  }
+
+  public initForms() { 
+    this.processFormGroup = this.fb.group({
+      name: [''],
+      type: [''],
     });
+
+    this.stepsChoicesFormGroup = this.fb.group({ 
+      stepChoosen: [''],
+    })
 
     this.stepsFormGroup = this.fb.group({
-      steps: this.fb.array([])
+      steps: this.fb.array([]),
     });
+  }
+
+  get stepChoices() { 
+    return this.stepsChoicesFormGroup.controls["stepChoosen"] as FormArray;
   }
 
   get steps() {
     return this.stepsFormGroup.controls["steps"] as FormArray;
   }
 
-  get stepsControls() { 
-    return this.steps.controls[0]['controls'];
-  }
-
-  public onHandleStepClick(buttonRef) {
+  public onHandleStepClick(key) {
     
-    const stepType = buttonRef._elementRef.nativeElement['data-type'];
-    this.initStepFormArray(stepType);
-  }
-
-  public initStepFormArray(stepType) {
-    this.removeStepFromArray();
+    this.removeFormGroup();
     
     const newStepsFormGroup: FormGroup = new FormGroup({});
+    
+    const selectedInputObject = this.findInputObject(key);
+    this.stepInputs = selectedInputObject.inputs;
 
-    this.stepInputs = stepsInputs[stepType]  
-
-    stepsInputs[stepType].forEach(inputObject => {
-      newStepsFormGroup.addControl(inputObject.name, new FormControl(inputObject.defaultValue));
-    });
+    selectedInputObject.inputs.forEach(input => { 
+      newStepsFormGroup.addControl(input.name, new FormControl(''));
+    })
 
     this.steps.push(newStepsFormGroup);
   }
 
-  public removeStepFromArray() {
+  public onCheckboxChange(event, key) {
+    event.target.checked && this.onHandleStepClick(key);
+  }
+
+  public handleAddStep() { 
+    console.log('Submiting...!');
+  }
+
+  public removeFormGroup() {
     this.steps.length > 0 && this.steps.removeAt(0); 
   }
 
-  public onHandleSubmit() {
-    console.log(this.firstFormGroup.value);
+  public onHandleSubmitForm() {
+    console.log(this.processFormGroup.value);
     console.log(this.stepsFormGroup.value);
+  }
+
+  public createProcess() {
+    const { name, type } = this.processFormGroup.value;
+    const newProcess     = new Process(name, type, this.organizationId);
+    this.currentProcess = newProcess;
     
+    this.apiService.createProcess(newProcess);
+  }
+
+  public findInputObject(key) { 
+    return this.stepsData.find(item => item.key === key);
   }
 
 }

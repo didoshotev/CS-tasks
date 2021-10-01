@@ -23,7 +23,7 @@ var processSchema = new Schema({
         { 
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Step'
-        }
+        },
     ],
 
     organization: { 

@@ -1,11 +1,15 @@
-import { EnumProcessType, IProcess } from "../interfaces/process.interface";
-
 export class Process { 
+    public name: string;
     public type: string;
-    public stepsCollection: [];
+    public organization: string;
+    public stepsCollection?: [];
+    public _id?: string;
     
-    constructor(type: string, stepsCollection: []) {
+    constructor(name: string, type: string, organization: string, stepsCollection?: [], _id?: string) {
+        this.name = name;
         this.type = type;
-        this.stepsCollection = stepsCollection;
+        this.organization = organization;
+        this.stepsCollection = stepsCollection || [];
+        this._id = _id;
     }
 }

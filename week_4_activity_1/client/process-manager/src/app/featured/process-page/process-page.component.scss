@@ -22,11 +22,15 @@
 
 .radio-item {
   display: flex;
-  margin-left: 10px;
+}
+
+.radio-input { 
+  margin-bottom: 10px;
 }
 
 .radio-label {
-  margin-top: 6px;
+  height: 100%;
+  // display: inline-block;
   margin-left: 10px;
   font-size: 18px;
 }
@@ -45,5 +49,15 @@
 
   &-btn {
     width: 100%;
+    margin: 10px 0;
   }
+}
+
+.process-heading { 
+  text-align: center;
+}
+
+.steps-list-container { 
+  display: flex;
+  justify-content: space-around;
 }

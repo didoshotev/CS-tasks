@@ -5,88 +5,104 @@
 
 <mat-horizontal-stepper linear #stepper>
 
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Fill the process information</ng-template>
+  <mat-step [stepControl]="processFormGroup">
+    <!--editable="false"-->
+    <form [formGroup]="processFormGroup">
+      <ng-template matStepLabel>Creating process</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Process name</mat-label>
-        <input matInput formControlName="firstCtrl"> <!-- required -->
+        <input matInput formControlName="name"> <!-- required -->
       </mat-form-field>
       <div class="radio-container">
-        <h2>Process Type</h2>   
+        <h2>Process Type</h2>
+
         <div class="radio-item">
-          <input formControlName="linear" type="radio" id="linear" value="linear">
-          <label class="radio-label" for="linear">linear</label>
+          <label>
+            <input class="radio-input" type="radio" value="lineal" formControlName="type">
+            <span class="radio-label">Lineal</span>
+          </label>
         </div>
-        
+
         <div class="radio-item">
-          <input formControlName="paralel" type="radio" id="paralel" value="paralel">
-          <label class="radio-label" for="paralel">paralel</label>
+          <label>
+            <input type="radio" value="paralel" formControlName="type">
+            <span class="radio-label">Paralel</span>
+          </label>
         </div>
       </div>
-        
-        <div>
-        <button mat-flat-button matStepperNext color="primary">Next</button>
+
+      <div>
+        <button mat-flat-button matStepperNext color="primary" (click)="createProcess()">Submit process</button>
       </div>
     </form>
   </mat-step>
 
-  <mat-step [stepControl]="stepsFormGroup">
-    <form [formGroup]="stepsFormGroup">
+  <mat-step [stepControl]="stepsChoicesFormGroup" completed="true">
+    <form [formGroup]="stepsChoicesFormGroup">
       <ng-template matStepLabel>Choose process steps</ng-template>
       <div>
-        <h2>Choose a step type</h2>
-        <ul>
-          <ng-container *ngFor="let item of stepsTextMatcher | keyvalue">
-
-            <li class="steps-list-item">
-              <button mat-raised-button 
-              class="steps-list-item-btn" color="primary"
-              [data-type]=item.key
-              #buttonRef
-              (click)="onHandleStepClick(buttonRef)"
-              matStepperNext
-              >{{ item.value }}</button>
-            </li>
-
-          </ng-container>
+        <!-- <h1 class="process-heading">Process: <strong>{{ currentProcess.name }}</strong></h1> -->
+        <div class="steps-list-container">
           
-        </ul>
-      </div>
-    </form>
-  </mat-step>
-
-  <mat-step [stepControl]="stepsFormGroup" >
-    <form [formGroup]="stepsFormGroup">
-      <ng-template matStepLabel>Fill the blank</ng-template>
-      <div>
-        <h2>Fill the blank</h2>
-        <ng-container *ngFor="let stepGroup of steps.controls; let i = index">
-          <div class="step-form-row" [formGroup]="stepGroup">
-            
-            <mat-form-field class="mr30" appearance="fill" *ngFor="let stepInput of stepInputs;">
-                <mat-label> {{ stepInput.label }} </mat-label>
-                <input matInput class="textField" [type]="stepInput.type"
-                 [name]="stepInput.name" [id]="stepInput.name"
-                 [formControlName]="stepInput.name">
-            </mat-form-field>
-
+          <div *ngIf="currentProcess.type == 'lineal'">
+            <h2>Steps level: {{ processCounter }}</h2>
+            <ul>
+              <li class="steps-list-item" *ngFor="let item of stepsData">
+               
+                  <label>
+                    <input type="radio" name="stepChoosen" formControlName="stepChoosen"
+                    [value]="item.key" (change)="onCheckboxChange($event, item.key)">
+                    <span>{{ item.value }}</span>
+                  </label>
+              </li>
+            </ul>
+            <button mat-raised-button color="primary" matStepperNext>Next</button>
+             <!-- <button mat-raised-button class="steps-list-item-btn" color="primary" #buttonRef
+              (click)="onHandleStepClick(buttonRef)" matStepperNext>Add lineal step to level {{processCounter}}</button>
+              <button mat-raised-button class="steps-list-item-btn" color="accent" #buttonRef
+              (click)="onHandleStepClick(buttonRef)" matStepperNext>Add paralel step to level {{processCounter}}</button> -->
           </div>
-        </ng-container>
-      </div>
 
-      <div>
-        <button mat-flat-button color="primary" class="mr30" matStepperPrevious>Back</button>
-        <button mat-flat-button color="primary" matStepperNext>Next</button>
+        </div>
       </div>
     </form>
   </mat-step>
+
+  <ng-container *ngIf="this.currentProcess.type === 'lineal'">
+    <mat-step [stepControl]="stepsFormGroup">
+      <form [formGroup]="stepsFormGroup">
+        <ng-template matStepLabel>Fill the blank</ng-template>
+        <div>
+          <h2>Fill the blank</h2>
+          <ng-container *ngFor="let stepGroup of steps.controls; let i = index">
+            <div class="step-form-row" [formGroup]="stepGroup">
+  
+              <mat-form-field class="mr30" appearance="fill" *ngFor="let stepInput of stepInputs;">
+                <mat-label> {{ stepInput.label }} </mat-label>
+                <input matInput class="textField" [type]="stepInput.type" [name]="stepInput.name" [id]="stepInput.name"
+                  [formControlName]="stepInput.name">
+              </mat-form-field>
+  
+            </div>
+          </ng-container>
+        </div>
+  
+        <div>
+          <button mat-flat-button color="accent" class="mr30" matStepperPrevious>Back</button>
+          <button mat-flat-button color="primary" class="mr30" matStepperPrevious (click)="handleAddStep()">Submit and add
+            more</button>
+  
+          <button mat-flat-button color="primary" matStepperNext>Continue</button>
+        </div>
+      </form>
+    </mat-step>
+  </ng-container>
 
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    <h1>Your process is ready</h1>
+    <h1>Your process is almost ready</h1>
     <div>
-      <button mat-flat-button color="primary" (click)="onHandleSubmit()">Submit</button>
+      <button mat-flat-button color="primary" (click)="onHandleSubmitForm()">Confirm</button>
     </div>
   </mat-step>
 

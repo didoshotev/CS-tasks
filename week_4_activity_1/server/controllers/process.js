@@ -14,12 +14,10 @@ module.exports = {
 
     post: {
         create: (req, res, next) => {
-            const { name, user } = req.body;
-            console.log(name, user)
+            const { name, type, organization, stepsCollection } = req.body;
 
-            models.Process.create({ name, user })
+            models.Process.create({ name, type, organization, stepsCollection })
                 .then(created => { 
-                    console.log('created org:', created);
                     res.send(created);
                 })
                 .catch(next);
