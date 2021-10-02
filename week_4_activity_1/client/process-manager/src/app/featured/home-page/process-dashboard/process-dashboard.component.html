@@ -1,0 +1,13 @@
+<section class="content">
+    <div class="content-list">
+        <app-process-list 
+        [organizationObservable]="selectedOrganizationSubject.asObservable()"
+        (selectedProcessEvent)="receiveSelectedProcess($event)"
+        ></app-process-list>
+    </div>
+    <div class="content-info">
+        <!-- <ng-container *ngIf="selectedProcess"> -->
+            <app-process-info [processSubject]="selectedProcessSubject.asObservable()"></app-process-info>
+        <!-- </ng-container> -->
+    </div>
+</section>

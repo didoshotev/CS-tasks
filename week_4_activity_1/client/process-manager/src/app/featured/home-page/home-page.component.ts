@@ -24,7 +24,5 @@ export class HomePageComponent implements OnInit {
 
   public handleChangeOrganization(item) { 
     this.selectedOrganizationSubject.next(item);
-
   }
-
 }

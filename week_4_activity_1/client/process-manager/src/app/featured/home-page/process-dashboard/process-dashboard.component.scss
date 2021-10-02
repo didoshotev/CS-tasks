@@ -1,0 +1,19 @@
+.content { 
+    background-color: aliceblue;
+    margin-top: 50px;
+    min-height: 600px;
+    border: 1px solid rgb(5, 85, 131);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    
+    &-list { 
+        width: 30%;
+        height: 100%;
+    }
+
+    &-info { 
+        width: 70%;
+        background-color: antiquewhite;
+    }
+}

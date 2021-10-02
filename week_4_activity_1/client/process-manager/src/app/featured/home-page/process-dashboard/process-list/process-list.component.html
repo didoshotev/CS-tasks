@@ -2,6 +2,10 @@
     <h3 class="content-heading">{{organization.name}}</h3>
     <button class="btn-organization" (click)="onHandleAdd()">Add Process</button>
     <ul class="content-list">
-        <li *ngFor="let process of organizationProcesses" class="content-list-item">{{ process.name }}</li>
+        <li 
+        *ngFor="let process of organizationProcesses"
+        class="content-list-item"
+        (click)="emitSelectedProcess(process)">
+        {{ process.name }}</li>
     </ul>
 </div>

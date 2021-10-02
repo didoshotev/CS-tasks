@@ -61,4 +61,9 @@ export class ApiService {
       step
     ).subscribe()
   }
+
+  public fetchStepsByIds(stepsIds: []): Observable<any> {
+
+    return this.http.post<any>(`${environment.api_url}/step/getManyById`, { stepsIds } )
+  }
 }

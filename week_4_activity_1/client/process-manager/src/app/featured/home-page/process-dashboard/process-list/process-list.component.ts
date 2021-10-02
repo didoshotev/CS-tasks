@@ -1,7 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { mergeMap, retry, tap } from 'rxjs/operators';
+import { Process } from 'src/app/shared/models/process.model';
 import { ApiService } from 'src/app/shared/services/api.service';
 
 @Component({
@@ -15,6 +16,8 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   @Input() organizationObservable: Observable<any>;
   public organization = null;
   public organizationProcesses;
+  
+  @Output() selectedProcessEvent = new EventEmitter<Process>();
 
   constructor(
     private router: Router,
@@ -29,7 +32,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
         this.organization = data
         return data
       }),
-      mergeMap(data =>  this.apiService.fetchProcessesByIds(data.processCollection))
+      mergeMap(data => this.apiService.fetchProcessesByIds(data.processCollection))
     ).pipe(
       tap(processes => { 
         this.organizationProcesses = processes;
@@ -39,6 +42,10 @@ export class ProcessListComponent implements OnInit, OnDestroy {
 
   public onHandleAdd() {
     this.router.navigateByUrl(`process/new/${this.organization._id}`);
+  }
+
+  public emitSelectedProcess(process: Process) { 
+    this.selectedProcessEvent.emit(process);
   }
 
   ngOnDestroy() {
