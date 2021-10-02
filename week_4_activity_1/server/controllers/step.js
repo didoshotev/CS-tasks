@@ -16,6 +16,21 @@ module.exports = {
             .catch(next)
     },
 
+    getManyById: async (req, res, next) => { 
+        const  { stepsIds } = req.body;
+
+        try {
+            const steps = await mongooseHelper.getManyById(
+                stepsIds,
+                models.Step
+            );
+            res.send(steps);
+            
+        } catch (error) {
+            next(error);            
+        }
+    },
+
     post: { 
 
         create: async (req, res, next) => {
@@ -24,13 +39,13 @@ module.exports = {
             try {
                 
                 const createdStep = await models.Step.create({ name, priority, processId, fields })
-                                
-                const modifiedStepsCollection = await mongooseHelper.pushToArray(
+                // { stepsCollection: [itemToAddId] }                
+
+                const modifiedStepsCollection = await mongooseHelper.pushToStepsCollection(
                     createdStep.processId,
                     models.Process,
-                    createdStep._id
+                    { 'stepsCollection': [createdStep._id] }
                 );
-                console.log('modified process', modifiedStepsCollection);
                 res.send(createdStep);
                 // return modified process if needed.. !
 

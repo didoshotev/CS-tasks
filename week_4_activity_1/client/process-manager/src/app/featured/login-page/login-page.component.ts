@@ -30,7 +30,6 @@ export class LoginPageComponent implements OnInit {
   
   onSubmitForm() { 
     const { username, password } = this.form.value;
-    console.log(username, password);
     this.authService.login(username, password);
     // procceed
   }

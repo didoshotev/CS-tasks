@@ -34,7 +34,6 @@ export class OrgPageComponent implements OnInit {
   }
 
   public onHandleSubmit() { 
-    console.log(this.form.value);
     const { name } = this.form.value;
     this.apiService.createOrganization(this.user._id, name);
     this.router.navigateByUrl('/home');

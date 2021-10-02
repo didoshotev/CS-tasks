@@ -1,16 +1,23 @@
 const mongooseHelper = { 
-    
-    getOneItem: async function(theClass) { 
-        return await theClass.find().lean();
-    },
 
-    pushToArray: async function(id, theClass, itemToAddId) { 
+    pushToStepsCollection: async function(id, theClass, modificator) { 
         return await theClass.findByIdAndUpdate(id, 
         
-            { $addToSet: { stepsCollection: [itemToAddId] }},
+            { $addToSet: modificator},
             { new: true }
         )
+    },
+
+    getOneItem: async function (id, theClass) {
+        return await theClass.findById(id).lean();
+    },
+
+    getManyById: async function (arrayIds, theClass) { 
+        return await theClass.find({
+            '_id': { $in: arrayIds}
+        })
     }
+    
 }
 
 module.exports = mongooseHelper;

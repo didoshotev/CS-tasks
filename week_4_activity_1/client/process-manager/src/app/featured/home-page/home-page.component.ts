@@ -19,8 +19,6 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
     this.apiService.fetchOrganizations().subscribe(data => {
       this.organizations = data
-      console.log(this.organizations);
-      
     })
   }
 

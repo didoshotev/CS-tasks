@@ -34,15 +34,11 @@ export class ApiService {
         name: organizationName,
         creatorId
       }
-    ).pipe(
-      tap(data => {
-        console.log(data);
-      })
     ).subscribe()
   }
 
 
-  public createProcess(process: Process):Observable<any> {
+  public createProcess(process: Process): Observable<any> {
 
     return this.http.post<Process>(`${environment.api_url}/process/create`,
       process,
@@ -52,22 +48,17 @@ export class ApiService {
   public fetchProcesses(): Observable<Process[]> {
 
     return this.http.get<Process[]>(`${environment.api_url}/process`)
-      .pipe(
-        tap(data => {
-          console.log('processes data:', data);
-        })
-      )
+  }
+
+  public fetchProcessesByIds(processIds: []): Observable<any> {
+
+    return this.http.post<any>(`${environment.api_url}/process/getManyById`, { processIds } )
   }
 
   public createStep(step: Step) {
 
     return this.http.post<any>(`${environment.api_url}/step/create`,
       step
-    ).pipe(
-      tap(data => {
-        console.log('new step', data);
-      })
     ).subscribe()
   }
-
 }
