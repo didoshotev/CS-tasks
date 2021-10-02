@@ -1,32 +1,16 @@
-<div class="content-info">
-    
-    <ng-container *ngIf="process">
-        <h1>{{ process.name }}</h1>
-        <div class="content-info-box">
-            Step 1
-        </div>
-    
-        <div class="content-info-box">
-            Step 2
-        </div>
-    
-        <div class="content-info-box">
-            Step 3
-        </div>
-    
-        <div class="content-info-group">
-            <div class="content-info-box">
-                Step 4
+<div class="wrapper">
+    <div *ngIf="process">
+        <ul class="content-info-list">
+            <div *ngFor="let stepLevel of arrangedStepsCollection; let levelIndex = index"
+            class="content-info-group">
+
+                <li *ngFor="let step of stepLevel; let lineIndex = index" class="content-info-list-item">
+                    {{levelIndex + 1}}.{{lineIndex + 1}} - {{ step.name }}
+                </li>
+
             </div>
-    
-            <div class="content-info-box">
-                Step 5
-            </div>
-        </div>
-    
-        <div class="content-info-box">
-            Step 6
-        </div>
-    </ng-container>
+            
+        </ul>
+    </div>
 
 </div>

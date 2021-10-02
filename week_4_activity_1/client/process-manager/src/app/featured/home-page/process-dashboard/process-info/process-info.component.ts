@@ -15,6 +15,7 @@ export class ProcessInfoComponent implements OnInit {
   public process: Process = null;
 
   public processStepsCollection;
+  public arrangedStepsCollection;
 
   constructor(
     private apiService: ApiService
@@ -33,8 +34,19 @@ export class ProcessInfoComponent implements OnInit {
       ).pipe(
         tap(stepsReceived => {
           this.processStepsCollection = stepsReceived;
-          console.log('stepsReceived', this.processStepsCollection);
+          this.arrangeStepsCollection();
         })
       ).subscribe()
+  }
+
+  public arrangeStepsCollection() {
+    this.arrangedStepsCollection = Array.from(Array(8), () => []);
+
+    for (let i = 0; i < this.processStepsCollection.length; i++) {
+      
+      const step     = this.processStepsCollection[i];
+      const rowLevel = step.priority.level - 1; 
+      this.arrangedStepsCollection[rowLevel].push(step)
+    }
   }
 }
