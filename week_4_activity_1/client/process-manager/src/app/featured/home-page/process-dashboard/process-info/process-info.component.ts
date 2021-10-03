@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { Process } from 'src/app/shared/models/process.model';
@@ -16,9 +17,11 @@ export class ProcessInfoComponent implements OnInit {
 
   public processStepsCollection;
   public arrangedStepsCollection;
+  public level;
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -45,8 +48,18 @@ export class ProcessInfoComponent implements OnInit {
     for (let i = 0; i < this.processStepsCollection.length; i++) {
       
       const step     = this.processStepsCollection[i];
-      const rowLevel = step.priority.level - 1; 
+      const rowLevel = step.priority.level - 1;
+      this.level     = rowLevel + 2;
+      
+
       this.arrangedStepsCollection[rowLevel].push(step)
     }
+  }
+
+  public addStep() { 
+    this.router.navigate(
+      [`process/${this.process.organization}/${this.process._id}`],
+      {state: { level: this.level}, queryParams: { level: this.level }}
+      )
   }
 }

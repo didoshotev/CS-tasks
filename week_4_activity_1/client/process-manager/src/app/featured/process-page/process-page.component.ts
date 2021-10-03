@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {  FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPriority } from 'src/app/shared/interfaces/priority.interface';
 import { Process } from 'src/app/shared/models/process.model';
 import { Step } from 'src/app/shared/models/step.model';
-import { User } from 'src/app/shared/models/user.model';
 import { ApiService } from 'src/app/shared/services/api.service';
-import { AuthService } from 'src/app/shared/services/auth.service';
 import GlobalReference from 'src/utils/Globals';
 import { stepsInputs } from 'src/utils/steps';
-
 
 @Component({
   selector: 'app-process-page',
@@ -18,16 +15,17 @@ import { stepsInputs } from 'src/utils/steps';
 })
 export class ProcessPageComponent implements OnInit {
 
-  public GlobalReference = GlobalReference;
-
   public priorityLevel = [1, 1];
 
   public stepsData = stepsInputs;
   public stepsTextMatcher = GlobalReference.stepsMatcher;
 
-  public currentUser: User;
   public currentProcess: Process;
   public organizationId;
+  public processId;
+
+  public editMode: boolean;
+  public isPreviousStepParalel: boolean;
 
   processFormGroup: FormGroup;
   stepsChoicesFormGroup: FormGroup;
@@ -39,38 +37,42 @@ export class ProcessPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
     private apiService: ApiService,
     private fb: FormBuilder
   ) {
 
-    this.authService.user.subscribe(userData => {
-      this.currentUser = userData;
-    })
-
-    this.route.params.subscribe(data => {
-      this.organizationId = data.id;
+    this.route.params.subscribe(paramsData => {
+      
+      paramsData.processId ?
+        (this.processId = paramsData.processId, this.editMode = true) :
+        (this.processId = null, this.editMode = false);
+      this.organizationId = paramsData.organizationId;
     })
 
   }
 
   ngOnInit(): void {
-    this.initForms()
+    this.priorityLevel[0] = +this.route.snapshot.queryParamMap.get('level') || 1;
+    this.initForms();
+    this.processId && this.fetchProcess();
+    
   }
 
   public initForms() { 
     this.processFormGroup = this.fb.group({
-      name: [''],
-      type: [''],
+      name: ['', Validators.required],
+      type: ['', Validators.required],
     });
 
     this.stepsChoicesFormGroup = this.fb.group({ 
-      stepChoosen: [''],
+      stepChoosen: ['', Validators.required],
     })
 
     this.stepsFormGroup = this.fb.group({
       steps: this.fb.array([]),
     });
+    console.log(this.processFormGroup.valid);
+    
   }
 
   get stepChoices() { 
@@ -112,9 +114,11 @@ export class ProcessPageComponent implements OnInit {
   public handleSubmitParalel() { 
     this.createStep()
     this.incrementParalel();
+    this.isPreviousStepParalel = true;
   }
 
-  public handleSubmitLineal() { 
+  public handleSubmitLineal() {
+    this.isPreviousStepParalel && this.incrementLineal();
     this.createStep();    
     this.incrementLineal();
   }
@@ -122,6 +126,15 @@ export class ProcessPageComponent implements OnInit {
   public onHandleSubmitForm() {
     console.log(this.processFormGroup.value);
     console.log(this.stepsFormGroup.value);
+  }
+
+  public fetchProcess() { 
+    this.apiService.fetchProcessesByIds(this.processId)
+      .subscribe(processData => { 
+        this.currentProcess = processData[0];
+        console.log(this.currentProcess);
+        
+      })
   }
 
   public createProcess() {
@@ -160,5 +173,6 @@ export class ProcessPageComponent implements OnInit {
   private incrementLineal() { 
     this.priorityLevel[1] = 1;
     this.priorityLevel[0]++;
+    this.isPreviousStepParalel = false;
   }
 }

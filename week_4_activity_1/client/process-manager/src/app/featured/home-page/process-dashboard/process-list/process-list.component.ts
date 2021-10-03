@@ -41,7 +41,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   }
 
   public onHandleAdd() {
-    this.router.navigateByUrl(`process/new/${this.organization._id}`);
+    this.router.navigateByUrl(`process/${this.organization._id}`);
   }
 
   public emitSelectedProcess(process: Process) { 

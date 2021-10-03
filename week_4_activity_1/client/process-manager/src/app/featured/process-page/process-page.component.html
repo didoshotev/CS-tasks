@@ -5,39 +5,42 @@
 
 <mat-horizontal-stepper linear #stepper>
 
-  <mat-step [stepControl]="processFormGroup">
-    <!--editable="false"-->
-    <form [formGroup]="processFormGroup">
-      <ng-template matStepLabel>Creating process</ng-template>
-      <mat-form-field appearance="fill">
-        <mat-label>Process name</mat-label>
-        <input matInput formControlName="name"> <!-- required -->
-      </mat-form-field>
-      <div class="radio-container">
-        <h2>Process Type</h2>
+  <ng-container *ngIf="!editMode">
+    <mat-step [stepControl]="processFormGroup">
+      <!--editable="false"-->
+      <form [formGroup]="processFormGroup">
+        <ng-template matStepLabel>Creating process</ng-template>
+        <mat-form-field appearance="fill">
+          <mat-label>Process name</mat-label>
+          <input matInput formControlName="name" required> <!-- required -->
+        </mat-form-field>
+        <div class="radio-container">
+          <h2>Process Type</h2>
 
-        <div class="radio-item">
-          <label>
-            <input class="radio-input" type="radio" value="lineal" formControlName="type">
-            <span class="radio-label">Lineal</span>
-          </label>
+          <div class="radio-item">
+            <label>
+              <input class="radio-input" type="radio" value="lineal" formControlName="type">
+              <span class="radio-label">Lineal</span>
+            </label>
+          </div>
+
+          <div class="radio-item">
+            <label>
+              <input type="radio" value="paralel" formControlName="type">
+              <span class="radio-label">Paralel</span>
+            </label>
+          </div>
         </div>
 
-        <div class="radio-item">
-          <label>
-            <input type="radio" value="paralel" formControlName="type">
-            <span class="radio-label">Paralel</span>
-          </label>
+        <div>
+          <button mat-flat-button matStepperNext color="primary" 
+          (click)="createProcess()" [disabled]="!processFormGroup.valid">Submit process</button>
         </div>
-      </div>
+      </form>
+    </mat-step>
+  </ng-container>
 
-      <div>
-        <button mat-flat-button matStepperNext color="primary" (click)="createProcess()">Submit process</button>
-      </div>
-    </form>
-  </mat-step>
-
-  <mat-step [stepControl]="stepsChoicesFormGroup" completed="true">
+  <mat-step [stepControl]="stepsChoicesFormGroup" >
     <form [formGroup]="stepsChoicesFormGroup">
       <ng-template matStepLabel>Choose process steps</ng-template>
       <div>
@@ -87,33 +90,20 @@
         <div>
           <button mat-flat-button color="secondary" class="mr30" matStepperPrevious>Back</button>
           <div class="btn-group">
+
+            <ng-container *ngIf="currentProcess && currentProcess.type === 'paralel'">
+              <button mat-flat-button color="accent" class="mr30" matStepperPrevious
+              (click)="handleSubmitParalel()">Submit as paralel</button>
+            </ng-container>
             
-            <button mat-flat-button color="primary" class="mr30" matStepperPrevious
-              (click)="handleSubmitParalel()">Submit as paralel and add
-              more</button>
 
             <button mat-flat-button color="primary" class="mr30" matStepperPrevious
-              (click)="handleSubmitLineal()">Submit as lineal and add
-              more</button>
+              (click)="handleSubmitLineal()">Submit as lineal</button>
           </div>
-
-          <div class="btn-group">
-            <button mat-flat-button color="accent" class="mr30" matStepperNext>Submit as paralel and continue</button>
-            <button mat-flat-button color="accent" matStepperNext>Submit as lineal and continue</button>
-          </div>
-
 
         </div>
       </form>
     </mat-step>
   </ng-container>
-
-  <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <h1>Your process is almost ready</h1>
-    <div>
-      <button mat-flat-button color="primary" (click)="onHandleSubmitForm()">Confirm</button>
-    </div>
-  </mat-step>
 
 </mat-horizontal-stepper>

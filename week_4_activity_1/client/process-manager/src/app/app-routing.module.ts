@@ -11,7 +11,8 @@ const routes: Routes = [
   { path: 'home', component: HomePageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'organization/new', component: OrgPageComponent },
-  { path: 'process/new/:id', component: ProcessPageComponent },
+  { path: 'process/:organizationId', component: ProcessPageComponent },
+  { path: 'process/:organizationId/:processId', component: ProcessPageComponent },
 
 ];
 
