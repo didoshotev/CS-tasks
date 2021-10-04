@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Process } from 'src/app/shared/models/process.model';
-import { ApiService } from 'src/app/shared/services/api.service';
 
 @Component({
   selector: 'app-process-dashboard',
@@ -15,20 +14,16 @@ export class ProcessDashboardComponent implements OnInit {
 
   public selectedProcessSubject: Subject<Process> = new Subject<Process>();
 
-  constructor(
-    private apiService: ApiService
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.selectedOrganizationSubject.subscribe(selectedOrg => { 
       this.currentOrganization = selectedOrg;
-      // console.log(this.currentOrganization);
     })
   }
 
   public receiveSelectedProcess(process: Process) { 
     this.selectedProcessSubject.next(process);
-    // console.log(this.selectedProcess);
   }
 
 }

@@ -1,16 +1,22 @@
 <div class="wrapper">
     <div *ngIf="process">
-        <button mat-flat-button color="primary" (click)="addStep()">Add step</button>
+        <div class="btn-group">
+            <button mat-flat-button color="primary" (click)="addStep()">Add step</button>
+            <button 
+            mat-flat-button color="accent" (click)="runProcess()">
+            Run process</button>
+
+        </div>
+
         <ul class="content-info-list">
-            <div *ngFor="let stepLevel of arrangedStepsCollection; let levelIndex = index"
-            class="content-info-group">
+            <div *ngFor="let stepLevel of arrangedStepsCollection; let levelIndex = index" class="content-info-group">
 
                 <li *ngFor="let step of stepLevel; let lineIndex = index" class="content-info-list-item">
                     {{levelIndex + 1}}.{{lineIndex + 1}} - {{ step.name }}
                 </li>
 
             </div>
-            
+
         </ul>
     </div>
 

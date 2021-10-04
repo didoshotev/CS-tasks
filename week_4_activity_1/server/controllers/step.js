@@ -5,7 +5,7 @@ const utils = require('../utils');
 const mongooseHelper = require('../utils/mongoHelper');
 
 
-module.exports = { 
+module.exports = {
 
     get: (req, res, next) => {
 
@@ -16,8 +16,8 @@ module.exports = {
             .catch(next)
     },
 
-    getManyById: async (req, res, next) => { 
-        const  { stepsIds } = req.body;
+    getManyById: async (req, res, next) => {
+        const { stepsIds } = req.body;
 
         try {
             const steps = await mongooseHelper.getManyById(
@@ -25,19 +25,19 @@ module.exports = {
                 models.Step
             );
             res.send(steps);
-            
+
         } catch (error) {
-            next(error);            
+            next(error);
         }
     },
 
-    post: { 
+    post: {
 
         create: async (req, res, next) => {
             const { name, priority, processId, fields } = req.body;
-        
+
             try {
-                
+
                 const createdStep = await models.Step.create({ name, priority, processId, fields })
                 // { stepsCollection: [itemToAddId] }                
 
@@ -50,9 +50,31 @@ module.exports = {
                 // return modified process if needed.. !
 
             } catch (error) {
-                next(error)                
+                next(error)
             }
-        }
+        },
+
+        run: async (req, res, next) => {
+            const { stepId } = req.params;
+            const { step } = req.body
+            
+            try {
+                // any calls
+                // const step = (await mongooseHelper.getManyById([stepId], models.Step))[0];
+                console.log(`Step: ${step.name} is executing`);
+                
+                // if(step.name == 'UPLOAD_YOUTUBE_VIDEO') { 
+                //     res.sendStatus(400);
+                //     return;
+                // }
+                
+                res.send(step)
+
+            } catch (error) {
+                next(error)
+            }
+
+        },
 
     }
 

@@ -16,6 +16,7 @@ import { ProcessPageComponent } from './featured/process-page/process-page.compo
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { ProcessDashboardComponent } from './featured/home-page/process-dashboard/process-dashboard.component';
+import { SnackBarComponent } from './shared/snack-bar/snack-bar.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ProcessDashboardComponent } from './featured/home-page/process-dashboar
     ProcessInfoComponent,
     OrgPageComponent,
     ProcessPageComponent,
-    ProcessDashboardComponent
+    ProcessDashboardComponent,
+    SnackBarComponent
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 // import {MatRadioModule} from '@angular/material/radio';
 
 const MaterialComponents = [
@@ -12,6 +13,7 @@ const MaterialComponents = [
   MatFormFieldModule,
   MatInputModule,
   MatRippleModule,
+  MatSnackBarModule
   // MatRadioModule
 ]
 

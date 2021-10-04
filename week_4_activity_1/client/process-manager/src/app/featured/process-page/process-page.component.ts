@@ -69,10 +69,8 @@ export class ProcessPageComponent implements OnInit {
     })
 
     this.stepsFormGroup = this.fb.group({
-      steps: this.fb.array([]),
+      steps: this.fb.array([], Validators.required),
     });
-    console.log(this.processFormGroup.valid);
-    
   }
 
   get stepChoices() { 
@@ -123,17 +121,10 @@ export class ProcessPageComponent implements OnInit {
     this.incrementLineal();
   }
 
-  public onHandleSubmitForm() {
-    console.log(this.processFormGroup.value);
-    console.log(this.stepsFormGroup.value);
-  }
-
   public fetchProcess() { 
     this.apiService.fetchProcessesByIds(this.processId)
       .subscribe(processData => { 
         this.currentProcess = processData[0];
-        console.log(this.currentProcess);
-        
       })
   }
 
