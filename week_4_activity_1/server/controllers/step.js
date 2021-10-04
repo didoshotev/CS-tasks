@@ -57,7 +57,7 @@ module.exports = {
         run: async (req, res, next) => {
             const { stepId } = req.params;
             const { step } = req.body
-            
+
             try {
                 // any calls
                 // const step = (await mongooseHelper.getManyById([stepId], models.Step))[0];
@@ -67,8 +67,9 @@ module.exports = {
                 //     res.sendStatus(400);
                 //     return;
                 // }
-                
-                res.send(step)
+                setTimeout(() => {
+                    res.send(step)
+                }, 2000)
 
             } catch (error) {
                 next(error)

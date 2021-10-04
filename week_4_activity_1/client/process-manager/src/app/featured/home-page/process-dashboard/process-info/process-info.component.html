@@ -11,7 +11,8 @@
         <ul class="content-info-list">
             <div *ngFor="let stepLevel of arrangedStepsCollection; let levelIndex = index" class="content-info-group">
 
-                <li *ngFor="let step of stepLevel; let lineIndex = index" class="content-info-list-item">
+                <li *ngFor="let step of stepLevel; let lineIndex = index" class="content-info-list-item"
+                (click)="runProcess(step.priority.level - 1)">
                     {{levelIndex + 1}}.{{lineIndex + 1}} - {{ step.name }}
                 </li>
 
