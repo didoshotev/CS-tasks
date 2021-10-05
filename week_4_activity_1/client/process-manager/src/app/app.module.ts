@@ -12,11 +12,11 @@ import { ProcessInfoComponent } from './featured/home-page/process-dashboard/pro
 import { OrgPageComponent } from './featured/org-page/org-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
-import { ProcessPageComponent } from './featured/process-page/process-page.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { ProcessDashboardComponent } from './featured/home-page/process-dashboard/process-dashboard.component';
 import { SnackBarComponent } from './shared/snack-bar/snack-bar.component';
+import { ProcessPageModule } from './featured/process-page/process-page.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,6 @@ import { SnackBarComponent } from './shared/snack-bar/snack-bar.component';
     ProcessListComponent,
     ProcessInfoComponent,
     OrgPageComponent,
-    ProcessPageComponent,
     ProcessDashboardComponent,
     SnackBarComponent
   ],
@@ -40,6 +39,7 @@ import { SnackBarComponent } from './shared/snack-bar/snack-bar.component';
     MaterialModule,
     MatStepperModule,
     MatCheckboxModule,
+    ProcessPageModule
   ],
   providers: [],
   bootstrap: [AppComponent]

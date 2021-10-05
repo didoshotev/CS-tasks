@@ -1,0 +1,14 @@
+<section>
+
+    <div *ngIf="stepFieldsType === 'SEND_EMAIL'">
+        <app-step-send-email (formDataEvent)="receiveFormDataEvent($event)"></app-step-send-email>
+    </div>
+
+    <div *ngIf="stepFieldsType === 'SEND_COMMAND'">
+        <app-step-send-command></app-step-send-command>
+    </div>
+
+    <button mat-raised-button color="primary" class="mr30" (click)="submitInputValuesAsLineal()">Submit as lineal</button>
+    <button mat-raised-button color="accent" (click)="submitInputValuesAsParalel()">Submit as paralel</button>
+
+</section>

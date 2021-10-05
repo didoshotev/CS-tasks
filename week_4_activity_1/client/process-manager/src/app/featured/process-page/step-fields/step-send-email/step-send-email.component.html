@@ -1,0 +1,23 @@
+<form [formGroup]="emailFormGroup">
+
+    <mat-form-field class="mr30" appearance="fill">
+        <mat-label>Enter your email</mat-label>
+        <input matInput class="textField" type="text" name="yourEmail" id="yourEmail"
+            formControlName="yourEmail">
+    </mat-form-field>
+
+    <mat-form-field class="mr30" appearance="fill">
+        <mat-label>Enter receiver email</mat-label>
+        <input matInput class="textField" type="text" name="receiverEmail" id="receiverEmail"
+            formControlName="receiverEmail">
+    </mat-form-field>
+
+    <mat-form-field class="mr30" appearance="fill">
+        <mat-label>Enter your message</mat-label>
+        <input matInput class="textField" type="text" name="message" id="message"
+            formControlName="message" (change)="sendData()">
+    </mat-form-field>
+
+    <!-- <button mat-raised-button color="accent" (click)="handleFinish()">Finish</button> -->
+
+</form>

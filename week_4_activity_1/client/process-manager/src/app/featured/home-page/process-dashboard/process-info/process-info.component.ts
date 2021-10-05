@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { of, Subject, Subscription } from 'rxjs';
-import { catchError, delay, map, mergeMap, take, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { catchError, mergeMap, tap } from 'rxjs/operators';
 import { Process } from 'src/app/shared/models/process.model';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { TaskRunnerService } from 'src/app/shared/services/task-runner.service';
@@ -89,7 +89,8 @@ export class ProcessInfoComponent implements OnInit{
         //   })
 
         const stepsCollection = this.arrangedStepsCollection.flat(1);
-
+        console.log(stepsCollection);
+        
         this.taskRunnerService.prepareStepsCollectionCalls(stepsCollection.slice())
             .pipe(
                 tap(data => {
