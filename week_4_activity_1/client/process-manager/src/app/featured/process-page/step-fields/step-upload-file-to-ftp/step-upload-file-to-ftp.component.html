@@ -1,1 +1,17 @@
-<p>step-upload-file-to-ftp works!</p>
+<form [formGroup]="uploadFileToFtpForm">
+
+    <mat-form-field class="mr30" appearance="fill">
+        <mat-label>Enter server name</mat-label>
+        <input matInput class="textField" type="text" name="serverName" id="serverName"
+            formControlName="serverName">
+    </mat-form-field>
+
+    <mat-form-field class="mr30" appearance="fill">
+        <mat-label>Enter server number</mat-label>
+        <input matInput class="textField" type="number" name="serverNumber" id="serverNumber"
+            formControlName="serverNumber" (change)="sendData()">
+    </mat-form-field>
+
+    <!-- <button mat-raised-button color="accent" (click)="handleFinish()">Finish</button> -->
+
+</form>

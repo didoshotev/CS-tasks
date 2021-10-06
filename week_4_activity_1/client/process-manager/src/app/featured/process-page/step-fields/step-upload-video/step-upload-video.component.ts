@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-step-upload-video',
@@ -7,9 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StepUploadVideoComponent implements OnInit {
 
-  constructor() { }
+    uploadVideoForm: FormGroup;
+    @Output() formDataEvent = new EventEmitter<object>();
 
-  ngOnInit(): void {
-  }
+    constructor(
+        private fb: FormBuilder
+    ) { }
+
+    ngOnInit(): void {
+
+        this.uploadVideoForm = this.fb.group({
+            username: ['', Validators.required],
+            videoLink: ['', Validators.required],
+        });
+    }
+
+    public sendData() { 
+        this.formDataEvent.emit(this.uploadVideoForm.value)
+    }
 
 }

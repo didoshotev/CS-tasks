@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-step-download-file-from-ftp',
@@ -7,9 +9,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StepDownloadFileFromFtpComponent implements OnInit {
 
-  constructor() { }
+    downloadFileFromFtpForm: FormGroup;
+    @Output() formDataEvent = new EventEmitter<object>();
 
-  ngOnInit(): void {
-  }
+    constructor(
+        private fb: FormBuilder
+    ) { }
+
+    ngOnInit(): void {
+
+        this.downloadFileFromFtpForm = this.fb.group({
+            yourUsername: ['', Validators.required],
+            serverName: ['', Validators.required],
+            serverNumber: ['', Validators.required],
+        });
+    }
+
+    public sendData() { 
+        this.formDataEvent.emit(this.downloadFileFromFtpForm.value)
+    }
 
 }

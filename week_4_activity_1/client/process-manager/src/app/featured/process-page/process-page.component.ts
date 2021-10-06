@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPriority } from 'src/app/shared/interfaces/priority.interface';
 import { Process } from 'src/app/shared/models/process.model';
@@ -35,6 +36,8 @@ export class ProcessPageComponent implements OnInit {
     public paralelStepInputs = [];
 
     public stepFieldsType;
+
+    @ViewChild('stepper') private myStepper: MatStepper;
 
     constructor(
         private route: ActivatedRoute,
@@ -109,21 +112,6 @@ export class ProcessPageComponent implements OnInit {
         this.steps.length > 0 && this.steps.removeAt(0);
     }
 
-
-    public handleSubmitParalel() {
-        const fields = this.steps.value[0];
-        this.createStep(fields);
-        this.incrementParalel();
-        this.isPreviousStepParalel = true;
-    }
-
-    public handleSubmitLineal() {
-        this.isPreviousStepParalel && this.incrementLineal();
-        const fields = this.steps.value[0];
-        this.createStep(fields);
-        this.incrementLineal();
-    }
-
     public fetchProcess() {
         this.apiService.fetchProcessesByIds(this.processId)
             .subscribe(processData => {
@@ -151,12 +139,33 @@ export class ProcessPageComponent implements OnInit {
 
         const name = this.steps['name'];
         console.log(fields);
-        
+
         const priority: IPriority = { level: this.priorityLevel[0], line: this.priorityLevel[1] }
 
         const newStep = new Step(name, priority, this.currentProcess._id, fields);
 
         this.apiService.createStep(newStep);
+    }
+
+    public receiveFormData(receivedInputObject) {
+
+        receivedInputObject.type === GlobalReference.processTypes.LINEAL ?
+            this.submitLineal(receivedInputObject.data) :
+            this.submitParalel(receivedInputObject.data);
+        
+        this.myStepper.previous();
+    }
+
+    public submitLineal(fields) {
+        this.isPreviousStepParalel && this.incrementLineal();
+        this.createStep(fields);
+        this.incrementLineal();
+    }
+
+    public submitParalel(fields) {
+        this.createStep(fields);
+        this.incrementParalel();
+        this.isPreviousStepParalel = true;
     }
 
     public handleFinish() {
@@ -166,13 +175,6 @@ export class ProcessPageComponent implements OnInit {
     public findInputObject(key) {
         return this.stepsData.find(item => item.key === key);
     }
-
-
-    receiveFormData(receivedInputObject) {
-        console.log(receivedInputObject);
-        // receivedInputObject.type === GlobalReference.processTypes.LINEAL
-    }
-
 
     private incrementParalel() {
         this.priorityLevel[1]++;

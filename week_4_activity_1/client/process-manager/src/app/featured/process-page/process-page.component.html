@@ -72,39 +72,6 @@
     <ng-container>
 
         <mat-step [stepControl]="stepsFormGroup">
-            <form [formGroup]="stepsFormGroup">
-                <ng-template matStepLabel>Fill the blank</ng-template>
-                <div>
-                    <h2>You are currently on level: {{ priorityLevel[0] }}.{{ priorityLevel[1]}} (priority)</h2>
-                    <ng-container *ngFor="let stepGroup of steps.controls; let i = index">
-                        <div class="step-form-row" [formGroup]="stepGroup">
-
-                            <mat-form-field class="mr30" appearance="fill" *ngFor="let stepInput of stepInputs;">
-                                <mat-label> {{ stepInput.label }} </mat-label>
-                                <input matInput class="textField" [type]="stepInput.type" [name]="stepInput.name"
-                                    [id]="stepInput.name" [formControlName]="stepInput.name">
-                            </mat-form-field>
-
-                        </div>
-                    </ng-container>
-                </div>
-
-                <div>
-                    <button mat-flat-button color="secondary" class="mr30" matStepperPrevious>Back</button>
-                    <div class="btn-group">
-
-                        <ng-container *ngIf="currentProcess && currentProcess.type === 'paralel'">
-                            <button mat-flat-button color="accent" class="mr30" matStepperPrevious
-                                (click)="handleSubmitParalel()">Submit as paralel</button>
-                        </ng-container>
-
-
-                        <button mat-flat-button color="primary" class="mr30" matStepperPrevious
-                            (click)="handleSubmitLineal()">Submit as lineal</button>
-                    </div>
-
-                </div>
-            </form>
             <ng-container *ngIf="stepFieldsType">
                 <app-step-fields [stepFieldsType]="stepFieldsType" (formDataEvent)="receiveFormData($event)"></app-step-fields>
             </ng-container>

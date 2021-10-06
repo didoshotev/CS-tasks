@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-step-upload-file-to-ftp',
@@ -7,9 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StepUploadFileToFtpComponent implements OnInit {
 
-  constructor() { }
+    uploadFileToFtpForm: FormGroup;
+    @Output() formDataEvent = new EventEmitter<object>();
 
-  ngOnInit(): void {
-  }
+    constructor(
+        private fb: FormBuilder
+    ) { }
+
+    ngOnInit(): void {
+
+        this.uploadFileToFtpForm = this.fb.group({
+            serverName: ['', Validators.required],
+            serverNumber: ['', Validators.required],
+        });
+    }
+
+    public sendData() { 
+        this.formDataEvent.emit(this.uploadFileToFtpForm.value)
+    }
 
 }

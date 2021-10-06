@@ -1,1 +1,14 @@
-<p>step-upload-video works!</p>
+<form [formGroup]="uploadVideoForm">
+
+    <mat-form-field class="mr30" appearance="fill">
+        <mat-label>Enter youtube username</mat-label>
+        <input matInput class="textField" type="text" name="username" id="username"
+            formControlName="username">
+    </mat-form-field>
+
+    <mat-form-field class="mr30" appearance="fill">
+        <mat-label>Enter video link</mat-label>
+        <input matInput class="textField" type="text" name="videoLink" id="videoLink"
+            formControlName="videoLink" (change)="sendData()">
+    </mat-form-field>
+</form>

@@ -26,12 +26,6 @@ export class StepSendEmailComponent implements OnInit {
     }
 
     public sendData() { 
-        // console.log(this.emailFormGroup.value);
         this.formDataEvent.emit(this.emailFormGroup.value)
     }
-
-    public submitForm(value: object) { 
-        this.formDataEvent.emit(value);
-    }
-
 }

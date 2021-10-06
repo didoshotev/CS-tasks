@@ -5,7 +5,19 @@
     </div>
 
     <div *ngIf="stepFieldsType === 'SEND_COMMAND'">
-        <app-step-send-command></app-step-send-command>
+        <app-step-send-command (formDataEvent)="receiveFormDataEvent($event)"></app-step-send-command>
+    </div>
+
+    <div *ngIf="stepFieldsType === 'UPLOAD_FILE_TO_FTP_SERVER'">
+        <app-step-upload-file-to-ftp (formDataEvent)="receiveFormDataEvent($event)"></app-step-upload-file-to-ftp>
+    </div>
+
+    <div *ngIf="stepFieldsType === 'DOWNLOAD_FILE_FROM_FTP_SERVER'">
+        <app-step-download-file-from-ftp (formDataEvent)="receiveFormDataEvent($event)"></app-step-download-file-from-ftp>
+    </div>
+    
+    <div *ngIf="stepFieldsType === 'UPLOAD_YOUTUBE_VIDEO'">
+        <app-step-upload-video (formDataEvent)="receiveFormDataEvent($event)"></app-step-upload-video>
     </div>
 
     <button mat-raised-button color="primary" class="mr30" (click)="submitInputValuesAsLineal()">Submit as lineal</button>

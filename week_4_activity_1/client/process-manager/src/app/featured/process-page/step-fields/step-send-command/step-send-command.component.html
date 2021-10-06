@@ -1,1 +1,7 @@
-<p>step-send-command works!</p>
+<form [formGroup]="commandFormGroup">
+    <mat-form-field appearance="fill">
+        <mat-label>Enter command number</mat-label>
+        <input matInput class="textField" type="text" name="cmdNumber" id="cmdNumber"
+            formControlName="cmdNumber" (change)="sendData()">
+    </mat-form-field>
+</form>

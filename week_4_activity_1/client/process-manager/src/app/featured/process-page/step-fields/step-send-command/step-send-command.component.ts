@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-step-send-command',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StepSendCommandComponent implements OnInit {
 
-  constructor() { }
+    commandFormGroup: FormGroup;
+    @Output() formDataEvent = new EventEmitter<object>();
 
-  ngOnInit(): void {
-  }
+    constructor(
+        private fb: FormBuilder
+    ) { }
+
+    ngOnInit(): void {
+
+        this.commandFormGroup = this.fb.group({
+            cmdNumber: ['', Validators.required],
+        });
+    }
+
+    public sendData() { 
+        this.formDataEvent.emit(this.commandFormGroup.value)
+    }
 
 }
